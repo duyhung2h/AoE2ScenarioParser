@@ -15,6 +15,8 @@ from AoE2ScenarioParser.objects.managers.map_manager import MapManager
 from AoE2ScenarioParser.objects.managers.trigger_manager import TriggerManager
 from AoE2ScenarioParser.objects.managers.unit_manager import UnitManager
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
+from AoE2ScenarioParser.sections.sectiondict import SectionDict
+from AoE2ScenarioParser.sections.variable_retriever_manager import VariableRetrieverManager
 
 
 class AoE2Scenario:
@@ -34,8 +36,13 @@ class AoE2Scenario:
         self.read_mode = None
         self.scenario_version = "???"
         self.game_version = "???"
-        self.structure = {}
-        self.sections: Dict[str, AoE2FileSection] = {}
+        self.structure: dict = {}
+        # self.variable_retrievers: dict = {}
+        self._vr_manager = VariableRetrieverManager(self)
+        self.sections: SectionDict[str, AoE2FileSection] = SectionDict(
+            structure_ref=self.structure,
+            vr_manager=self._vr_manager
+        )
         self._object_manager: Union[AoE2ObjectManager, None] = None
 
         # Used in debug functions
@@ -62,15 +69,16 @@ class AoE2Scenario:
         print("##########################################")
 
         s_print(f"\nLoading scenario structure...")
-        initialise_version_dependencies(scenario.game_version, scenario.scenario_version)
         scenario._load_structure()
+        scenario._load_variable_retrievers()
+        initialise_version_dependencies(scenario.game_version, scenario.scenario_version)
         s_print(f"Loading scenario structure finished successfully.", final=True)
 
         # scenario._initialize(igenerator)
-        s_print("Parsing scenario file...", final=True)
-        scenario._load_header_section(igenerator)
-        scenario._load_content_sections(igenerator)
-        s_print(f"Parsing scenario file finished successfully.", final=True)
+        # s_print("Parsing scenario file...", final=True)
+        # scenario._load_header_section(igenerator)
+        # scenario._load_content_sections(igenerator)
+        # s_print(f"Parsing scenario file finished successfully.", final=True)
 
         scenario._object_manager = AoE2ObjectManager(
             sections=scenario.sections,
@@ -84,7 +92,7 @@ class AoE2Scenario:
     def _load_structure(self):
         if self.game_version == "???" or self.scenario_version == "???":
             raise ValueError("Both game and scenario version need to be set to load structure")
-        self.structure = get_structure(self.game_version, self.scenario_version)
+        self.structure.update(get_structure(self.game_version, self.scenario_version))
 
     def _load_header_section(self, raw_file_igenerator: IncrementalGenerator):
         header = self._create_and_load_section('FileHeader', raw_file_igenerator)
@@ -216,6 +224,11 @@ class AoE2Scenario:
             f.write(''.join(result))
         s_print("Writing structure to file finished successfully.", final=True)
 
+    def _load_variable_retrievers(self):
+        self._vr_manager.variable_retrievers = get_version_dependant_structure_file(
+            self.game_version, self.scenario_version, 'variable_retrievers'
+        )
+
 
 def initialise_version_dependencies(game_version, scenario_version):
     condition_json = get_version_dependant_structure_file(game_version, scenario_version, "conditions")
@@ -264,7 +277,7 @@ def get_version_dependant_structure_file(game_version: str, scenario_version: st
             return json.load(structure_file)
     except FileNotFoundError:  # Unsupported version
         v = f"{game_version}:{scenario_version}"
-        raise UnknownStructureError(f"The structure {name} could not be found with: {v}")
+        raise UnknownStructureError(f"The structure {name}.json could not be found with: {v}")
 
 
 def get_structure(game_version, scenario_version) -> dict:
