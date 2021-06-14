@@ -15,8 +15,8 @@ from AoE2ScenarioParser.objects.managers.map_manager import MapManager
 from AoE2ScenarioParser.objects.managers.trigger_manager import TriggerManager
 from AoE2ScenarioParser.objects.managers.unit_manager import UnitManager
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
-from AoE2ScenarioParser.sections.sectiondict import SectionDict
-from AoE2ScenarioParser.sections.variable_retriever_manager import VariableRetrieverManager
+from AoE2ScenarioParser.sections.retrieverdict import RetrieverDict
+from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager
 
 
 class AoE2Scenario:
@@ -37,14 +37,12 @@ class AoE2Scenario:
         self.scenario_version = "???"
         self.game_version = "???"
         self.structure: dict = {}
-        # self.variable_retrievers: dict = {}
-        self._vr_manager = VariableRetrieverManager(self)
-        self.sections: SectionDict[str, AoE2FileSection] = SectionDict(
-            structure_ref=self.structure,
-            vr_manager=self._vr_manager
-        )
-        self._object_manager: Union[AoE2ObjectManager, None] = None
+        self.sections: dict[str, AoE2FileSection] = {}
         self.decompressed_file = None
+
+        # Managers
+        self._dynamic_retriever_manager = DynamicRetrieverManager(self)
+        self._object_manager: Union[AoE2ObjectManager, None] = None
 
         # Used in debug functions
         self._file = None
@@ -71,8 +69,10 @@ class AoE2Scenario:
 
         s_print(f"\nLoading scenario structure...")
         scenario._load_structure()
-        scenario._load_variable_retrievers()
-        initialise_version_dependencies(scenario.game_version, scenario.scenario_version)
+        scenario._load_dynamic_retrievers()
+        scenario._initialise_sections()
+
+        load_trigger_version_dependencies(scenario.game_version, scenario.scenario_version)
         s_print(f"Loading scenario structure finished successfully.", final=True)
 
         scenario._load_file(igenerator)
@@ -99,11 +99,22 @@ class AoE2Scenario:
 
     def _load_file(self, raw_file_igenerator: IncrementalGenerator):
         header_section = self._create_and_load_section('FileHeader', raw_file_igenerator)
-        # self._add_to_sections(header_section)
 
         header = raw_file_igenerator.file_content[:header_section.byte_length]
         content = decompress_bytes(raw_file_igenerator.get_remaining_bytes())
         self.decompressed_file = header + content
+
+    def _load_dynamic_retrievers(self):
+        self._dynamic_retriever_manager.dynamic_retrievers = get_version_dependant_structure_file(
+            self.game_version, self.scenario_version, 'dynamic_retrievers'
+        )
+
+    def _initialise_sections(self):
+        drm = self._dynamic_retriever_manager
+        for section_name in self.structure.keys():
+            self.sections[section_name] = AoE2FileSection(
+                section_name, RetrieverDict(drm=drm, parent_path=[section_name])
+            )
 
     def _load_content_sections(self, raw_file_igenerator: IncrementalGenerator):
         data_igenerator = IncrementalGenerator(
@@ -124,7 +135,10 @@ class AoE2Scenario:
 
     def _create_and_load_section(self, name, igenerator):
         s_print(f"\t🔄 Parsing {name}...")
-        section = AoE2FileSection.from_structure(name, self.structure.get(name))
+        section = AoE2FileSection.from_structure(
+            name, self.structure.get(name),
+            RetrieverDict(drm=self._dynamic_retriever_manager)
+        )
         s_print(f"\t🔄 Gathering {name} data...")
         section.set_data_from_generator(igenerator, self.sections)
         s_print(f"\t✔ {name}", final=True)
@@ -231,13 +245,8 @@ class AoE2Scenario:
             f.write(''.join(result))
         s_print("Writing structure to file finished successfully.", final=True)
 
-    def _load_variable_retrievers(self):
-        self._vr_manager.variable_retrievers = get_version_dependant_structure_file(
-            self.game_version, self.scenario_version, 'variable_retrievers'
-        )
 
-
-def initialise_version_dependencies(game_version, scenario_version):
+def load_trigger_version_dependencies(game_version, scenario_version):
     condition_json = get_version_dependant_structure_file(game_version, scenario_version, "conditions")
 
     for condition_id, structure in condition_json.items():

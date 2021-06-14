@@ -10,6 +10,7 @@ from AoE2ScenarioParser.helper.pretty_format import pretty_format_list
 from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex, insert_char
 from AoE2ScenarioParser.sections.aoe2_struct_model import AoE2StructModel, model_dict_from_structure
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
+from AoE2ScenarioParser.sections.retrieverdict import RetrieverDict
 from AoE2ScenarioParser.sections.retrievers.retriever import Retriever, duplicate_retriever_map, reset_retriever_map
 
 
@@ -19,15 +20,28 @@ class SectionLevel(Enum):
 
 
 class AoE2FileSection:
-    def __init__(self, name, retriever_map, struct_models=None, level=SectionLevel.TOP_LEVEL):
+    self_attributes = [
+        "name",
+        "retriever_map",
+        "byte_length",
+        "struct_models",
+        "level",
+    ]
+
+    def __init__(self, name, retriever_map: RetrieverDict, struct_models=None, level=SectionLevel.TOP_LEVEL):
         if struct_models is None:
             struct_models = {}
 
+        # Inject host reference
+        retriever_map._file_section_host = self
+
+        # When adding more self attributes, please add to the list above: AoE2FileSection.self_attributes = [...]
         self.name: str = name
         self.retriever_map = retriever_map
         self.byte_length: int = -1
         self.struct_models: Dict[str, AoE2StructModel] = struct_models
         self.level: SectionLevel = level
+        """Only used for debugging and __str__ like methods"""
 
     @classmethod
     def from_model(cls, model, set_defaults=False) -> AoE2FileSection:
@@ -47,19 +61,19 @@ class AoE2FileSection:
 
         return cls(
             name=model.name,
-            retriever_map=duplicate_rmap,
+            retriever_map=RetrieverDict(duplicate_rmap, drm=model.drm),
             struct_models=model.structs,
             level=SectionLevel.STRUCT
         )
 
     @classmethod
-    def from_structure(cls, section_name, structure):
+    def from_structure(cls, section_name, structure, drm):
         retriever_map = {}
         for name, attr in structure.get('retrievers').items():
             retriever_map[name] = Retriever.from_structure(attr, name)
 
-        structs = model_dict_from_structure(structure)
-        return cls(section_name, retriever_map, structs)
+        structs = model_dict_from_structure(structure, drm)
+        return cls(section_name, RetrieverDict(retriever_map, drm), structs)
 
     def get_data_as_bytes(self):
         result = []
@@ -110,7 +124,7 @@ class AoE2FileSection:
         self.byte_length = total_length
 
     def set_data(self, data, sections):
-        retrievers = self.retriever_map.values()
+        retrievers = list(self.retriever_map.values())
 
         if len(data) == len(retrievers):
             for i in range(len(data)):
@@ -128,7 +142,7 @@ class AoE2FileSection:
 
     def __getattr__(self, item):
         """Providing a default way to access retriever data labeled 'name'"""
-        if 'retriever_map' not in self.__dict__:
+        if item == 'self_attributes' or item in self.self_attributes:
             return super().__getattribute__(item)
         else:
             retriever = self.retriever_map[item]
@@ -139,7 +153,7 @@ class AoE2FileSection:
 
     def __setattr__(self, name, value):
         """Trying to edit retriever data labeled 'name' if available"""
-        if 'retriever_map' not in self.__dict__:
+        if name == 'self_attributes' or name in self.self_attributes:
             super().__setattr__(name, value)
         else:
             try:
@@ -240,6 +254,8 @@ class AoE2FileSection:
                 represent += self._entry_to_string(
                     retriever.name, str(data), str(retriever.datatype.to_simple_string())
                 )
+        else:  # For-else:
+            represent += "\t << No retrievers >>\n"
 
         return represent
 
