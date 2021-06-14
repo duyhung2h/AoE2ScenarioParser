@@ -1,5 +1,13 @@
 from typing import TYPE_CHECKING
 
+from AoE2ScenarioParser.helper.bytes_parser import retrieve_bytes
+from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
+from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict
+from AoE2ScenarioParser.objects.aoe2_object import AoE2Object
+from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
+from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
+from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
+
 if TYPE_CHECKING:
     from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
 
@@ -10,18 +18,43 @@ class VariableRetrieverManager:
         self.variable_retrievers = None
         self.progress_id = -1
 
-    def get_value(self, retriever):
-        retriever_id = int(retriever['id'])
+    def get_value(self, name, structure):
+        retriever_id = int(structure['id'])
+
+        print("\n\n>>> Getting value")
+        print(f"Name:      {name}")
+        print(f"Structure: {structure}")
 
         if self.progress_id > retriever_id:
             pass  # Needs a return
 
         for vr_id in self.variable_retrievers.keys():
             if self.progress_id < retriever_id and self.progress_id < int(vr_id):
-                vr = self.variable_retrievers[vr_id]
-                print(self.get_length_until(int(vr_id)))
-                print(vr)
-                exit()
+                print("\n>>> Found unresolved retriever!")
+                vr_structure = self.variable_retrievers[vr_id]
+                print(f"Structure: {vr_structure}")
+                bytes_until = self.get_length_until(int(vr_id))
+                retriever = Retriever.from_structure(vr_structure, vr_structure['name'])
+
+                # Todo: Find a way to have available the current parent SectionDict (?)
+                # Todo: Truly no clue how to fix this...
+                # Todo: Not even sure if it's possible without rewriting something huge...
+                # Todo: Again, no idea what and how (yet (??)
+                self_section_dict = AoE2FileSection('NAME', {})
+
+                if hasattr(retriever, 'on_construct'):
+                    handle_retriever_dependency(retriever, 'construct', self_section_dict, self.scenario.sections)
+
+                # Todo: Shouldn't need Incremental generator to get the bytes
+                necessary_bytes = retrieve_bytes(
+                    IncrementalGenerator('_name_', self.scenario.decompressed_file, bytes_until), retriever
+                )
+
+                print(necessary_bytes)
+                # print(retriever.set_data_from_bytes())
+                # print(retriever)
+                # print(vr_structure)
+                # exit()
 
         print(retriever_id)
         exit()

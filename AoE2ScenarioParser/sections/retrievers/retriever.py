@@ -127,7 +127,12 @@ class Retriever:
         return retriever
 
     @classmethod
-    def from_structure(cls, name, structure):
+    def from_structure(cls, structure, name=None):
+        if name is None:
+            if 'name' not in structure:
+                raise ValueError("Parameter name is mandatory when not available in structure.")
+            name = structure['name']
+
         datatype = DataType(var=structure.get('type'), repeat=structure.get('repeat', 1))
         retriever = cls(
             name=name,
@@ -181,7 +186,12 @@ class Retriever:
             data = str(pretty_format_list(self.data))
         else:
             data = string_manipulations.q_str(self.data)
-        return f"{self.to_simple_string()} >>> {data}"
+
+        # extra = []
+        # for attr in attributes:
+        #     if hasattr(self, attr):
+        #         extra.append(f'\n{attr}: ' + str(getattr(self, attr)))
+        return f"{self.to_simple_string()} >>> {data}"  # + string_manipulations.add_tabs(''.join(extra), 1)
 
 
 def duplicate_retriever_map(retriever_map: Dict[str, Retriever]) -> Dict[str, Retriever]:

@@ -1,4 +1,4 @@
-from AoE2ScenarioParser.sections.retriever_reader import get_value, func
+from AoE2ScenarioParser.sections.retriever_reader import get_value
 
 
 class SectionDict(dict):
@@ -22,17 +22,26 @@ class SectionDict(dict):
         val = super().get(key)
         if val is not None:
             return val
-        return self.__missing__(key)
+        return self._solve_missing(key)
 
     def __getattr__(self, item):
-        return self.__missing__(item)
+        return self._solve_missing(item)
 
     def __missing__(self, key):
+        return self._solve_missing(key)
+
+    def _solve_missing(self, key):
+        print(f"key: {key}")
         path = self._parent_path + [key]
+        print(f"path: {path}")
+        parent_list = get_value(self._structure_ref, self._parent_path)
         val = get_value(self._structure_ref, path)
+        print(f"val:         {val}")
+        print(f"parent_list: {parent_list}")
 
         if 'type' in val:
-            return func(self._structure_ref, self._vr_manager, val)
+            return self._vr_manager.get_value(path[-1], val)
+            # return func(self._structure_ref, self._vr_manager, val)
         else:
             return self.setdefault(key, SectionDict(
                 structure_ref=self._structure_ref,

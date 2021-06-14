@@ -56,7 +56,7 @@ class AoE2FileSection:
     def from_structure(cls, section_name, structure):
         retriever_map = {}
         for name, attr in structure.get('retrievers').items():
-            retriever_map[name] = Retriever.from_structure(name, attr)
+            retriever_map[name] = Retriever.from_structure(attr, name)
 
         structs = model_dict_from_structure(structure)
         return cls(section_name, retriever_map, structs)

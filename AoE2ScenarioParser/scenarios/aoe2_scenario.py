@@ -44,6 +44,7 @@ class AoE2Scenario:
             vr_manager=self._vr_manager
         )
         self._object_manager: Union[AoE2ObjectManager, None] = None
+        self.decompressed_file = None
 
         # Used in debug functions
         self._file = None
@@ -74,6 +75,8 @@ class AoE2Scenario:
         initialise_version_dependencies(scenario.game_version, scenario.scenario_version)
         s_print(f"Loading scenario structure finished successfully.", final=True)
 
+        scenario._load_file(igenerator)
+
         # scenario._initialize(igenerator)
         # s_print("Parsing scenario file...", final=True)
         # scenario._load_header_section(igenerator)
@@ -94,9 +97,13 @@ class AoE2Scenario:
             raise ValueError("Both game and scenario version need to be set to load structure")
         self.structure.update(get_structure(self.game_version, self.scenario_version))
 
-    def _load_header_section(self, raw_file_igenerator: IncrementalGenerator):
-        header = self._create_and_load_section('FileHeader', raw_file_igenerator)
-        self._add_to_sections(header)
+    def _load_file(self, raw_file_igenerator: IncrementalGenerator):
+        header_section = self._create_and_load_section('FileHeader', raw_file_igenerator)
+        # self._add_to_sections(header_section)
+
+        header = raw_file_igenerator.file_content[:header_section.byte_length]
+        content = decompress_bytes(raw_file_igenerator.get_remaining_bytes())
+        self.decompressed_file = header + content
 
     def _load_content_sections(self, raw_file_igenerator: IncrementalGenerator):
         data_igenerator = IncrementalGenerator(

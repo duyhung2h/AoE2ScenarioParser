@@ -16,7 +16,7 @@ class AoE2StructModel:
     def from_structure(cls, name, structure) -> AoE2StructModel:
         retriever_map = {}
         for retriever_name, attr in structure.get('retrievers').items():
-            retriever_map[retriever_name] = Retriever.from_structure(retriever_name, attr)
+            retriever_map[retriever_name] = Retriever.from_structure(attr, retriever_name)
         structs = model_dict_from_structure(structure)
 
         return cls(name, retriever_map, structs)
