@@ -1,4 +1,4 @@
-from copy import copy
+import copy
 
 
 def numbers():
@@ -6,20 +6,21 @@ def numbers():
 
 
 counter = numbers()
-variable_retrievers = {}
+dynamic_retrievers = {}
 
 
-def mark_retrievers(section):
+def mark_retrievers(path, section):
     for name, retriever in section['retrievers'].items():
         retriever['id'] = next(counter)
 
         if retriever_is_variable(retriever):
-            variable_retrievers[retriever['id']] = copy(retriever)
-            variable_retrievers[retriever['id']]['name'] = name
+            dynamic_retrievers[retriever['id']] = copy.copy(retriever)
+            dynamic_retrievers[retriever['id']]['name'] = name
+            dynamic_retrievers[retriever['id']]['path'] = path + [name]
 
         if retriever['type'][:7] == "struct:":
             rtype = retriever['type'][7:]
-            mark_retrievers(section['structs'][rtype])
+            mark_retrievers(path + [name + "[__index__]"], section['structs'][rtype])
 
 
 def retriever_is_variable(retriever):

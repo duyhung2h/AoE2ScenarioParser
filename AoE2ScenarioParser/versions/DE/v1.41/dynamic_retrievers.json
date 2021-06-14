@@ -3,7 +3,11 @@
         "type": "str32",
         "default": "",
         "id": 4,
-        "name": "scenario_instructions"
+        "name": "scenario_instructions",
+        "path": [
+            "FileHeader",
+            "scenario_instructions"
+        ]
     },
     "9": {
         "type": "u32",
@@ -29,20 +33,32 @@
             }
         },
         "id": 9,
-        "name": "unknown_numbers"
+        "name": "unknown_numbers",
+        "path": [
+            "FileHeader",
+            "unknown_numbers"
+        ]
     },
     "10": {
         "type": "str32",
         "default": "KSneijders/AoE2ScenarioParser",
         "id": 10,
-        "name": "creator_name"
+        "name": "creator_name",
+        "path": [
+            "FileHeader",
+            "creator_name"
+        ]
     },
     "16": {
         "type": "struct:PlayerDataOneStruct",
         "repeat": 16,
         "default": null,
         "id": 16,
-        "name": "player_data_1"
+        "name": "player_data_1",
+        "path": [
+            "DataHeader",
+            "player_data_1"
+        ]
     },
     "26": {
         "type": "30",
@@ -61,73 +77,121 @@
             }
         },
         "id": 26,
-        "name": "mission_item"
+        "name": "mission_item",
+        "path": [
+            "DataHeader",
+            "mission_item"
+        ]
     },
     "28": {
         "type": "str16",
         "default": "CreatedUsingAoE2ScenarioParser.aoe2scenario",
         "id": 28,
-        "name": "filename"
+        "name": "filename",
+        "path": [
+            "DataHeader",
+            "filename"
+        ]
     },
     "35": {
         "type": "str16",
         "default": "",
         "id": 35,
-        "name": "ascii_instructions"
+        "name": "ascii_instructions",
+        "path": [
+            "Messages",
+            "ascii_instructions"
+        ]
     },
     "36": {
         "type": "str16",
         "default": "",
         "id": 36,
-        "name": "ascii_hints"
+        "name": "ascii_hints",
+        "path": [
+            "Messages",
+            "ascii_hints"
+        ]
     },
     "37": {
         "type": "str16",
         "default": "This scenario was created using AoE2ScenarioParser! Hopefully you enjoyed!",
         "id": 37,
-        "name": "ascii_victory"
+        "name": "ascii_victory",
+        "path": [
+            "Messages",
+            "ascii_victory"
+        ]
     },
     "38": {
         "type": "str16",
         "default": "",
         "id": 38,
-        "name": "ascii_loss"
+        "name": "ascii_loss",
+        "path": [
+            "Messages",
+            "ascii_loss"
+        ]
     },
     "39": {
         "type": "str16",
         "default": "",
         "id": 39,
-        "name": "ascii_history"
+        "name": "ascii_history",
+        "path": [
+            "Messages",
+            "ascii_history"
+        ]
     },
     "40": {
         "type": "str16",
         "default": "",
         "id": 40,
-        "name": "ascii_scouts"
+        "name": "ascii_scouts",
+        "path": [
+            "Messages",
+            "ascii_scouts"
+        ]
     },
     "41": {
         "type": "str16",
         "default": "",
         "id": 41,
-        "name": "ascii_pregame"
+        "name": "ascii_pregame",
+        "path": [
+            "Cinematics",
+            "ascii_pregame"
+        ]
     },
     "42": {
         "type": "str16",
         "default": "",
         "id": 42,
-        "name": "ascii_victory"
+        "name": "ascii_victory",
+        "path": [
+            "Cinematics",
+            "ascii_victory"
+        ]
     },
     "43": {
         "type": "str16",
         "default": "",
         "id": 43,
-        "name": "ascii_loss"
+        "name": "ascii_loss",
+        "path": [
+            "Cinematics",
+            "ascii_loss"
+        ]
     },
     "44": {
         "type": "str16",
         "default": "",
         "id": 44,
-        "name": "ascii_filename"
+        "name": "ascii_filename",
+        "path": [
+            "BackgroundImage",
+            "ascii_filename"
+        ]
     },
     "49": {
         "type": "struct:BitMapInfoStruct",
@@ -140,7 +204,11 @@
             }
         },
         "id": 49,
-        "name": "bitmap_info"
+        "name": "bitmap_info",
+        "path": [
+            "BackgroundImage",
+            "bitmap_info"
+        ]
     },
     "61": {
         "type": "u32",
@@ -152,7 +220,12 @@
             }
         },
         "id": 61,
-        "name": "colors_used"
+        "name": "colors_used",
+        "path": [
+            "BackgroundImage",
+            "bitmap_info[__index__]",
+            "colors_used"
+        ]
     },
     "62": {
         "type": "u8",
@@ -168,7 +241,12 @@
             }
         },
         "id": 62,
-        "name": "image"
+        "name": "image",
+        "path": [
+            "BackgroundImage",
+            "bitmap_info[__index__]",
+            "image"
+        ]
     },
     "63": {
         "type": "str16",
@@ -208,7 +286,11 @@
             ""
         ],
         "id": 63,
-        "name": "strings"
+        "name": "strings",
+        "path": [
+            "PlayerDataTwo",
+            "strings"
+        ]
     },
     "64": {
         "type": "str16",
@@ -232,34 +314,55 @@
             ""
         ],
         "id": 64,
-        "name": "ai_names"
+        "name": "ai_names",
+        "path": [
+            "PlayerDataTwo",
+            "ai_names"
+        ]
     },
     "65": {
         "type": "struct:AIStruct",
         "repeat": 16,
         "default": null,
         "id": 65,
-        "name": "ai_files"
+        "name": "ai_files",
+        "path": [
+            "PlayerDataTwo",
+            "ai_files"
+        ]
     },
     "68": {
         "type": "str32",
         "default": "",
         "id": 68,
-        "name": "ai_per_file_text"
+        "name": "ai_per_file_text",
+        "path": [
+            "PlayerDataTwo",
+            "ai_files[__index__]",
+            "ai_per_file_text"
+        ]
     },
     "71": {
         "type": "struct:ResourcesStruct",
         "repeat": 16,
         "default": null,
         "id": 71,
-        "name": "resources"
+        "name": "resources",
+        "path": [
+            "PlayerDataTwo",
+            "resources"
+        ]
     },
     "90": {
         "type": "struct:PlayerDiplomacyStruct",
         "repeat": 16,
         "default": null,
         "id": 90,
-        "name": "per_player_diplomacy"
+        "name": "per_player_diplomacy",
+        "path": [
+            "Diplomacy",
+            "per_player_diplomacy"
+        ]
     },
     "97": {
         "type": "u32",
@@ -278,7 +381,11 @@
             }
         },
         "id": 97,
-        "name": "disabled_tech_ids_player_1"
+        "name": "disabled_tech_ids_player_1",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_1"
+        ]
     },
     "98": {
         "type": "u32",
@@ -293,7 +400,11 @@
             }
         },
         "id": 98,
-        "name": "disabled_tech_ids_player_2"
+        "name": "disabled_tech_ids_player_2",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_2"
+        ]
     },
     "99": {
         "type": "u32",
@@ -308,7 +419,11 @@
             }
         },
         "id": 99,
-        "name": "disabled_tech_ids_player_3"
+        "name": "disabled_tech_ids_player_3",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_3"
+        ]
     },
     "100": {
         "type": "u32",
@@ -323,7 +438,11 @@
             }
         },
         "id": 100,
-        "name": "disabled_tech_ids_player_4"
+        "name": "disabled_tech_ids_player_4",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_4"
+        ]
     },
     "101": {
         "type": "u32",
@@ -338,7 +457,11 @@
             }
         },
         "id": 101,
-        "name": "disabled_tech_ids_player_5"
+        "name": "disabled_tech_ids_player_5",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_5"
+        ]
     },
     "102": {
         "type": "u32",
@@ -353,7 +476,11 @@
             }
         },
         "id": 102,
-        "name": "disabled_tech_ids_player_6"
+        "name": "disabled_tech_ids_player_6",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_6"
+        ]
     },
     "103": {
         "type": "u32",
@@ -368,7 +495,11 @@
             }
         },
         "id": 103,
-        "name": "disabled_tech_ids_player_7"
+        "name": "disabled_tech_ids_player_7",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_7"
+        ]
     },
     "104": {
         "type": "u32",
@@ -383,7 +514,11 @@
             }
         },
         "id": 104,
-        "name": "disabled_tech_ids_player_8"
+        "name": "disabled_tech_ids_player_8",
+        "path": [
+            "Options",
+            "disabled_tech_ids_player_8"
+        ]
     },
     "106": {
         "type": "u32",
@@ -402,7 +537,11 @@
             }
         },
         "id": 106,
-        "name": "disabled_building_ids_player_1"
+        "name": "disabled_building_ids_player_1",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_1"
+        ]
     },
     "107": {
         "type": "u32",
@@ -417,7 +556,11 @@
             }
         },
         "id": 107,
-        "name": "disabled_building_ids_player_2"
+        "name": "disabled_building_ids_player_2",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_2"
+        ]
     },
     "108": {
         "type": "u32",
@@ -432,7 +575,11 @@
             }
         },
         "id": 108,
-        "name": "disabled_building_ids_player_3"
+        "name": "disabled_building_ids_player_3",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_3"
+        ]
     },
     "109": {
         "type": "u32",
@@ -447,7 +594,11 @@
             }
         },
         "id": 109,
-        "name": "disabled_building_ids_player_4"
+        "name": "disabled_building_ids_player_4",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_4"
+        ]
     },
     "110": {
         "type": "u32",
@@ -462,7 +613,11 @@
             }
         },
         "id": 110,
-        "name": "disabled_building_ids_player_5"
+        "name": "disabled_building_ids_player_5",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_5"
+        ]
     },
     "111": {
         "type": "u32",
@@ -477,7 +632,11 @@
             }
         },
         "id": 111,
-        "name": "disabled_building_ids_player_6"
+        "name": "disabled_building_ids_player_6",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_6"
+        ]
     },
     "112": {
         "type": "u32",
@@ -492,7 +651,11 @@
             }
         },
         "id": 112,
-        "name": "disabled_building_ids_player_7"
+        "name": "disabled_building_ids_player_7",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_7"
+        ]
     },
     "113": {
         "type": "u32",
@@ -507,7 +670,11 @@
             }
         },
         "id": 113,
-        "name": "disabled_building_ids_player_8"
+        "name": "disabled_building_ids_player_8",
+        "path": [
+            "Options",
+            "disabled_building_ids_player_8"
+        ]
     },
     "115": {
         "type": "u32",
@@ -526,7 +693,11 @@
             }
         },
         "id": 115,
-        "name": "disabled_unit_ids_player_1"
+        "name": "disabled_unit_ids_player_1",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_1"
+        ]
     },
     "116": {
         "type": "u32",
@@ -541,7 +712,11 @@
             }
         },
         "id": 116,
-        "name": "disabled_unit_ids_player_2"
+        "name": "disabled_unit_ids_player_2",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_2"
+        ]
     },
     "117": {
         "type": "u32",
@@ -556,7 +731,11 @@
             }
         },
         "id": 117,
-        "name": "disabled_unit_ids_player_3"
+        "name": "disabled_unit_ids_player_3",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_3"
+        ]
     },
     "118": {
         "type": "u32",
@@ -571,7 +750,11 @@
             }
         },
         "id": 118,
-        "name": "disabled_unit_ids_player_4"
+        "name": "disabled_unit_ids_player_4",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_4"
+        ]
     },
     "119": {
         "type": "u32",
@@ -586,7 +769,11 @@
             }
         },
         "id": 119,
-        "name": "disabled_unit_ids_player_5"
+        "name": "disabled_unit_ids_player_5",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_5"
+        ]
     },
     "120": {
         "type": "u32",
@@ -601,7 +788,11 @@
             }
         },
         "id": 120,
-        "name": "disabled_unit_ids_player_6"
+        "name": "disabled_unit_ids_player_6",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_6"
+        ]
     },
     "121": {
         "type": "u32",
@@ -616,7 +807,11 @@
             }
         },
         "id": 121,
-        "name": "disabled_unit_ids_player_7"
+        "name": "disabled_unit_ids_player_7",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_7"
+        ]
     },
     "122": {
         "type": "u32",
@@ -631,19 +826,31 @@
             }
         },
         "id": 122,
-        "name": "disabled_unit_ids_player_8"
+        "name": "disabled_unit_ids_player_8",
+        "path": [
+            "Options",
+            "disabled_unit_ids_player_8"
+        ]
     },
     "130": {
         "type": "str16",
         "default": "",
         "id": 130,
-        "name": "water_definition"
+        "name": "water_definition",
+        "path": [
+            "Map",
+            "water_definition"
+        ]
     },
     "132": {
         "type": "str16",
         "default": "Empty",
         "id": 132,
-        "name": "map_color_mood"
+        "name": "map_color_mood",
+        "path": [
+            "Map",
+            "map_color_mood"
+        ]
     },
     "134": {
         "type": "str16",
@@ -655,7 +862,11 @@
             }
         },
         "id": 134,
-        "name": "script_name"
+        "name": "script_name",
+        "path": [
+            "Map",
+            "script_name"
+        ]
     },
     "144": {
         "type": "struct:TerrainStruct",
@@ -681,27 +892,44 @@
             }
         },
         "id": 144,
-        "name": "terrain_data"
+        "name": "terrain_data",
+        "path": [
+            "Map",
+            "terrain_data"
+        ]
     },
     "150": {
         "type": "struct:PlayerDataFourStruct",
         "repeat": 8,
         "default": null,
         "id": 150,
-        "name": "player_data_4"
+        "name": "player_data_4",
+        "path": [
+            "Units",
+            "player_data_4"
+        ]
     },
     "159": {
         "type": "struct:PlayerDataThreeStruct",
         "repeat": 8,
         "default": null,
         "id": 159,
-        "name": "player_data_3"
+        "name": "player_data_3",
+        "path": [
+            "Units",
+            "player_data_3"
+        ]
     },
     "160": {
         "type": "str16",
         "default": "Scenario Editor Phantom",
         "id": 160,
-        "name": "constant_name"
+        "name": "constant_name",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "constant_name"
+        ]
     },
     "167": {
         "type": "u8",
@@ -730,7 +958,12 @@
             }
         },
         "id": 167,
-        "name": "diplomacy_for_interaction"
+        "name": "diplomacy_for_interaction",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "diplomacy_for_interaction"
+        ]
     },
     "172": {
         "type": "u8",
@@ -758,7 +991,12 @@
             }
         },
         "id": 172,
-        "name": "unknown_2"
+        "name": "unknown_2",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "unknown_2"
+        ]
     },
     "173": {
         "type": "44",
@@ -777,7 +1015,12 @@
             }
         },
         "id": 173,
-        "name": "unknown_structure_grand_theft_empires"
+        "name": "unknown_structure_grand_theft_empires",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "unknown_structure_grand_theft_empires"
+        ]
     },
     "174": {
         "type": "u8",
@@ -794,7 +1037,12 @@
             }
         },
         "id": 174,
-        "name": "unknown_5"
+        "name": "unknown_5",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "unknown_5"
+        ]
     },
     "176": {
         "type": "32",
@@ -809,7 +1057,12 @@
             }
         },
         "id": 176,
-        "name": "unknown_structure_ww_campaign_2"
+        "name": "unknown_structure_ww_campaign_2",
+        "path": [
+            "Units",
+            "player_data_3[__index__]",
+            "unknown_structure_ww_campaign_2"
+        ]
     },
     "178": {
         "type": "struct:PlayerUnitsStruct",
@@ -828,7 +1081,11 @@
             }
         },
         "id": 178,
-        "name": "players_units"
+        "name": "players_units",
+        "path": [
+            "Units",
+            "players_units"
+        ]
     },
     "180": {
         "type": "struct:UnitStruct",
@@ -847,7 +1104,12 @@
             }
         },
         "id": 180,
-        "name": "units"
+        "name": "units",
+        "path": [
+            "Units",
+            "players_units[__index__]",
+            "units"
+        ]
     },
     "193": {
         "type": "struct:TriggerStruct",
@@ -870,25 +1132,44 @@
             }
         },
         "id": 193,
-        "name": "trigger_data"
+        "name": "trigger_data",
+        "path": [
+            "Triggers",
+            "trigger_data"
+        ]
     },
     "204": {
         "type": "str32",
         "default": "",
         "id": 204,
-        "name": "trigger_description"
+        "name": "trigger_description",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "trigger_description"
+        ]
     },
     "205": {
         "type": "str32",
         "default": "Trigger 0",
         "id": 205,
-        "name": "trigger_name"
+        "name": "trigger_name",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "trigger_name"
+        ]
     },
     "206": {
         "type": "str32",
         "default": "",
         "id": 206,
-        "name": "short_description"
+        "name": "short_description",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "short_description"
+        ]
     },
     "208": {
         "type": "struct:EffectStruct",
@@ -907,7 +1188,12 @@
             }
         },
         "id": 208,
-        "name": "effect_data"
+        "name": "effect_data",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data"
+        ]
     },
     "212": {
         "type": "u8",
@@ -924,7 +1210,13 @@
             }
         },
         "id": 212,
-        "name": "armour_attack_quantity"
+        "name": "armour_attack_quantity",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "armour_attack_quantity"
+        ]
     },
     "213": {
         "type": "u8",
@@ -941,7 +1233,13 @@
             }
         },
         "id": 213,
-        "name": "armour_attack_class"
+        "name": "armour_attack_class",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "armour_attack_class"
+        ]
     },
     "214": {
         "comment": "These 2 bytes are unused but present when armour_attack is used.",
@@ -959,7 +1257,13 @@
             }
         },
         "id": 214,
-        "name": "armour_attack_unused"
+        "name": "armour_attack_unused",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "armour_attack_unused"
+        ]
     },
     "215": {
         "type": "s32",
@@ -976,19 +1280,37 @@
             }
         },
         "id": 215,
-        "name": "quantity"
+        "name": "quantity",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "quantity"
+        ]
     },
     "262": {
         "type": "str32",
         "default": "",
         "id": 262,
-        "name": "message"
+        "name": "message",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "message"
+        ]
     },
     "263": {
         "type": "str32",
         "default": "",
         "id": 263,
-        "name": "sound_name"
+        "name": "sound_name",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "sound_name"
+        ]
     },
     "264": {
         "type": "s32",
@@ -1007,7 +1329,13 @@
             }
         },
         "id": 264,
-        "name": "selected_object_ids"
+        "name": "selected_object_ids",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_data[__index__]",
+            "selected_object_ids"
+        ]
     },
     "265": {
         "type": "s32",
@@ -1022,7 +1350,12 @@
             }
         },
         "id": 265,
-        "name": "effect_display_order_array"
+        "name": "effect_display_order_array",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "effect_display_order_array"
+        ]
     },
     "267": {
         "type": "struct:ConditionStruct",
@@ -1041,13 +1374,24 @@
             }
         },
         "id": 267,
-        "name": "condition_data"
+        "name": "condition_data",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "condition_data"
+        ]
     },
     "293": {
         "type": "str32",
         "default": "",
         "id": 293,
-        "name": "xs_function"
+        "name": "xs_function",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "condition_data[__index__]",
+            "xs_function"
+        ]
     },
     "294": {
         "type": "s32",
@@ -1062,7 +1406,12 @@
             }
         },
         "id": 294,
-        "name": "condition_display_order_array"
+        "name": "condition_display_order_array",
+        "path": [
+            "Triggers",
+            "trigger_data[__index__]",
+            "condition_display_order_array"
+        ]
     },
     "295": {
         "type": "u32",
@@ -1077,7 +1426,11 @@
             }
         },
         "id": 295,
-        "name": "trigger_display_order_array"
+        "name": "trigger_display_order_array",
+        "path": [
+            "Triggers",
+            "trigger_display_order_array"
+        ]
     },
     "298": {
         "type": "struct:VariableStruct",
@@ -1096,13 +1449,22 @@
             }
         },
         "id": 298,
-        "name": "variable_data"
+        "name": "variable_data",
+        "path": [
+            "Triggers",
+            "variable_data"
+        ]
     },
     "300": {
         "type": "str32",
         "default": "_Variable0",
         "id": 300,
-        "name": "variable_name"
+        "name": "variable_name",
+        "path": [
+            "Triggers",
+            "variable_data[__index__]",
+            "variable_name"
+        ]
     },
     "302": {
         "type": "str16",
@@ -1115,13 +1477,21 @@
             }
         },
         "id": 302,
-        "name": "script_file_path"
+        "name": "script_file_path",
+        "path": [
+            "Files",
+            "script_file_path"
+        ]
     },
     "303": {
         "type": "str32",
         "default": "",
         "id": 303,
-        "name": "script_file_content"
+        "name": "script_file_content",
+        "path": [
+            "Files",
+            "script_file_content"
+        ]
     },
     "306": {
         "type": "u32",
@@ -1150,7 +1520,11 @@
             }
         },
         "id": 306,
-        "name": "number_of_ai_files"
+        "name": "number_of_ai_files",
+        "path": [
+            "Files",
+            "number_of_ai_files"
+        ]
     },
     "307": {
         "type": "struct:AI2Struct",
@@ -1170,18 +1544,32 @@
             }
         },
         "id": 307,
-        "name": "ai_files"
+        "name": "ai_files",
+        "path": [
+            "Files",
+            "ai_files"
+        ]
     },
     "308": {
         "type": "str32",
         "default": "",
         "id": 308,
-        "name": "ai_file_name"
+        "name": "ai_file_name",
+        "path": [
+            "Files",
+            "ai_files[__index__]",
+            "ai_file_name"
+        ]
     },
     "309": {
         "type": "str32",
         "default": "",
         "id": 309,
-        "name": "ai_file"
+        "name": "ai_file",
+        "path": [
+            "Files",
+            "ai_files[__index__]",
+            "ai_file"
+        ]
     }
 }
