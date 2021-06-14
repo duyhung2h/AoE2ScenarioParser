@@ -2,7 +2,8 @@
     "4": {
         "type": "str32",
         "default": "",
-        "id": 4
+        "id": 4,
+        "name": "scenario_instructions"
     },
     "9": {
         "type": "u32",
@@ -27,18 +28,21 @@
                 "target": "self:amount_of_unknown_numbers"
             }
         },
-        "id": 9
+        "id": 9,
+        "name": "unknown_numbers"
     },
     "10": {
         "type": "str32",
         "default": "KSneijders/AoE2ScenarioParser",
-        "id": 10
+        "id": 10,
+        "name": "creator_name"
     },
     "16": {
         "type": "struct:PlayerDataOneStruct",
         "repeat": 16,
         "default": null,
-        "id": 16
+        "id": 16,
+        "name": "player_data_1"
     },
     "26": {
         "type": "30",
@@ -56,62 +60,74 @@
                 "target": "self:mission_items_counter"
             }
         },
-        "id": 26
+        "id": 26,
+        "name": "mission_item"
     },
     "28": {
         "type": "str16",
         "default": "CreatedUsingAoE2ScenarioParser.aoe2scenario",
-        "id": 28
+        "id": 28,
+        "name": "filename"
     },
     "35": {
         "type": "str16",
         "default": "",
-        "id": 35
+        "id": 35,
+        "name": "ascii_instructions"
     },
     "36": {
         "type": "str16",
         "default": "",
-        "id": 36
+        "id": 36,
+        "name": "ascii_hints"
     },
     "37": {
         "type": "str16",
         "default": "This scenario was created using AoE2ScenarioParser! Hopefully you enjoyed!",
-        "id": 37
+        "id": 37,
+        "name": "ascii_victory"
     },
     "38": {
         "type": "str16",
         "default": "",
-        "id": 38
+        "id": 38,
+        "name": "ascii_loss"
     },
     "39": {
         "type": "str16",
         "default": "",
-        "id": 39
+        "id": 39,
+        "name": "ascii_history"
     },
     "40": {
         "type": "str16",
         "default": "",
-        "id": 40
+        "id": 40,
+        "name": "ascii_scouts"
     },
     "41": {
         "type": "str16",
         "default": "",
-        "id": 41
+        "id": 41,
+        "name": "ascii_pregame"
     },
     "42": {
         "type": "str16",
         "default": "",
-        "id": 42
+        "id": 42,
+        "name": "ascii_victory"
     },
     "43": {
         "type": "str16",
         "default": "",
-        "id": 43
+        "id": 43,
+        "name": "ascii_loss"
     },
     "44": {
         "type": "str16",
         "default": "",
-        "id": 44
+        "id": 44,
+        "name": "ascii_filename"
     },
     "49": {
         "type": "struct:BitMapInfoStruct",
@@ -123,7 +139,8 @@
                 "eval": "1 if picture_orientation in [-1, 2] else 0"
             }
         },
-        "id": 49
+        "id": 49,
+        "name": "bitmap_info"
     },
     "61": {
         "type": "u32",
@@ -134,7 +151,8 @@
                 "target": "self:number_of_colors_used"
             }
         },
-        "id": 61
+        "id": 61,
+        "name": "colors_used"
     },
     "62": {
         "type": "u8",
@@ -149,7 +167,8 @@
                 "eval": "width * height"
             }
         },
-        "id": 62
+        "id": 62,
+        "name": "image"
     },
     "63": {
         "type": "str16",
@@ -188,7 +207,8 @@
             "",
             ""
         ],
-        "id": 63
+        "id": 63,
+        "name": "strings"
     },
     "64": {
         "type": "str16",
@@ -211,30 +231,35 @@
             "",
             ""
         ],
-        "id": 64
+        "id": 64,
+        "name": "ai_names"
     },
     "65": {
         "type": "struct:AIStruct",
         "repeat": 16,
         "default": null,
-        "id": 65
+        "id": 65,
+        "name": "ai_files"
     },
     "68": {
         "type": "str32",
         "default": "",
-        "id": 68
+        "id": 68,
+        "name": "ai_per_file_text"
     },
     "71": {
         "type": "struct:ResourcesStruct",
         "repeat": 16,
         "default": null,
-        "id": 71
+        "id": 71,
+        "name": "resources"
     },
     "90": {
         "type": "struct:PlayerDiplomacyStruct",
         "repeat": 16,
         "default": null,
-        "id": 90
+        "id": 90,
+        "name": "per_player_diplomacy"
     },
     "97": {
         "type": "u32",
@@ -252,7 +277,8 @@
                 "target": "self:per_player_number_of_disabled_techs"
             }
         },
-        "id": 97
+        "id": 97,
+        "name": "disabled_tech_ids_player_1"
     },
     "98": {
         "type": "u32",
@@ -266,7 +292,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 98
+        "id": 98,
+        "name": "disabled_tech_ids_player_2"
     },
     "99": {
         "type": "u32",
@@ -280,7 +307,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 99
+        "id": 99,
+        "name": "disabled_tech_ids_player_3"
     },
     "100": {
         "type": "u32",
@@ -294,7 +322,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 100
+        "id": 100,
+        "name": "disabled_tech_ids_player_4"
     },
     "101": {
         "type": "u32",
@@ -308,7 +337,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 101
+        "id": 101,
+        "name": "disabled_tech_ids_player_5"
     },
     "102": {
         "type": "u32",
@@ -322,7 +352,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 102
+        "id": 102,
+        "name": "disabled_tech_ids_player_6"
     },
     "103": {
         "type": "u32",
@@ -336,7 +367,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 103
+        "id": 103,
+        "name": "disabled_tech_ids_player_7"
     },
     "104": {
         "type": "u32",
@@ -350,7 +382,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 104
+        "id": 104,
+        "name": "disabled_tech_ids_player_8"
     },
     "106": {
         "type": "u32",
@@ -368,7 +401,8 @@
                 "target": "self:per_player_number_of_disabled_buildings"
             }
         },
-        "id": 106
+        "id": 106,
+        "name": "disabled_building_ids_player_1"
     },
     "107": {
         "type": "u32",
@@ -382,7 +416,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 107
+        "id": 107,
+        "name": "disabled_building_ids_player_2"
     },
     "108": {
         "type": "u32",
@@ -396,7 +431,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 108
+        "id": 108,
+        "name": "disabled_building_ids_player_3"
     },
     "109": {
         "type": "u32",
@@ -410,7 +446,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 109
+        "id": 109,
+        "name": "disabled_building_ids_player_4"
     },
     "110": {
         "type": "u32",
@@ -424,7 +461,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 110
+        "id": 110,
+        "name": "disabled_building_ids_player_5"
     },
     "111": {
         "type": "u32",
@@ -438,7 +476,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 111
+        "id": 111,
+        "name": "disabled_building_ids_player_6"
     },
     "112": {
         "type": "u32",
@@ -452,7 +491,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 112
+        "id": 112,
+        "name": "disabled_building_ids_player_7"
     },
     "113": {
         "type": "u32",
@@ -466,7 +506,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 113
+        "id": 113,
+        "name": "disabled_building_ids_player_8"
     },
     "115": {
         "type": "u32",
@@ -484,7 +525,8 @@
                 "target": "self:per_player_number_of_disabled_units"
             }
         },
-        "id": 115
+        "id": 115,
+        "name": "disabled_unit_ids_player_1"
     },
     "116": {
         "type": "u32",
@@ -498,7 +540,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 116
+        "id": 116,
+        "name": "disabled_unit_ids_player_2"
     },
     "117": {
         "type": "u32",
@@ -512,7 +555,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 117
+        "id": 117,
+        "name": "disabled_unit_ids_player_3"
     },
     "118": {
         "type": "u32",
@@ -526,7 +570,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 118
+        "id": 118,
+        "name": "disabled_unit_ids_player_4"
     },
     "119": {
         "type": "u32",
@@ -540,7 +585,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 119
+        "id": 119,
+        "name": "disabled_unit_ids_player_5"
     },
     "120": {
         "type": "u32",
@@ -554,7 +600,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 120
+        "id": 120,
+        "name": "disabled_unit_ids_player_6"
     },
     "121": {
         "type": "u32",
@@ -568,7 +615,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 121
+        "id": 121,
+        "name": "disabled_unit_ids_player_7"
     },
     "122": {
         "type": "u32",
@@ -582,17 +630,20 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 122
+        "id": 122,
+        "name": "disabled_unit_ids_player_8"
     },
     "130": {
         "type": "str16",
         "default": "",
-        "id": 130
+        "id": 130,
+        "name": "water_definition"
     },
     "132": {
         "type": "str16",
         "default": "Empty",
-        "id": 132
+        "id": 132,
+        "name": "map_color_mood"
     },
     "134": {
         "type": "str16",
@@ -603,7 +654,8 @@
                 "target": "Files:script_file_path"
             }
         },
-        "id": 134
+        "id": 134,
+        "name": "script_name"
     },
     "144": {
         "type": "struct:TerrainStruct",
@@ -628,24 +680,28 @@
                 ]
             }
         },
-        "id": 144
+        "id": 144,
+        "name": "terrain_data"
     },
     "150": {
         "type": "struct:PlayerDataFourStruct",
         "repeat": 8,
         "default": null,
-        "id": 150
+        "id": 150,
+        "name": "player_data_4"
     },
     "159": {
         "type": "struct:PlayerDataThreeStruct",
         "repeat": 8,
         "default": null,
-        "id": 159
+        "id": 159,
+        "name": "player_data_3"
     },
     "160": {
         "type": "str16",
         "default": "Scenario Editor Phantom",
-        "id": 160
+        "id": 160,
+        "name": "constant_name"
     },
     "167": {
         "type": "u8",
@@ -673,7 +729,8 @@
                 "target": "self:player_count_for_diplomacy"
             }
         },
-        "id": 167
+        "id": 167,
+        "name": "diplomacy_for_interaction"
     },
     "172": {
         "type": "u8",
@@ -700,7 +757,8 @@
                 "target": "self:victory_version"
             }
         },
-        "id": 172
+        "id": 172,
+        "name": "unknown_2"
     },
     "173": {
         "type": "44",
@@ -718,7 +776,8 @@
                 "target": "self:unknown"
             }
         },
-        "id": 173
+        "id": 173,
+        "name": "unknown_structure_grand_theft_empires"
     },
     "174": {
         "type": "u8",
@@ -734,7 +793,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 174
+        "id": 174,
+        "name": "unknown_5"
     },
     "176": {
         "type": "32",
@@ -748,7 +808,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 176
+        "id": 176,
+        "name": "unknown_structure_ww_campaign_2"
     },
     "178": {
         "type": "struct:PlayerUnitsStruct",
@@ -766,7 +827,8 @@
                 "target": "self:number_of_unit_sections"
             }
         },
-        "id": 178
+        "id": 178,
+        "name": "players_units"
     },
     "180": {
         "type": "struct:UnitStruct",
@@ -784,7 +846,8 @@
                 "target": "self:unit_count"
             }
         },
-        "id": 180
+        "id": 180,
+        "name": "units"
     },
     "193": {
         "type": "struct:TriggerStruct",
@@ -806,22 +869,26 @@
                 ]
             }
         },
-        "id": 193
+        "id": 193,
+        "name": "trigger_data"
     },
     "204": {
         "type": "str32",
         "default": "",
-        "id": 204
+        "id": 204,
+        "name": "trigger_description"
     },
     "205": {
         "type": "str32",
         "default": "Trigger 0",
-        "id": 205
+        "id": 205,
+        "name": "trigger_name"
     },
     "206": {
         "type": "str32",
         "default": "",
-        "id": 206
+        "id": 206,
+        "name": "short_description"
     },
     "208": {
         "type": "struct:EffectStruct",
@@ -839,7 +906,8 @@
                 "target": "self:number_of_effects"
             }
         },
-        "id": 208
+        "id": 208,
+        "name": "effect_data"
     },
     "212": {
         "type": "u8",
@@ -855,7 +923,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 212
+        "id": 212,
+        "name": "armour_attack_quantity"
     },
     "213": {
         "type": "u8",
@@ -871,7 +940,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 213
+        "id": 213,
+        "name": "armour_attack_class"
     },
     "214": {
         "comment": "These 2 bytes are unused but present when armour_attack is used.",
@@ -888,7 +958,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 214
+        "id": 214,
+        "name": "armour_attack_unused"
     },
     "215": {
         "type": "s32",
@@ -904,17 +975,20 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 215
+        "id": 215,
+        "name": "quantity"
     },
     "262": {
         "type": "str32",
         "default": "",
-        "id": 262
+        "id": 262,
+        "name": "message"
     },
     "263": {
         "type": "str32",
         "default": "",
-        "id": 263
+        "id": 263,
+        "name": "sound_name"
     },
     "264": {
         "type": "s32",
@@ -932,7 +1006,8 @@
                 "target": "self:number_of_units_selected"
             }
         },
-        "id": 264
+        "id": 264,
+        "name": "selected_object_ids"
     },
     "265": {
         "type": "s32",
@@ -946,7 +1021,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 265
+        "id": 265,
+        "name": "effect_display_order_array"
     },
     "267": {
         "type": "struct:ConditionStruct",
@@ -964,12 +1040,14 @@
                 "target": "self:number_of_conditions"
             }
         },
-        "id": 267
+        "id": 267,
+        "name": "condition_data"
     },
     "293": {
         "type": "str32",
         "default": "",
-        "id": 293
+        "id": 293,
+        "name": "xs_function"
     },
     "294": {
         "type": "s32",
@@ -983,7 +1061,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 294
+        "id": 294,
+        "name": "condition_display_order_array"
     },
     "295": {
         "type": "u32",
@@ -997,7 +1076,8 @@
                 "action": "REFRESH_SELF"
             }
         },
-        "id": 295
+        "id": 295,
+        "name": "trigger_display_order_array"
     },
     "298": {
         "type": "struct:VariableStruct",
@@ -1015,12 +1095,14 @@
                 "target": "self:number_of_variables"
             }
         },
-        "id": 298
+        "id": 298,
+        "name": "variable_data"
     },
     "300": {
         "type": "str32",
         "default": "_Variable0",
-        "id": 300
+        "id": 300,
+        "name": "variable_name"
     },
     "302": {
         "type": "str16",
@@ -1032,12 +1114,14 @@
                 "eval": "script_name + ('.xs' if len(script_name) > 0 else '')"
             }
         },
-        "id": 302
+        "id": 302,
+        "name": "script_file_path"
     },
     "303": {
         "type": "str32",
         "default": "",
-        "id": 303
+        "id": 303,
+        "name": "script_file_content"
     },
     "306": {
         "type": "u32",
@@ -1065,7 +1149,8 @@
                 "target": "self:ai_files_present"
             }
         },
-        "id": 306
+        "id": 306,
+        "name": "number_of_ai_files"
     },
     "307": {
         "type": "struct:AI2Struct",
@@ -1084,16 +1169,19 @@
                 "target": "self:number_of_ai_files"
             }
         },
-        "id": 307
+        "id": 307,
+        "name": "ai_files"
     },
     "308": {
         "type": "str32",
         "default": "",
-        "id": 308
+        "id": 308,
+        "name": "ai_file_name"
     },
     "309": {
         "type": "str32",
         "default": "",
-        "id": 309
+        "id": 309,
+        "name": "ai_file"
     }
 }

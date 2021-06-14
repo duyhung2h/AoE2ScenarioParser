@@ -4,7 +4,7 @@ This file is used to update the version files and generate the variable structur
 import json
 from pathlib import Path
 
-from resources.scripts.build.support import mark_retrievers, variable_retrievers
+from resources.scripts.update_versions.support import mark_retrievers, variable_retrievers
 
 de_folder = Path(__file__).parent.parent.parent.parent / 'AoE2ScenarioParser' / 'versions' / 'DE'
 
@@ -26,6 +26,5 @@ f.close()
 
 # Write variable retrievers file
 f = open(de_folder / 'v1.41' / 'variable_retrievers.json', 'w')
-print(len(variable_retrievers))
 json.dump(variable_retrievers, f, indent=4)
 f.close()

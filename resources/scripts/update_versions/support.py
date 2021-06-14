@@ -1,3 +1,6 @@
+from copy import copy
+
+
 def numbers():
     yield from range(99999)
 
@@ -7,11 +10,12 @@ variable_retrievers = {}
 
 
 def mark_retrievers(section):
-    for retriever in section['retrievers'].values():
+    for name, retriever in section['retrievers'].items():
         retriever['id'] = next(counter)
 
         if retriever_is_variable(retriever):
-            variable_retrievers[retriever['id']] = retriever
+            variable_retrievers[retriever['id']] = copy(retriever)
+            variable_retrievers[retriever['id']]['name'] = name
 
         if retriever['type'][:7] == "struct:":
             rtype = retriever['type'][7:]
