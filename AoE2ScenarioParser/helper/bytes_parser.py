@@ -1,10 +1,12 @@
-from typing import List
+from typing import List, Tuple, TYPE_CHECKING
 
 from AoE2ScenarioParser import settings
 from AoE2ScenarioParser.helper.bytes_conversions import bytes_to_int
 from AoE2ScenarioParser.helper.exceptions import EndOfFileError
 from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
-from AoE2ScenarioParser.helper.list_functions import listify
+
+if TYPE_CHECKING:
+    from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 attributes = ['on_refresh', 'on_construct', 'on_commit']
 
@@ -33,7 +35,40 @@ def vorl(retriever, value):
     return value
 
 
-def retrieve_bytes(igenerator: IncrementalGenerator, retriever) -> List[bytes]:
+def slice_bytes(retriever: 'Retriever', byte_string: bytes, start_from: int) -> Tuple[List[bytes], int]:
+    var_type, var_len = retriever.datatype.type_and_length
+    retrieved_bytes = []
+    progress = start_from
+
+    def get_bytes(amount) -> bytes:
+        nonlocal progress
+        if len(byte_string) < progress + amount:
+            raise EndOfFileError("End of byte_string reached")  # Todo: Add different error
+        result = byte_string[progress:progress + amount]
+        progress += amount
+        return result
+
+    try:
+        for i in range(retriever.datatype.repeat):
+            if var_type != "str":  # (Signed) ints, floats, chars, plain bytes etc.
+                retrieved_bytes.append(get_bytes(var_len))
+            else:  # String, Stored as: (signed int (n), string (string_length = n))
+                int_bytes = get_bytes(var_len)
+                string_length = bytes_to_int(int_bytes, signed=True)
+                string_bytes = get_bytes(string_length)
+                retrieved_bytes.append(int_bytes + string_bytes)
+    except EndOfFileError:
+        if is_end_of_file_mark(retriever):
+            retriever.datatype.repeat = 0
+            return [], progress
+
+    # If more bytes present in the file after END_OF_FILE_MARK
+    # handle_end_of_file_mark(igenerator, retriever)
+
+    return retrieved_bytes, progress
+
+
+def retrieve_bytes_from_generator(igenerator: IncrementalGenerator, retriever) -> List[bytes]:
     """
     Retrieves the bytes belonging to this retriever.
 
@@ -61,10 +96,6 @@ def retrieve_bytes(igenerator: IncrementalGenerator, retriever) -> List[bytes]:
         if is_end_of_file_mark(retriever):
             retriever.datatype.repeat = 0
             return []
-    except TypeError:
-        print(retriever)
-        print(retriever.datatype.repeat)
-        exit()  # Todo: Should not exit (?)
 
     # If more bytes present in the file after END_OF_FILE_MARK
     handle_end_of_file_mark(igenerator, retriever)
