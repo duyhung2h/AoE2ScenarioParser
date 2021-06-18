@@ -14,6 +14,11 @@ class EndOfFileError(Exception):
     pass
 
 
+class TargetRetrieverReached(Exception):
+    """Used like StopIteration in nested generator. But StopIteration stops both and raises the error on the outside"""
+    pass
+
+
 class UnsupportedAttributeError(Exception):
     pass
 
