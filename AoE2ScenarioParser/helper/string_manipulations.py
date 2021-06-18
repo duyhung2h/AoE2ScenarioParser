@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple, List, TypeVar
 
 
 def add_str_trail(string) -> str:
@@ -19,14 +19,14 @@ def del_str_trail(string) -> Union[str, bytes]:
     return string
 
 
-def add_prefix_chars(string, char, length):
+def add_prefix_chars(string, char, length) -> str:
     if len(string) > length:
         return string
     else:
         return char * (length - len(string)) + string
 
 
-def add_suffix_chars(string, char, total_length):
+def add_suffix_chars(string, char, total_length) -> str:
     if len(string) > total_length:
         return string
     else:
@@ -39,20 +39,31 @@ def q_str(value: any) -> str:
     return str(value)
 
 
-def add_tabs(string: str, tabs: int):
+def add_tabs(string: str, tabs: int) -> str:
     return ("\n\r"+("\t" * tabs)).join(string.splitlines())
 
 
-def create_inline_line(entries):
+def create_inline_line(entries) -> str:
     return "\t" + ", ".join(map(str, entries)) + "\r\n"
 
 
-def create_textual_hex(string, space_distance=2, enter_distance=48):
+def create_textual_hex(string, space_distance=2, enter_distance=48) -> str:
     """Please note that the 'enter_distance' parameter is including the - to be added - spaces. If you calculated it
     without the spaces, please multiply the number by: `block size incl space / block size excl space`"""
     return insert_char(insert_char(string, " ", space_distance), "\n", enter_distance)
 
 
 # Credits: gurney alex @ https://stackoverflow.com/a/2657733/7230293
-def insert_char(string, char, step=64):
+def insert_char(string, char, step=64) -> str:
     return char.join(string[i:i + step] for i in range(0, len(string), step))
+
+
+def split_string_blocks(string, step) -> List[str]:
+    return [string[i:i+step] for i in range(0, len(string), step)]
+
+
+T = TypeVar('T', str, bytes)
+
+
+def split_string_at_index(string: T, index: int) -> Tuple[T, T]:
+    return string[:index], string[index:]
