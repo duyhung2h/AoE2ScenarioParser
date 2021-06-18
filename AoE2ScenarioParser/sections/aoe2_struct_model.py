@@ -6,7 +6,7 @@ from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict
 from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 if TYPE_CHECKING:
-    from AoE2ScenarioParser.sections.variable_retriever_manager import DynamicRetrieverManager
+    from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager
 
 
 class AoE2StructModel:
@@ -24,6 +24,7 @@ class AoE2StructModel:
         self.retriever_map = retriever_map
         self.structs = structs
         self.drm = drm
+        self.parent_path = []  # Todo: Better way to add this?
 
     @classmethod
     def from_structure(cls, name, structure, drm) -> AoE2StructModel:

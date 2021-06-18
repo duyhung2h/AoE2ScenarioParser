@@ -1,22 +1,22 @@
 import json
 import zlib
 from pathlib import Path
-from typing import Union, Dict
+from typing import Union
 
 import AoE2ScenarioParser.datasets.conditions as conditions
 import AoE2ScenarioParser.datasets.effects as effects
-from AoE2ScenarioParser.helper.printers import s_print
 from AoE2ScenarioParser.helper.exceptions import InvalidScenarioStructureError, UnknownScenarioStructureError, \
     UnknownStructureError
-from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex
 from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
+from AoE2ScenarioParser.helper.printers import s_print
+from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex, split_string_at_index
 from AoE2ScenarioParser.objects.aoe2_object_manager import AoE2ObjectManager
 from AoE2ScenarioParser.objects.managers.map_manager import MapManager
 from AoE2ScenarioParser.objects.managers.trigger_manager import TriggerManager
 from AoE2ScenarioParser.objects.managers.unit_manager import UnitManager
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
-from AoE2ScenarioParser.sections.retrieverdict import RetrieverDict
-from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager
+from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager as Drm, resolve_path
+from AoE2ScenarioParser.sections.sectiondict import SectionDict
 
 
 class AoE2Scenario:
@@ -36,27 +36,36 @@ class AoE2Scenario:
         self.read_mode = None
         self.scenario_version = "???"
         self.game_version = "???"
-        self.structure: dict = {}
-        self.sections: dict[str, AoE2FileSection] = {}
-        self.decompressed_file = None
 
+        # File contents
+        self.compressed_file = None
+        self.decompressed_file = None
+        # Structure
+        self.structure: dict = {}
+        self.sections: dict = {}
         # Managers
-        self._dynamic_retriever_manager = DynamicRetrieverManager(self)
+        self._drm: Drm = Drm()
         self._object_manager: Union[AoE2ObjectManager, None] = None
 
-        # Used in debug functions
-        self._file = None
-        self._file_header = None
-        self._decompressed_file_data = None
+        # Injection
+        self._drm.scenario = self
+
+    # Todo: Can be removed once drm function has been split
+    @property
+    def file_content(self):
+        """Request the file content thus far."""
+        return self.decompressed_file if self.decompressed_file is not None else self.compressed_file
 
     @classmethod
     def from_file(cls, filename, game_version):
+        scenario = cls()
+
         print(f"\nReading file: '{filename}'")
         s_print("Reading scenario file...")
         igenerator = IncrementalGenerator.from_file(filename)
+        scenario.compressed_file = igenerator.file_content
         s_print("Reading scenario file finished successfully.", final=True)
 
-        scenario = cls()
         scenario.read_mode = "from_file"
         scenario.game_version = game_version
         scenario.scenario_version = get_file_version(igenerator)
@@ -88,7 +97,7 @@ class AoE2Scenario:
             game_version=scenario.game_version,
             scenario_version=scenario.scenario_version
         )
-        scenario._object_manager.setup()
+        # scenario._object_manager.setup()
 
         return scenario
 
@@ -98,23 +107,26 @@ class AoE2Scenario:
         self.structure.update(get_structure(self.game_version, self.scenario_version))
 
     def _load_file(self, raw_file_igenerator: IncrementalGenerator):
-        header_section = self._create_and_load_section('FileHeader', raw_file_igenerator)
+        # Calculate all dynamic retrievers until this point
+        end_of_header_id = resolve_path(self.structure, ['FileHeader', '__END_OF_HEADER_MARK__'])['id']
 
-        header = raw_file_igenerator.file_content[:header_section.byte_length]
-        content = decompress_bytes(raw_file_igenerator.get_remaining_bytes())
-        self.decompressed_file = header + content
+        # Todo: necessary because `get_length_until` doesn't reolve retrievers
+        self._drm.determine_value(['FileHeader', '__END_OF_HEADER_MARK__'])
+        header_length = self._drm.get_length_until(end_of_header_id)
+
+        header, body = split_string_at_index(raw_file_igenerator.file_content, header_length)
+        body = decompress_bytes(body)
+
+        self.decompressed_file = header + body
 
     def _load_dynamic_retrievers(self):
-        self._dynamic_retriever_manager.dynamic_retrievers = get_version_dependant_structure_file(
+        self._drm.dynamic_retrievers = get_version_dependant_structure_file(
             self.game_version, self.scenario_version, 'dynamic_retrievers'
         )
 
     def _initialise_sections(self):
-        drm = self._dynamic_retriever_manager
         for section_name in self.structure.keys():
-            self.sections[section_name] = AoE2FileSection(
-                section_name, RetrieverDict(drm=drm, parent_path=[section_name])
-            )
+            self.sections[section_name] = SectionDict(drm=self._drm, parent_path=[section_name])
 
     def _load_content_sections(self, raw_file_igenerator: IncrementalGenerator):
         data_igenerator = IncrementalGenerator(
@@ -137,7 +149,7 @@ class AoE2Scenario:
         s_print(f"\t🔄 Parsing {name}...")
         section = AoE2FileSection.from_structure(
             name, self.structure.get(name),
-            RetrieverDict(drm=self._dynamic_retriever_manager)
+            SectionDict(drm=self._drm)
         )
         s_print(f"\t🔄 Gathering {name} data...")
         section.set_data_from_generator(igenerator, self.sections)
@@ -195,27 +207,27 @@ class AoE2Scenario:
     ################ Debug functions ################
     ############################################# """
 
-    def _debug_write_from_source(self, filename, datatype, write_bytes=True):
-        """This function is used as a test debugging writing. It writes parts of the read file to the filesystem."""
-        print("File writing from source started with attributes " + datatype + "...")
-        file = open(filename, "wb" if write_bytes else "w")
-        selected_parts = []
-        for t in datatype:
-            if t == "f":
-                selected_parts.append(self._file)
-            elif t == "h":
-                selected_parts.append(self._file_header)
-            elif t == "d":
-                selected_parts.append(self._decompressed_file_data)
-        parts = None
-        for part in selected_parts:
-            if parts is None:
-                parts = part
-                continue
-            parts += part
-        file.write(parts if write_bytes else create_textual_hex(parts.hex()))
-        file.close()
-        print("File writing finished successfully.")
+    # def _debug_write_from_source(self, filename, datatype, write_bytes=True):
+    #     """This function is used as a test debugging writing. It writes parts of the read file to the filesystem."""
+    #     print("File writing from source started with attributes " + datatype + "...")
+    #     file = open(filename, "wb" if write_bytes else "w")
+    #     selected_parts = []
+    #     for t in datatype:
+    #         if t == "f":
+    #             selected_parts.append(self._file)
+    #         elif t == "h":
+    #             selected_parts.append(self._file_header)
+    #         elif t == "d":
+    #             selected_parts.append(self._decompressed_file_data)
+    #     parts = None
+    #     for part in selected_parts:
+    #         if parts is None:
+    #             parts = part
+    #             continue
+    #         parts += part
+    #     file.write(parts if write_bytes else create_textual_hex(parts.hex()))
+    #     file.close()
+    #     print("File writing finished successfully.")
 
     def _retrieve_byte_structure(self, file_part):
         s_print(f"\t🔄 Writing {file_part.name}...")
@@ -271,7 +283,7 @@ def get_file_version(generator: IncrementalGenerator):
     return generator.get_bytes(4, update_progress=False).decode('ASCII')
 
 
-def decompress_bytes(file_content):
+def decompress_bytes(file_content: bytes) -> bytes:
     return zlib.decompress(file_content, -zlib.MAX_WBITS)
 
 

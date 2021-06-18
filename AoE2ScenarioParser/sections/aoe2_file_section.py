@@ -10,8 +10,8 @@ from AoE2ScenarioParser.helper.pretty_format import pretty_format_list
 from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex, insert_char
 from AoE2ScenarioParser.sections.aoe2_struct_model import AoE2StructModel, model_dict_from_structure
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
-from AoE2ScenarioParser.sections.retrieverdict import RetrieverDict
-from AoE2ScenarioParser.sections.retrievers.retriever import Retriever, duplicate_retriever_map, reset_retriever_map
+from AoE2ScenarioParser.sections.sectiondict import SectionDict, duplicate_retriever_map, reset_retriever_map
+from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 
 class SectionLevel(Enum):
@@ -28,7 +28,9 @@ class AoE2FileSection:
         "level",
     ]
 
-    def __init__(self, name, retriever_map: RetrieverDict, struct_models=None, level=SectionLevel.TOP_LEVEL):
+    def __init__(self, name, retriever_map: SectionDict, struct_models=None, level=SectionLevel.TOP_LEVEL):
+        raise Exception("AoE2FileSection USED!")
+
         if struct_models is None:
             struct_models = {}
 
@@ -61,7 +63,7 @@ class AoE2FileSection:
 
         return cls(
             name=model.name,
-            retriever_map=RetrieverDict(duplicate_rmap, drm=model.drm),
+            retriever_map=SectionDict(duplicate_rmap, drm=model.drm),
             struct_models=model.structs,
             level=SectionLevel.STRUCT
         )
@@ -73,7 +75,7 @@ class AoE2FileSection:
             retriever_map[name] = Retriever.from_structure(attr, name)
 
         structs = model_dict_from_structure(structure, drm)
-        return cls(section_name, RetrieverDict(retriever_map, drm), structs)
+        return cls(section_name, SectionDict(retriever_map, drm), structs)
 
     def get_data_as_bytes(self):
         result = []
@@ -111,7 +113,7 @@ class AoE2FileSection:
 
                         total_length += struct.byte_length
                 else:
-                    retrieved_bytes = bytes_parser.retrieve_bytes(igenerator, retriever)
+                    retrieved_bytes = bytes_parser.retrieve_bytes_from_generator(igenerator, retriever)
                     retriever.set_data_from_bytes(retrieved_bytes)
 
                     total_length += sum([len(raw_bytes) for raw_bytes in retrieved_bytes])

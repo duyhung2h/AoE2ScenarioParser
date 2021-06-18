@@ -1,7 +1,10 @@
 import math
+from typing import TYPE_CHECKING
 
 from AoE2ScenarioParser.sections.dependencies.dependency_action import DependencyAction
-from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
+
+if TYPE_CHECKING:
+    from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 
 def refresh_targets(retriever_event, section, sections):
@@ -16,7 +19,7 @@ def execute_refresh_action(retriever, section, sections):
     handle_retriever_dependency(retriever, "refresh", section, sections)
 
 
-def handle_retriever_dependency(retriever: Retriever, state, section, sections):
+def handle_retriever_dependency(retriever: 'Retriever', state, section, sections):
     on_x = f'on_{state}'
     if not hasattr(retriever, on_x):
         return
@@ -57,6 +60,6 @@ def execute_dependency_eval(retriever_event, section, sections):
 
 def select_retriever(target, section, sections):
     if target[0] == "self":
-        return section.retriever_map[target[1]]
+        return section[target[1]]
     else:
-        return sections[target[0]].retriever_map[target[1]]
+        return sections[target[0]][target[1]]

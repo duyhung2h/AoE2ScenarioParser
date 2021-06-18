@@ -1,22 +1,25 @@
 from typing import TYPE_CHECKING
 
-from AoE2ScenarioParser.helper.bytes_parser import retrieve_bytes
+from AoE2ScenarioParser.helper.bytes_parser import retrieve_bytes_from_generator
+from AoE2ScenarioParser.helper.exceptions import TargetRetrieverReached
 from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
 from AoE2ScenarioParser.helper.list_functions import sum_len
-from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict
-from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
+from AoE2ScenarioParser.helper.string_manipulations import split_string_blocks
+from AoE2ScenarioParser.sections.aoe2_struct_model import model_dict_from_structure
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
 from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 if TYPE_CHECKING:
-    from AoE2ScenarioParser.scenarios.aoe2_de_scenario import AoE2DEScenario
+    pass
 
 
-def resolve_path(structure, path):
+def resolve_path(structure, path, end_in_retrievers=True):
     try:
-        for p in path:
+        for index, p in enumerate(path):
             structure = structure[p]
-            structure = into_retrievers(structure)
+
+            if end_in_retrievers or index != len(path) - 1:
+                structure = into_retrievers(structure)
         return structure
     except KeyError:
         raise KeyError(f"Path {path} cannot be found.") from None
@@ -27,13 +30,26 @@ def into_retrievers(structure):
 
 
 class DynamicRetrieverManager:
-    def __init__(self, scenario_ref):
-        self.scenario: AoE2DEScenario = scenario_ref
-        self.structure = scenario_ref.structure  # Ease of access
-
+    def __init__(self):
+        self.scenario = None
         self.dynamic_retrievers = None
         self.dynamic_int_keys = []
         self.progress_id = -1
+
+    @property
+    def scenario(self):
+        return self._scenario
+
+    @scenario.setter
+    def scenario(self, value):
+        self._scenario = value
+
+    @property
+    def structure(self):
+        if self.scenario is not None:
+            return self.scenario.structure
+        else:
+            raise ValueError("Scenario hasn't been injected. Structure not available")
 
     @property
     def dynamic_retrievers(self) -> dict[str, dict]:
@@ -45,7 +61,8 @@ class DynamicRetrieverManager:
         if type(value) is dict:
             self.dynamic_int_keys = list(map(int, value.keys()))
 
-    def determine_value(self, path, host: AoE2FileSection):
+    # Todo: Split getting value and discovering until in different functions
+    def determine_value(self, path):
         print(f">>> Get value function called. Path: {path}")
 
         retriever_structure = resolve_path(self.structure, path)
@@ -61,24 +78,29 @@ class DynamicRetrieverManager:
 
         for dynamic_retriever_id in self.dynamic_int_keys:
             if dynamic_retriever_id > retriever_id:
+                # Solve requested retriever
                 bytes_until = self.get_length_until(retriever_id)
                 retriever = Retriever.from_structure(retriever_structure, name)
 
                 # Todo: Shouldn't need Incremental generator to get the bytes
-                necessary_bytes = retrieve_bytes(
-                    IncrementalGenerator('_name_', self.scenario.decompressed_file, bytes_until), retriever
+                necessary_bytes = retrieve_bytes_from_generator(
+                    IncrementalGenerator('_name_', self.scenario.file_content, bytes_until), retriever
                 )
-                retriever.set_data_from_bytes(necessary_bytes)  # Todo: No need to parse this :)
-                host.retriever_map[name] = retriever
+                retriever.set_data_from_bytes(necessary_bytes)
+                # host.retriever_map[name] = retriever
+                # Set in return - So much cleaner :)
                 print(f"Bytes: {necessary_bytes}")
                 print("Result:")
                 print(f"{retriever}\n")
                 return retriever
 
             elif self.progress_id < retriever_id and self.progress_id < dynamic_retriever_id:
-                print("\n>>> Found unresolved retriever!")
+                # Solve in-between unresolved retrievers
                 dr_structure = self.dynamic_retrievers[str(dynamic_retriever_id)]
+
+                print("\n>>> Found unresolved retriever!")
                 print(f"Unresolved Structure: {dr_structure['name']} -> {dr_structure}")
+
                 bytes_until = self.get_length_until(dynamic_retriever_id)
                 retriever = Retriever.from_structure(dr_structure, dr_structure['name'])
 
@@ -90,12 +112,37 @@ class DynamicRetrieverManager:
                         self.scenario.sections
                     )
 
-                # Todo: Shouldn't need Incremental generator to get the bytes
-                necessary_bytes = retrieve_bytes(
-                    IncrementalGenerator('_name_', self.scenario.decompressed_file, bytes_until),
-                    retriever
-                )
-                retriever.set_data_from_bytes(necessary_bytes)  # Todo: No need to parse this :)
+                necessary_bytes = []
+                model = None
+                if dr_structure['type'][:7] == "struct:":
+                    if 'static_length' in dr_structure:
+                        static_length = dr_structure['static_length']
+                        struct_name = dr_structure['type'][7:]
+
+                        total_static_length = retriever.datatype.repeat * static_length
+                        byte_string = self.scenario.file_content[bytes_until:bytes_until+total_static_length]
+                        necessary_bytes = split_string_blocks(byte_string, static_length)
+
+                        parent_path = dr_structure['path'][:-1]
+                        section_structure = resolve_path(self.structure, parent_path, end_in_retrievers=False)
+
+                        model = model_dict_from_structure(section_structure, self)[struct_name]
+                        model.parent_path = parent_path
+                    else:
+                        exit(99)
+                else:
+                    # Todo: Shouldn't need Incremental generator to get the bytes
+                    necessary_bytes = retrieve_bytes_from_generator(
+                        IncrementalGenerator('_name_', self.scenario.file_content, bytes_until),
+                        retriever
+                    )
+
+                # if dr_structure['type'][:7] == "struct:":
+                #     print(pretty_format_list(necessary_bytes))
+                #     print(len(necessary_bytes[0]))
+                #     exit(13)
+
+                retriever.setup_data_as_bytes(necessary_bytes, model)
                 self.dynamic_retrievers[str(dynamic_retriever_id)]['length'] = sum_len(necessary_bytes)
                 print(f"Bytes: {necessary_bytes}")
                 print("Result:")
@@ -103,14 +150,17 @@ class DynamicRetrieverManager:
                 self.progress_id = dynamic_retriever_id
 
     def get_length_until(self, rid):
-        g = retriever_generator_from(self.scenario.structure, 0)
+        g = retriever_generator(self.scenario.structure, 0, rid)
         total_length = 0
-        for _ in range(rid):
-            retriever = next(g)
+        for retriever in g:
             string_id = str(retriever['id'])
 
-            if string_id in self.dynamic_retrievers:
-                total_length += self.dynamic_retrievers[string_id]['length']
+            if string_id in self.dynamic_retrievers.keys():
+                try:
+                    total_length += self.dynamic_retrievers[string_id]['length']
+                except KeyError:
+                    print(self.dynamic_retrievers[string_id])
+                    raise Exception("Owh no...")
             else:
                 total_length += get_static_retriever_length(retriever)
         return total_length
@@ -131,21 +181,23 @@ def get_static_retriever_length(retriever):
     return var_len
 
 
-def retriever_generator_from(structure, rid):
+def retriever_generator(structure, from_retriever_id, until_retriever_id=-1):
     def loop(s):
         for retriever in s['retrievers'].values():
+            if retriever['id'] >= until_retriever_id != -1:
+                raise TargetRetrieverReached('Reached until retriever id')
             if retriever['type'][:7] == "struct:":
+                yield retriever
+
                 rtype = retriever['type'][7:]
-                loop(s['structs'][rtype])
+                yield from loop(s['structs'][rtype])
             else:
-                if rid <= int(retriever['id']):
+                if from_retriever_id <= int(retriever['id']):
                     yield retriever
 
     for section in structure.values():
-        gen = loop(section)
-        while True:
-            try:
-                yield next(gen)
-            except StopIteration:
-                break
+        try:
+            yield from loop(section)
+        except TargetRetrieverReached:
+            return
     yield None

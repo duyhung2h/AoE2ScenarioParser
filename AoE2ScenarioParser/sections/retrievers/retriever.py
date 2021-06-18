@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-import pickle
-from typing import Dict
-
 from AoE2ScenarioParser.helper import bytes_parser, string_manipulations
 from AoE2ScenarioParser.helper.bytes_conversions import parse_bytes_to_val, parse_val_to_bytes
 from AoE2ScenarioParser.helper.list_functions import listify
-from AoE2ScenarioParser.helper.pretty_format import pretty_format_list
+from AoE2ScenarioParser.helper.pretty_format import pretty_format_list, pretty_format_dict
 from AoE2ScenarioParser.sections.dependencies.dependency_action import DependencyAction
 from AoE2ScenarioParser.sections.dependencies.retriever_dependency import RetrieverDependency
 from AoE2ScenarioParser.sections.retrievers.datatype import DataType
+from AoE2ScenarioParser.sections.sectiondict import SectionDict
 
 
 class Retriever:
@@ -26,8 +24,9 @@ class Retriever:
         'is_list',
         'log_value',
         '_data',
-        'default_value',
-        # 'string_end_char'
+        '_data_as_bytes',
+        '_model',
+        'default_value'
     ]
 
     on_construct: RetrieverDependency
@@ -50,12 +49,48 @@ class Retriever:
         self.is_list = is_list
         self.log_value = log_value
         self._data = None
+        self._data_as_bytes = None
+        self._model = None
 
         if log_value:
             self.datatype.log_value = True
             self.datatype._debug_retriever_name = name
 
-        # self.string_end_char = False
+    @property
+    def data(self):
+        # Using try-except instead of an if statement for performance reasons.
+        # Don't want to run an if statement for each data request
+        try:
+            return self._data
+        except AttributeError:
+            # When `self._data` doesn't exist. (caused by using `del ...`)
+            if self._data_as_bytes is None:
+                raise ValueError("Unable to restore data value from bytes when _data_as_bytes is None.")
+            if self._model:
+                self.data = []
+                for i in range(self.datatype.repeat):
+                    sdict = SectionDict.from_model(self._model)
+                    sdict.set_data_from_bytes(self._data_as_bytes[i])
+
+                    self.data.append(sdict)
+            else:
+                self.set_data_from_bytes(self._data_as_bytes)
+            return self.data
+
+    @data.setter
+    def data(self, value):
+        if self.log_value:
+            self._print_value_update(self._data, value)
+        self._data = value
+
+    @data.deleter
+    def data(self):
+        del self._data
+
+    def setup_data_as_bytes(self, bytes_list, model=None):
+        self._data_as_bytes = bytes_list
+        self._model = model
+        del self.data
 
     def get_data_as_bytes(self):
         self.update_datatype_repeat()
@@ -84,23 +119,14 @@ class Retriever:
         if self.datatype.repeat > 0 and self.datatype.repeat != len(bytes_list):
             raise ValueError("Unable to set bytes when bytes list isn't equal to repeat")
 
+        print(bytes_list)
+
         result = [parse_bytes_to_val(self, entry_bytes) for entry_bytes in bytes_list]
         self.data = bytes_parser.vorl(self, result)
 
     def update_datatype_repeat(self):
         if type(self.data) == list:
             self.datatype.repeat = len(self.data)
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, value):
-        if self.log_value:
-            old_value = self._data
-            self._print_value_update(old_value, value)
-        self._data = value
 
     def set_data_to_default(self):
         if self.datatype.type == "data":
@@ -141,6 +167,7 @@ class Retriever:
             is_list=structure.get('is_list', None),
             log_value=structure.get('log', False)
         )
+
         # Go through dependencies if exist, else empty dict
         for dependency_name, properties in structure.get('dependencies', {}).items():
             if type(properties) is not list:
@@ -192,15 +219,6 @@ class Retriever:
         #     if hasattr(self, attr):
         #         extra.append(f'\n{attr}: ' + str(getattr(self, attr)))
         return f"{self.to_simple_string()} >>> {data}"  # + string_manipulations.add_tabs(''.join(extra), 1)
-
-
-def duplicate_retriever_map(retriever_map: Dict[str, Retriever]) -> Dict[str, Retriever]:
-    return pickle.loads(pickle.dumps(retriever_map))
-
-
-def reset_retriever_map(retriever_map: Dict[str, Retriever]) -> None:
-    for retriever in retriever_map.values():
-        retriever.set_data_to_default()
 
 
 def _evaluate_is_list_attribute(retriever, dependency):
