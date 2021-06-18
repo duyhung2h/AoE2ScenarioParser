@@ -96,6 +96,11 @@
                     }
                 },
                 "id": 11
+            },
+            "__END_OF_HEADER_MARK__": {
+                "type": "0",
+                "default": "",
+                "id": 12
             }
         }
     },
@@ -104,12 +109,12 @@
             "next_unit_id_to_place": {
                 "type": "u32",
                 "default": 0,
-                "id": 12
+                "id": 13
             },
             "version": {
                 "type": "f32",
-                "default": 1.399999976158142,
-                "id": 13
+                "default": 1.409999966621399,
+                "id": 14
             },
             "player_names": {
                 "type": "c256",
@@ -132,7 +137,7 @@
                     "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
                     "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
                 ],
-                "id": 14
+                "id": 15
             },
             "string_table_player_names": {
                 "type": "u32",
@@ -155,18 +160,19 @@
                     4294967294,
                     4294967294
                 ],
-                "id": 15
+                "id": 16
             },
             "player_data_1": {
                 "type": "struct:PlayerDataOneStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 16
+                "id": 17,
+                "static_length": 20
             },
             "conquest_mode": {
                 "type": "u8",
                 "default": 0,
-                "id": 22
+                "id": 23
             },
             "mission_items_counter": {
                 "type": "u16",
@@ -178,17 +184,17 @@
                         "eval": "len(mission_item)"
                     }
                 },
-                "id": 23
+                "id": 24
             },
             "mission_available": {
                 "type": "u16",
                 "default": 0,
-                "id": 24
+                "id": 25
             },
             "mission_timeline": {
                 "type": "f32",
                 "default": 0.0,
-                "id": 25
+                "id": 26
             },
             "mission_item": {
                 "type": "30",
@@ -206,17 +212,17 @@
                         "target": "self:mission_items_counter"
                     }
                 },
-                "id": 26
+                "id": 27
             },
             "unknown": {
                 "type": "64",
                 "default": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000",
-                "id": 27
+                "id": 28
             },
             "filename": {
                 "type": "str16",
                 "default": "CreatedUsingAoE2ScenarioParser.aoe2scenario",
-                "id": 28
+                "id": 29
             }
         },
         "structs": {
@@ -225,27 +231,27 @@
                     "active": {
                         "type": "u32",
                         "default": 0,
-                        "id": 17
+                        "id": 18
                     },
                     "human": {
                         "type": "u32",
                         "default": 0,
-                        "id": 18
+                        "id": 19
                     },
                     "civilization": {
                         "type": "u32",
                         "default": 36,
-                        "id": 19
+                        "id": 20
                     },
                     "architecture_set": {
                         "type": "u32",
                         "default": 36,
-                        "id": 20
+                        "id": 21
                     },
                     "cty_mode": {
                         "type": "u32",
                         "default": 4,
-                        "id": 21
+                        "id": 22
                     }
                 }
             }
@@ -256,62 +262,62 @@
             "instructions": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 29
+                "id": 30
             },
             "hints": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 30
+                "id": 31
             },
             "victory": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 31
+                "id": 32
             },
             "loss": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 32
+                "id": 33
             },
             "history": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 33
+                "id": 34
             },
             "scouts": {
                 "type": "u32",
                 "default": 4294967294,
-                "id": 34
+                "id": 35
             },
             "ascii_instructions": {
                 "type": "str16",
                 "default": "",
-                "id": 35
+                "id": 36
             },
             "ascii_hints": {
                 "type": "str16",
                 "default": "",
-                "id": 36
+                "id": 37
             },
             "ascii_victory": {
                 "type": "str16",
                 "default": "This scenario was created using AoE2ScenarioParser! Hopefully you enjoyed!",
-                "id": 37
+                "id": 38
             },
             "ascii_loss": {
                 "type": "str16",
                 "default": "",
-                "id": 38
+                "id": 39
             },
             "ascii_history": {
                 "type": "str16",
                 "default": "",
-                "id": 39
+                "id": 40
             },
             "ascii_scouts": {
                 "type": "str16",
                 "default": "",
-                "id": 40
+                "id": 41
             }
         }
     },
@@ -320,17 +326,17 @@
             "ascii_pregame": {
                 "type": "str16",
                 "default": "",
-                "id": 41
+                "id": 42
             },
             "ascii_victory": {
                 "type": "str16",
                 "default": "",
-                "id": 42
+                "id": 43
             },
             "ascii_loss": {
                 "type": "str16",
                 "default": "",
-                "id": 43
+                "id": 44
             }
         }
     },
@@ -339,27 +345,27 @@
             "ascii_filename": {
                 "type": "str16",
                 "default": "",
-                "id": 44
+                "id": 45
             },
             "picture_version": {
                 "type": "u32",
                 "default": 3,
-                "id": 45
+                "id": 46
             },
             "bitmap_width": {
                 "type": "u32",
                 "default": 0,
-                "id": 46
+                "id": 47
             },
             "bitmap_height": {
                 "type": "s32",
                 "default": 0,
-                "id": 47
+                "id": 48
             },
             "picture_orientation": {
                 "type": "s16",
                 "default": 1,
-                "id": 48
+                "id": 49
             },
             "bitmap_info": {
                 "type": "struct:BitMapInfoStruct",
@@ -371,7 +377,7 @@
                         "eval": "1 if picture_orientation in [-1, 2] else 0"
                     }
                 },
-                "id": 49
+                "id": 50
             }
         },
         "structs": {
@@ -380,57 +386,57 @@
                     "size": {
                         "type": "s32",
                         "default": 0,
-                        "id": 50
+                        "id": 51
                     },
                     "width": {
                         "type": "u32",
                         "default": 0,
-                        "id": 51
+                        "id": 52
                     },
                     "height": {
                         "type": "u32",
                         "default": 0,
-                        "id": 52
+                        "id": 53
                     },
                     "planes": {
                         "type": "s16",
                         "default": 0,
-                        "id": 53
+                        "id": 54
                     },
                     "bit_count": {
                         "type": "s16",
                         "default": 0,
-                        "id": 54
+                        "id": 55
                     },
                     "compression": {
                         "type": "u32",
                         "default": 0,
-                        "id": 55
+                        "id": 56
                     },
                     "image_size": {
                         "type": "u32",
                         "default": 0,
-                        "id": 56
+                        "id": 57
                     },
                     "x_pels": {
                         "type": "u32",
                         "default": 0,
-                        "id": 57
+                        "id": 58
                     },
                     "y_pels": {
                         "type": "u32",
                         "default": 0,
-                        "id": 58
+                        "id": 59
                     },
                     "number_of_colors_used": {
                         "type": "u32",
                         "default": 0,
-                        "id": 59
+                        "id": 60
                     },
                     "important_colors": {
                         "type": "u32",
                         "default": 0,
-                        "id": 60
+                        "id": 61
                     },
                     "colors_used": {
                         "type": "u32",
@@ -441,7 +447,7 @@
                                 "target": "self:number_of_colors_used"
                             }
                         },
-                        "id": 61
+                        "id": 62
                     },
                     "image": {
                         "type": "u8",
@@ -456,7 +462,7 @@
                                 "eval": "width * height"
                             }
                         },
-                        "id": 62
+                        "id": 63
                     }
                 }
             }
@@ -501,7 +507,7 @@
                     "",
                     ""
                 ],
-                "id": 63
+                "id": 64
             },
             "ai_names": {
                 "type": "str16",
@@ -524,13 +530,13 @@
                     "",
                     ""
                 ],
-                "id": 64
+                "id": 65
             },
             "ai_files": {
                 "type": "struct:AIStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 65
+                "id": 66
             },
             "ai_type": {
                 "type": "u8",
@@ -553,18 +559,19 @@
                     1,
                     1
                 ],
-                "id": 69
+                "id": 70
             },
             "separator": {
                 "type": "u32",
                 "default": 4294967197,
-                "id": 70
+                "id": 71
             },
             "resources": {
                 "type": "struct:ResourcesStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 71
+                "id": 72,
+                "static_length": 28
             }
         },
         "structs": {
@@ -573,17 +580,17 @@
                     "unknown": {
                         "type": "u32",
                         "default": 0,
-                        "id": 66
+                        "id": 67
                     },
                     "unknown_2": {
                         "type": "u32",
                         "default": 0,
-                        "id": 67
+                        "id": 68
                     },
                     "ai_per_file_text": {
                         "type": "str32",
                         "default": "",
-                        "id": 68
+                        "id": 69
                     }
                 }
             },
@@ -592,37 +599,37 @@
                     "gold": {
                         "type": "u32",
                         "default": 0,
-                        "id": 72
+                        "id": 73
                     },
                     "wood": {
                         "type": "u32",
                         "default": 0,
-                        "id": 73
+                        "id": 74
                     },
                     "food": {
                         "type": "u32",
                         "default": 0,
-                        "id": 74
+                        "id": 75
                     },
                     "stone": {
                         "type": "u32",
                         "default": 0,
-                        "id": 75
+                        "id": 76
                     },
                     "ore_x_unused": {
                         "type": "u32",
                         "default": 0,
-                        "id": 76
+                        "id": 77
                     },
                     "trade_goods": {
                         "type": "u32",
                         "default": 0,
-                        "id": 77
+                        "id": 78
                     },
                     "player_color": {
                         "type": "u32",
                         "default": 0,
-                        "id": 78
+                        "id": 79
                     }
                 }
             }
@@ -633,57 +640,57 @@
             "separator": {
                 "type": "u32",
                 "default": 4294967197,
-                "id": 79
+                "id": 80
             },
             "conquest_required": {
                 "type": "u32",
                 "default": 1,
-                "id": 80
+                "id": 81
             },
             "ruins": {
                 "type": "u32",
                 "default": 0,
-                "id": 81
+                "id": 82
             },
             "artifacts": {
                 "type": "u32",
                 "default": 0,
-                "id": 82
+                "id": 83
             },
             "discovery": {
                 "type": "u32",
                 "default": 0,
-                "id": 83
+                "id": 84
             },
             "explored_percent_of_map_required": {
                 "type": "u32",
                 "default": 0,
-                "id": 84
+                "id": 85
             },
             "gold": {
                 "type": "u32",
                 "default": 0,
-                "id": 85
+                "id": 86
             },
             "all_custom_conditions_required": {
                 "type": "u32",
                 "default": 0,
-                "id": 86
+                "id": 87
             },
             "mode": {
                 "type": "u32",
                 "default": 0,
-                "id": 87
+                "id": 88
             },
             "required_score_for_score_victory": {
                 "type": "u32",
                 "default": 900,
-                "id": 88
+                "id": 89
             },
             "time_for_timed_game_in_10ths_of_a_year": {
                 "type": "u32",
                 "default": 9000,
-                "id": 89
+                "id": 90
             }
         }
     },
@@ -693,7 +700,8 @@
                 "type": "struct:PlayerDiplomacyStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 90
+                "id": 91,
+                "static_length": 4
             },
             "individual_victories": {
                 "type": "60",
@@ -892,12 +900,12 @@
                     "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
                     "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
                 ],
-                "id": 92
+                "id": 93
             },
             "separator": {
                 "type": "u32",
                 "default": 4294967197,
-                "id": 93
+                "id": 94
             },
             "per_player_allied_victory": {
                 "type": "u32",
@@ -920,12 +928,12 @@
                     0,
                     0
                 ],
-                "id": 94
+                "id": 95
             },
             "unknown": {
                 "type": "4",
                 "default": "00010004",
-                "id": 95
+                "id": 96
             }
         },
         "structs": {
@@ -952,7 +960,7 @@
                             3,
                             3
                         ],
-                        "id": 91
+                        "id": 92
                     }
                 }
             }
@@ -979,7 +987,7 @@
                         "eval": "[len(x) for x in [disabled_tech_ids_player_1, disabled_tech_ids_player_2, disabled_tech_ids_player_3, disabled_tech_ids_player_4, disabled_tech_ids_player_5, disabled_tech_ids_player_6, disabled_tech_ids_player_7, disabled_tech_ids_player_8]]"
                     }
                 },
-                "id": 96
+                "id": 97
             },
             "disabled_tech_ids_player_1": {
                 "type": "u32",
@@ -997,7 +1005,7 @@
                         "target": "self:per_player_number_of_disabled_techs"
                     }
                 },
-                "id": 97
+                "id": 98
             },
             "disabled_tech_ids_player_2": {
                 "type": "u32",
@@ -1011,7 +1019,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 98
+                "id": 99
             },
             "disabled_tech_ids_player_3": {
                 "type": "u32",
@@ -1025,7 +1033,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 99
+                "id": 100
             },
             "disabled_tech_ids_player_4": {
                 "type": "u32",
@@ -1039,7 +1047,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 100
+                "id": 101
             },
             "disabled_tech_ids_player_5": {
                 "type": "u32",
@@ -1053,7 +1061,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 101
+                "id": 102
             },
             "disabled_tech_ids_player_6": {
                 "type": "u32",
@@ -1067,7 +1075,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 102
+                "id": 103
             },
             "disabled_tech_ids_player_7": {
                 "type": "u32",
@@ -1081,7 +1089,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 103
+                "id": 104
             },
             "disabled_tech_ids_player_8": {
                 "type": "u32",
@@ -1095,7 +1103,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 104
+                "id": 105
             },
             "per_player_number_of_disabled_buildings": {
                 "type": "u32",
@@ -1116,7 +1124,7 @@
                         "eval": "[len(x) for x in [disabled_building_ids_player_1, disabled_building_ids_player_2, disabled_building_ids_player_3, disabled_building_ids_player_4, disabled_building_ids_player_5, disabled_building_ids_player_6, disabled_building_ids_player_7, disabled_building_ids_player_8]]"
                     }
                 },
-                "id": 105
+                "id": 106
             },
             "disabled_building_ids_player_1": {
                 "type": "u32",
@@ -1134,7 +1142,7 @@
                         "target": "self:per_player_number_of_disabled_buildings"
                     }
                 },
-                "id": 106
+                "id": 107
             },
             "disabled_building_ids_player_2": {
                 "type": "u32",
@@ -1148,7 +1156,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 107
+                "id": 108
             },
             "disabled_building_ids_player_3": {
                 "type": "u32",
@@ -1162,7 +1170,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 108
+                "id": 109
             },
             "disabled_building_ids_player_4": {
                 "type": "u32",
@@ -1176,7 +1184,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 109
+                "id": 110
             },
             "disabled_building_ids_player_5": {
                 "type": "u32",
@@ -1190,7 +1198,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 110
+                "id": 111
             },
             "disabled_building_ids_player_6": {
                 "type": "u32",
@@ -1204,7 +1212,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 111
+                "id": 112
             },
             "disabled_building_ids_player_7": {
                 "type": "u32",
@@ -1218,7 +1226,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 112
+                "id": 113
             },
             "disabled_building_ids_player_8": {
                 "type": "u32",
@@ -1232,7 +1240,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 113
+                "id": 114
             },
             "per_player_number_of_disabled_units": {
                 "type": "u32",
@@ -1253,7 +1261,7 @@
                         "eval": "[len(x) for x in [disabled_unit_ids_player_1, disabled_unit_ids_player_2, disabled_unit_ids_player_3, disabled_unit_ids_player_4, disabled_unit_ids_player_5, disabled_unit_ids_player_6, disabled_unit_ids_player_7, disabled_unit_ids_player_8]]"
                     }
                 },
-                "id": 114
+                "id": 115
             },
             "disabled_unit_ids_player_1": {
                 "type": "u32",
@@ -1271,7 +1279,7 @@
                         "target": "self:per_player_number_of_disabled_units"
                     }
                 },
-                "id": 115
+                "id": 116
             },
             "disabled_unit_ids_player_2": {
                 "type": "u32",
@@ -1285,7 +1293,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 116
+                "id": 117
             },
             "disabled_unit_ids_player_3": {
                 "type": "u32",
@@ -1299,7 +1307,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 117
+                "id": 118
             },
             "disabled_unit_ids_player_4": {
                 "type": "u32",
@@ -1313,7 +1321,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 118
+                "id": 119
             },
             "disabled_unit_ids_player_5": {
                 "type": "u32",
@@ -1327,7 +1335,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 119
+                "id": 120
             },
             "disabled_unit_ids_player_6": {
                 "type": "u32",
@@ -1341,7 +1349,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 120
+                "id": 121
             },
             "disabled_unit_ids_player_7": {
                 "type": "u32",
@@ -1355,7 +1363,7 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 121
+                "id": 122
             },
             "disabled_unit_ids_player_8": {
                 "type": "u32",
@@ -1369,28 +1377,28 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 122
+                "id": 123
             },
             "combat_mode": {
                 "type": "u32",
-                "id": 123
+                "id": 124
             },
             "naval_mode": {
                 "type": "u32",
-                "id": 124
+                "id": 125
             },
             "all_techs": {
                 "type": "u32",
-                "id": 125
+                "id": 126
             },
             "per_player_starting_age": {
                 "type": "u32",
                 "repeat": 16,
-                "id": 126
+                "id": 127
             },
             "unknown": {
                 "type": "32",
-                "id": 127
+                "id": 128
             },
             "number_of_triggers": {
                 "type": "u32",
@@ -1401,7 +1409,7 @@
                         "eval": "len(trigger_data)"
                     }
                 },
-                "id": 128
+                "id": 129
             }
         }
     },
@@ -1410,27 +1418,27 @@
             "separator_1": {
                 "type": "2",
                 "default": "600a",
-                "id": 129
+                "id": 130
             },
             "water_definition": {
                 "type": "str16",
                 "default": "",
-                "id": 130
+                "id": 131
             },
             "separator_2": {
                 "type": "2",
                 "default": "600a",
-                "id": 131
+                "id": 132
             },
             "map_color_mood": {
                 "type": "str16",
                 "default": "Empty",
-                "id": 132
+                "id": 133
             },
             "separator_3": {
                 "type": "2",
                 "default": "600a",
-                "id": 133
+                "id": 134
             },
             "script_name": {
                 "type": "str16",
@@ -1441,42 +1449,42 @@
                         "target": "Files:script_file_path"
                     }
                 },
-                "id": 134
+                "id": 135
             },
             "block_humanity_team_change": {
                 "type": "u8",
                 "default": 0,
-                "id": 135
+                "id": 136
             },
             "collide_and_correct": {
                 "type": "u8",
                 "default": 0,
-                "id": 136
+                "id": 137
             },
             "villager_force_drop": {
                 "type": "u8",
                 "default": 0,
-                "id": 137
+                "id": 138
             },
             "unknown": {
                 "type": "128",
                 "default": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-                "id": 138
+                "id": 139
             },
             "player_1_camera_y": {
                 "type": "s32",
                 "default": -559026163,
-                "id": 139
+                "id": 140
             },
             "player_1_camera_x": {
                 "type": "s32",
                 "default": 2,
-                "id": 140
+                "id": 141
             },
             "no_waves_on_shore": {
                 "type": "s8",
                 "default": 1,
-                "id": 141
+                "id": 142
             },
             "map_width": {
                 "type": "s32",
@@ -1488,7 +1496,7 @@
                         "eval": "int(math.sqrt(len(terrain_data)))"
                     }
                 },
-                "id": 142
+                "id": 143
             },
             "map_height": {
                 "type": "s32",
@@ -1500,7 +1508,7 @@
                         "eval": "int(math.sqrt(len(terrain_data)))"
                     }
                 },
-                "id": 143
+                "id": 144
             },
             "terrain_data": {
                 "type": "struct:TerrainStruct",
@@ -1525,7 +1533,8 @@
                         ]
                     }
                 },
-                "id": 144
+                "id": 145,
+                "static_length": 7
             }
         },
         "structs": {
@@ -1534,22 +1543,22 @@
                     "terrain_id": {
                         "type": "u8",
                         "default": 0,
-                        "id": 145
+                        "id": 146
                     },
                     "elevation": {
                         "type": "u8",
                         "default": 0,
-                        "id": 146
+                        "id": 147
                     },
                     "unused": {
                         "type": "3",
                         "default": "00ffff",
-                        "id": 147
+                        "id": 148
                     },
                     "layer": {
                         "type": "s16",
                         "default": -1,
-                        "id": 148
+                        "id": 149
                     }
                 }
             }
@@ -1567,24 +1576,25 @@
                         "eval": "len(players_units)"
                     }
                 },
-                "id": 149
+                "id": 150
             },
             "player_data_4": {
                 "type": "struct:PlayerDataFourStruct",
                 "repeat": 8,
                 "default": null,
-                "id": 150
+                "id": 151,
+                "static_length": 28
             },
             "number_of_players": {
                 "type": "u32",
                 "default": 9,
-                "id": 158
+                "id": 159
             },
             "player_data_3": {
                 "type": "struct:PlayerDataThreeStruct",
                 "repeat": 8,
                 "default": null,
-                "id": 159
+                "id": 160
             },
             "players_units": {
                 "type": "struct:PlayerUnitsStruct",
@@ -1602,7 +1612,7 @@
                         "target": "self:number_of_unit_sections"
                     }
                 },
-                "id": 178
+                "id": 179
             }
         },
         "structs": {
@@ -1611,37 +1621,37 @@
                     "food_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 151
+                        "id": 152
                     },
                     "wood_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 152
+                        "id": 153
                     },
                     "gold_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 153
+                        "id": 154
                     },
                     "stone_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 154
+                        "id": 155
                     },
                     "ore_x_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 155
+                        "id": 156
                     },
                     "trade_goods_duplicate": {
                         "type": "f32",
                         "default": 0.0,
-                        "id": 156
+                        "id": 157
                     },
                     "population_limit": {
                         "type": "f32",
                         "default": 200.0,
-                        "id": 157
+                        "id": 158
                     }
                 }
             },
@@ -1650,32 +1660,32 @@
                     "constant_name": {
                         "type": "str16",
                         "default": "Scenario Editor Phantom",
-                        "id": 160
+                        "id": 161
                     },
                     "initial_camera_x": {
                         "type": "f32",
                         "default": 72.0,
-                        "id": 161
+                        "id": 162
                     },
                     "initial_camera_y": {
                         "type": "f32",
                         "default": 72.0,
-                        "id": 162
+                        "id": 163
                     },
                     "unknown_similar_to_camera_x": {
                         "type": "s16",
                         "default": 72,
-                        "id": 163
+                        "id": 164
                     },
                     "unknown_similar_to_camera_y": {
                         "type": "s16",
                         "default": 72,
-                        "id": 164
+                        "id": 165
                     },
                     "aok_allied_victory": {
                         "type": "u8",
                         "default": 0,
-                        "id": 165
+                        "id": 166
                     },
                     "player_count_for_diplomacy": {
                         "type": "u16",
@@ -1687,7 +1697,7 @@
                                 "eval": "len(diplomacy_for_interaction)"
                             }
                         },
-                        "id": 166
+                        "id": 167
                     },
                     "diplomacy_for_interaction": {
                         "type": "u8",
@@ -1715,7 +1725,7 @@
                                 "target": "self:player_count_for_diplomacy"
                             }
                         },
-                        "id": 167
+                        "id": 168
                     },
                     "diplomacy_for_ai_system": {
                         "type": "u32",
@@ -1731,12 +1741,12 @@
                             4,
                             4
                         ],
-                        "id": 168
+                        "id": 169
                     },
                     "color": {
                         "type": "u32",
                         "default": 0,
-                        "id": 169
+                        "id": 170
                     },
                     "victory_version": {
                         "type": "f32",
@@ -1748,7 +1758,7 @@
                                 "eval": "2 if len(unknown_2) == 7 else 0"
                             }
                         },
-                        "id": 170
+                        "id": 171
                     },
                     "unknown": {
                         "type": "u16",
@@ -1760,7 +1770,7 @@
                                 "eval": "len(unknown_structure_grand_theft_empires)"
                             }
                         },
-                        "id": 171
+                        "id": 172
                     },
                     "unknown_2": {
                         "type": "u8",
@@ -1787,7 +1797,7 @@
                                 "target": "self:victory_version"
                             }
                         },
-                        "id": 172
+                        "id": 173
                     },
                     "unknown_structure_grand_theft_empires": {
                         "type": "44",
@@ -1805,7 +1815,7 @@
                                 "target": "self:unknown"
                             }
                         },
-                        "id": 173
+                        "id": 174
                     },
                     "unknown_5": {
                         "type": "u8",
@@ -1821,7 +1831,7 @@
                                 "action": "REFRESH_SELF"
                             }
                         },
-                        "id": 174
+                        "id": 175
                     },
                     "unknown_3": {
                         "type": "u8",
@@ -1835,7 +1845,7 @@
                             0,
                             0
                         ],
-                        "id": 175
+                        "id": 176
                     },
                     "unknown_structure_ww_campaign_2": {
                         "type": "32",
@@ -1849,12 +1859,12 @@
                                 "action": "REFRESH_SELF"
                             }
                         },
-                        "id": 176
+                        "id": 177
                     },
                     "unknown_4": {
                         "type": "s32",
                         "default": -1,
-                        "id": 177
+                        "id": 178
                     }
                 }
             },
@@ -1870,7 +1880,7 @@
                                 "eval": "len(units)"
                             }
                         },
-                        "id": 179
+                        "id": 180
                     },
                     "units": {
                         "type": "struct:UnitStruct",
@@ -1888,7 +1898,8 @@
                                 "target": "self:unit_count"
                             }
                         },
-                        "id": 180
+                        "id": 181,
+                        "static_length": 29
                     }
                 },
                 "structs": {
@@ -1897,47 +1908,47 @@
                             "x": {
                                 "type": "f32",
                                 "default": 0.5,
-                                "id": 181
+                                "id": 182
                             },
                             "y": {
                                 "type": "f32",
                                 "default": 0.5,
-                                "id": 182
+                                "id": 183
                             },
                             "z": {
                                 "type": "f32",
                                 "default": 0,
-                                "id": 183
+                                "id": 184
                             },
                             "reference_id": {
                                 "type": "s32",
                                 "default": 0,
-                                "id": 184
+                                "id": 185
                             },
                             "unit_const": {
                                 "type": "u16",
                                 "default": 4,
-                                "id": 185
+                                "id": 186
                             },
                             "status": {
                                 "type": "u8",
                                 "default": 2,
-                                "id": 186
+                                "id": 187
                             },
                             "rotation": {
                                 "type": "f32",
                                 "default": 0,
-                                "id": 187
+                                "id": 188
                             },
                             "initial_animation_frame": {
                                 "type": "u16",
                                 "default": 0,
-                                "id": 188
+                                "id": 189
                             },
                             "garrisoned_in_id": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 189
+                                "id": 190
                             }
                         }
                     }
@@ -1950,12 +1961,12 @@
             "trigger_version": {
                 "type": "f64",
                 "default": 2.4,
-                "id": 190
+                "id": 191
             },
             "trigger_instruction_start": {
                 "type": "s8",
                 "default": 0,
-                "id": 191
+                "id": 192
             },
             "number_of_triggers": {
                 "type": "s32",
@@ -1967,7 +1978,7 @@
                         "eval": "len(trigger_data)"
                     }
                 },
-                "id": 192
+                "id": 193
             },
             "trigger_data": {
                 "type": "struct:TriggerStruct",
@@ -1989,7 +2000,7 @@
                         ]
                     }
                 },
-                "id": 193
+                "id": 194
             },
             "trigger_display_order_array": {
                 "type": "u32",
@@ -2003,12 +2014,12 @@
                         "action": "REFRESH_SELF"
                     }
                 },
-                "id": 295
+                "id": 296
             },
             "unknown_bytes": {
                 "type": "1028",
                 "default": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-                "id": 296
+                "id": 297
             },
             "number_of_variables": {
                 "type": "u32",
@@ -2020,7 +2031,7 @@
                         "eval": "len(variable_data)"
                     }
                 },
-                "id": 297
+                "id": 298
             },
             "variable_data": {
                 "type": "struct:VariableStruct",
@@ -2038,7 +2049,7 @@
                         "target": "self:number_of_variables"
                     }
                 },
-                "id": 298
+                "id": 299
             }
         },
         "structs": {
@@ -2047,67 +2058,67 @@
                     "enabled": {
                         "type": "u32",
                         "default": 1,
-                        "id": 194
+                        "id": 195
                     },
                     "looping": {
                         "type": "s8",
                         "default": 0,
-                        "id": 195
+                        "id": 196
                     },
                     "description_string_table_id": {
                         "type": "s32",
                         "default": 0,
-                        "id": 196
+                        "id": 197
                     },
                     "display_as_objective": {
                         "type": "u8",
                         "default": 0,
-                        "id": 197
+                        "id": 198
                     },
                     "objective_description_order": {
                         "type": "u32",
                         "default": 0,
-                        "id": 198
+                        "id": 199
                     },
                     "make_header": {
                         "type": "u8",
                         "default": 0,
-                        "id": 199
+                        "id": 200
                     },
                     "short_description_string_table_id": {
                         "type": "s32",
                         "default": 0,
-                        "id": 200
+                        "id": 201
                     },
                     "display_on_screen": {
                         "type": "u8",
                         "default": 0,
-                        "id": 201
+                        "id": 202
                     },
                     "unknown": {
                         "type": "5",
                         "default": "0000000000",
-                        "id": 202
+                        "id": 203
                     },
                     "mute_objectives": {
                         "type": "u8",
                         "default": 0,
-                        "id": 203
+                        "id": 204
                     },
                     "trigger_description": {
                         "type": "str32",
                         "default": "",
-                        "id": 204
+                        "id": 205
                     },
                     "trigger_name": {
                         "type": "str32",
                         "default": "Trigger 0",
-                        "id": 205
+                        "id": 206
                     },
                     "short_description": {
                         "type": "str32",
                         "default": "",
-                        "id": 206
+                        "id": 207
                     },
                     "number_of_effects": {
                         "type": "s32",
@@ -2119,7 +2130,7 @@
                                 "eval": "len(effect_data)"
                             }
                         },
-                        "id": 207
+                        "id": 208
                     },
                     "effect_data": {
                         "type": "struct:EffectStruct",
@@ -2137,7 +2148,7 @@
                                 "target": "self:number_of_effects"
                             }
                         },
-                        "id": 208
+                        "id": 209
                     },
                     "effect_display_order_array": {
                         "type": "s32",
@@ -2151,7 +2162,7 @@
                                 "action": "REFRESH_SELF"
                             }
                         },
-                        "id": 265
+                        "id": 266
                     },
                     "number_of_conditions": {
                         "type": "s32",
@@ -2163,7 +2174,7 @@
                                 "eval": "len(condition_data)"
                             }
                         },
-                        "id": 266
+                        "id": 267
                     },
                     "condition_data": {
                         "type": "struct:ConditionStruct",
@@ -2181,7 +2192,7 @@
                                 "target": "self:number_of_conditions"
                             }
                         },
-                        "id": 267
+                        "id": 268
                     },
                     "condition_display_order_array": {
                         "type": "s32",
@@ -2195,7 +2206,7 @@
                                 "action": "REFRESH_SELF"
                             }
                         },
-                        "id": 294
+                        "id": 295
                     }
                 },
                 "structs": {
@@ -2215,17 +2226,17 @@
                                         ]
                                     }
                                 },
-                                "id": 209
+                                "id": 210
                             },
                             "static_value_46": {
                                 "type": "s32",
                                 "default": 48,
-                                "id": 210
+                                "id": 211
                             },
                             "ai_script_goal": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 211
+                                "id": 212
                             },
                             "armour_attack_quantity": {
                                 "type": "u8",
@@ -2241,7 +2252,7 @@
                                         "action": "REFRESH_SELF"
                                     }
                                 },
-                                "id": 212
+                                "id": 213
                             },
                             "armour_attack_class": {
                                 "type": "u8",
@@ -2257,7 +2268,7 @@
                                         "action": "REFRESH_SELF"
                                     }
                                 },
-                                "id": 213
+                                "id": 214
                             },
                             "armour_attack_unused": {
                                 "comment": "These 2 bytes are unused but present when armour_attack is used.",
@@ -2274,7 +2285,7 @@
                                         "action": "REFRESH_SELF"
                                     }
                                 },
-                                "id": 214
+                                "id": 215
                             },
                             "quantity": {
                                 "type": "s32",
@@ -2290,17 +2301,17 @@
                                         "action": "REFRESH_SELF"
                                     }
                                 },
-                                "id": 215
+                                "id": 216
                             },
                             "tribute_list": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 216
+                                "id": 217
                             },
                             "diplomacy": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 217
+                                "id": 218
                             },
                             "number_of_units_selected": {
                                 "type": "s32",
@@ -2312,232 +2323,232 @@
                                         "eval": "len(selected_object_ids) if len(selected_object_ids) != 0 else -1"
                                     }
                                 },
-                                "id": 218
+                                "id": 219
                             },
                             "unknown": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 219
+                                "id": 220
                             },
                             "object_list_unit_id": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 220
+                                "id": 221
                             },
                             "source_player": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 221
+                                "id": 222
                             },
                             "target_player": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 222
+                                "id": 223
                             },
                             "technology": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 223
+                                "id": 224
                             },
                             "string_id": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 224
+                                "id": 225
                             },
                             "unknown_2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 225
+                                "id": 226
                             },
                             "display_time": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 226
+                                "id": 227
                             },
                             "trigger_id": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 227
+                                "id": 228
                             },
                             "location_x": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 228
+                                "id": 229
                             },
                             "location_y": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 229
+                                "id": 230
                             },
                             "area_x1": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 230
+                                "id": 231
                             },
                             "area_y1": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 231
+                                "id": 232
                             },
                             "area_x2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 232
+                                "id": 233
                             },
                             "area_y2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 233
+                                "id": 234
                             },
                             "object_group": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 234
+                                "id": 235
                             },
                             "object_type": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 235
+                                "id": 236
                             },
                             "instruction_panel_position": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 236
+                                "id": 237
                             },
                             "attack_stance": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 237
+                                "id": 238
                             },
                             "time_unit": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 238
+                                "id": 239
                             },
                             "enabled": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 239
+                                "id": 240
                             },
                             "food": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 240
+                                "id": 241
                             },
                             "wood": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 241
+                                "id": 242
                             },
                             "stone": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 242
+                                "id": 243
                             },
                             "gold": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 243
+                                "id": 244
                             },
                             "item_id": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 244
+                                "id": 245
                             },
                             "flash_object": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 245
+                                "id": 246
                             },
                             "force_research_technology": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 246
+                                "id": 247
                             },
                             "visibility_state": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 247
+                                "id": 248
                             },
                             "scroll": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 248
+                                "id": 249
                             },
                             "operation": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 249
+                                "id": 250
                             },
                             "object_list_unit_id_2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 250
+                                "id": 251
                             },
                             "button_location": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 251
+                                "id": 252
                             },
                             "ai_signal_value": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 252
+                                "id": 253
                             },
                             "unknown_3": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 253
+                                "id": 254
                             },
                             "object_attributes": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 254
+                                "id": 255
                             },
                             "variable": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 255
+                                "id": 256
                             },
                             "timer": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 256
+                                "id": 257
                             },
                             "facet": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 257
+                                "id": 258
                             },
                             "location_object_reference": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 258
+                                "id": 259
                             },
                             "play_sound": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 259
+                                "id": 260
                             },
                             "player_color": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 260
+                                "id": 261
                             },
                             "unknown_4": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 261
+                                "id": 262
                             },
                             "message": {
                                 "type": "str32",
                                 "default": "",
-                                "id": 262
+                                "id": 263
                             },
                             "sound_name": {
                                 "type": "str32",
                                 "default": "",
-                                "id": 263
+                                "id": 264
                             },
                             "selected_object_ids": {
                                 "type": "s32",
@@ -2555,7 +2566,7 @@
                                         "target": "self:number_of_units_selected"
                                     }
                                 },
-                                "id": 264
+                                "id": 265
                             }
                         }
                     },
@@ -2564,132 +2575,132 @@
                             "condition_type": {
                                 "type": "s32",
                                 "default": 0,
-                                "id": 268
+                                "id": 269
                             },
                             "static_value_21": {
                                 "type": "s32",
                                 "default": 23,
-                                "id": 269
+                                "id": 270
                             },
                             "quantity": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 270
+                                "id": 271
                             },
                             "attribute": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 271
+                                "id": 272
                             },
                             "unit_object": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 272
+                                "id": 273
                             },
                             "next_object": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 273
+                                "id": 274
                             },
                             "object_list": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 274
+                                "id": 275
                             },
                             "source_player": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 275
+                                "id": 276
                             },
                             "technology": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 276
+                                "id": 277
                             },
                             "timer": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 277
+                                "id": 278
                             },
                             "unknown": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 278
+                                "id": 279
                             },
                             "area_x1": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 279
+                                "id": 280
                             },
                             "area_y1": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 280
+                                "id": 281
                             },
                             "area_x2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 281
+                                "id": 282
                             },
                             "area_y2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 282
+                                "id": 283
                             },
                             "object_group": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 283
+                                "id": 284
                             },
                             "object_type": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 284
+                                "id": 285
                             },
                             "ai_signal": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 285
+                                "id": 286
                             },
                             "inverted": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 286
+                                "id": 287
                             },
                             "unknown_2": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 287
+                                "id": 288
                             },
                             "variable": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 288
+                                "id": 289
                             },
                             "comparison": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 289
+                                "id": 290
                             },
                             "target_player": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 290
+                                "id": 291
                             },
                             "unit_ai_action": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 291
+                                "id": 292
                             },
                             "unknown_4": {
                                 "type": "s32",
                                 "default": -1,
-                                "id": 292
+                                "id": 293
                             },
                             "xs_function": {
                                 "type": "str32",
                                 "default": "",
-                                "id": 293
+                                "id": 294
                             }
                         }
                     }
@@ -2700,12 +2711,12 @@
                     "variable_id": {
                         "type": "u32",
                         "default": 0,
-                        "id": 299
+                        "id": 300
                     },
                     "variable_name": {
                         "type": "str32",
                         "default": "_Variable0",
-                        "id": 300
+                        "id": 301
                     }
                 }
             }
@@ -2716,7 +2727,7 @@
             "unknown_2": {
                 "type": "4",
                 "default": "00000000",
-                "id": 301
+                "id": 302
             },
             "script_file_path": {
                 "type": "str16",
@@ -2728,12 +2739,12 @@
                         "eval": "script_name + ('.xs' if len(script_name) > 0 else '')"
                     }
                 },
-                "id": 302
+                "id": 303
             },
             "script_file_content": {
                 "type": "str32",
                 "default": "",
-                "id": 303
+                "id": 304
             },
             "ai_files_present": {
                 "type": "u32",
@@ -2745,12 +2756,12 @@
                         "eval": "0 if number_of_ai_files == 0 else 1"
                     }
                 },
-                "id": 304
+                "id": 305
             },
             "unknown_4": {
                 "type": "4",
                 "default": "00000000",
-                "id": 305
+                "id": 306
             },
             "number_of_ai_files": {
                 "type": "u32",
@@ -2778,7 +2789,7 @@
                         "target": "self:ai_files_present"
                     }
                 },
-                "id": 306
+                "id": 307
             },
             "ai_files": {
                 "type": "struct:AI2Struct",
@@ -2797,12 +2808,12 @@
                         "target": "self:number_of_ai_files"
                     }
                 },
-                "id": 307
+                "id": 308
             },
             "__END_OF_FILE_MARK__": {
                 "type": "1",
                 "default": "",
-                "id": 310
+                "id": 311
             }
         },
         "structs": {
@@ -2811,12 +2822,12 @@
                     "ai_file_name": {
                         "type": "str32",
                         "default": "",
-                        "id": 308
+                        "id": 309
                     },
                     "ai_file": {
                         "type": "str32",
                         "default": "",
-                        "id": 309
+                        "id": 310
                     }
                 }
             }
