@@ -40,7 +40,8 @@ def q_str(value: any) -> str:
 
 
 def add_tabs(string: str, tabs: int) -> str:
-    return ("\n\r"+("\t" * tabs)).join(string.splitlines())
+    splitted_string = string.splitlines(keepends=True)
+    return ("\t" * tabs)+("\t" * tabs).join(splitted_string)
 
 
 def create_inline_line(entries) -> str:
