@@ -113,7 +113,7 @@
             },
             "version": {
                 "type": "f32",
-                "default": 1.409999966621399,
+                "default": 1.41,
                 "id": 14
             },
             "player_names": {
@@ -240,12 +240,12 @@
                     },
                     "civilization": {
                         "type": "u32",
-                        "default": 36,
+                        "default": 38,
                         "id": 20
                     },
                     "architecture_set": {
                         "type": "u32",
-                        "default": 36,
+                        "default": 38,
                         "id": 21
                     },
                     "cty_mode": {
