@@ -62,6 +62,8 @@ class SectionDict(dict):
         return self.__solve_missing(key)
 
     def __getattr__(self, item):
+        if item in self.keys():
+            return self.get(item).data
         return self.__solve_missing(item)
 
     def __missing__(self, key):
