@@ -31,6 +31,10 @@ def into_retrievers(structure):
 
 class DynamicRetrieverManager:
     def __init__(self):
+        # Debugging mode
+        self.debug_mode = True
+        self.debug_store = {}
+
         self.scenario = None
         self.dynamic_retrievers = None
         self.dynamic_int_keys = []
@@ -60,6 +64,26 @@ class DynamicRetrieverManager:
         self._dynamic_retrievers = value
         if type(value) is dict:
             self.dynamic_int_keys = list(map(int, value.keys()))
+
+    def _write_debug_file(self):
+        rprint("\nWriting debug file...")
+        with open(Path(__file__).parent.parent / 'debug_file.txt', 'w') as f:
+            last_byte_loc = 0
+            dc_file = self.scenario.decompressed_file
+
+            for byte_loc, block in sorted(self.debug_store.items()):
+                length, retr = block
+
+                unparsed_bytes_before = create_textual_hex(dc_file[last_byte_loc:byte_loc].hex())
+                own_bytes = add_tabs(create_textual_hex(dc_file[byte_loc:byte_loc + length].hex()), 2)
+                own_bytes += " (own)" if own_bytes.strip() != "" else "<<EMPTY>>"
+
+                f.write(f"{unparsed_bytes_before}")
+                f.write(f"\n\n{retr}\n\n{own_bytes}\n\n")
+                last_byte_loc = byte_loc + length
+
+            f.write(create_textual_hex(dc_file[last_byte_loc:].hex()))
+        rprint("Writing debug file finished successfully!", final=True)
 
     # Todo: Split getting value and discovering until in different functions
     def determine_value(self, path):
@@ -92,6 +116,8 @@ class DynamicRetrieverManager:
                 print(f"Bytes: {necessary_bytes}")
                 print("Result:")
                 print(f"{retriever}\n")
+                if self.debug_mode:
+                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever)
                 return retriever
 
             elif self.progress_id < retriever_id and self.progress_id < dynamic_retriever_id:
@@ -148,6 +174,9 @@ class DynamicRetrieverManager:
                 print("Result:")
                 print(retriever)
                 self.progress_id = dynamic_retriever_id
+
+                if self.debug_mode:
+                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever)
 
     def get_length_until(self, rid):
         g = retriever_generator(self.scenario.structure, 0, rid)
