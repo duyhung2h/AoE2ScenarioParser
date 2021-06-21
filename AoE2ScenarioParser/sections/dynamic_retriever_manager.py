@@ -1,16 +1,19 @@
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from AoE2ScenarioParser.helper.bytes_parser import retrieve_bytes_from_generator
 from AoE2ScenarioParser.helper.exceptions import TargetRetrieverReached
 from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
 from AoE2ScenarioParser.helper.list_functions import sum_len
-from AoE2ScenarioParser.helper.string_manipulations import split_string_blocks
+from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict, pretty_format_list
+from AoE2ScenarioParser.helper.printers import rprint
+from AoE2ScenarioParser.helper.string_manipulations import split_string_blocks, create_textual_hex, add_tabs
 from AoE2ScenarioParser.sections.aoe2_struct_model import model_dict_from_structure
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
 from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 if TYPE_CHECKING:
-    pass
+    from AoE2ScenarioParser.scenarios.aoe2_scenario import AoE2Scenario
 
 
 def resolve_path(structure, path, end_in_retrievers=True):
@@ -41,7 +44,7 @@ class DynamicRetrieverManager:
         self.progress_id = -1
 
     @property
-    def scenario(self):
+    def scenario(self) -> 'AoE2Scenario':
         return self._scenario
 
     @scenario.setter
@@ -146,7 +149,7 @@ class DynamicRetrieverManager:
                         struct_name = dr_structure['type'][7:]
 
                         total_static_length = retriever.datatype.repeat * static_length
-                        byte_string = self.scenario.file_content[bytes_until:bytes_until+total_static_length]
+                        byte_string = self.scenario.file_content[bytes_until:bytes_until + total_static_length]
                         necessary_bytes = split_string_blocks(byte_string, static_length)
 
                         parent_path = dr_structure['path'][:-1]
@@ -163,11 +166,6 @@ class DynamicRetrieverManager:
                         retriever
                     )
 
-                # if dr_structure['type'][:7] == "struct:":
-                #     print(pretty_format_list(necessary_bytes))
-                #     print(len(necessary_bytes[0]))
-                #     exit(13)
-
                 retriever.setup_data_as_bytes(necessary_bytes, model)
                 self.dynamic_retrievers[str(dynamic_retriever_id)]['length'] = sum_len(necessary_bytes)
                 print(f"Bytes: {necessary_bytes}")
@@ -175,23 +173,32 @@ class DynamicRetrieverManager:
                 print(retriever)
                 self.progress_id = dynamic_retriever_id
 
+                print("PATH")
+                print(resolve_path(self.structure, dr_structure['path']))
+                self.scenario.get_retriever(dr_structure['path'][:-1])[retriever.name] = retriever
                 if self.debug_mode:
                     self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever)
 
     def get_length_until(self, rid):
-        g = retriever_generator(self.scenario.structure, 0, rid)
-        total_length = 0
-        for retriever in g:
+        total_length = ignore_count = 0
+        retriever: dict
+        for retriever in retriever_generator(self.scenario.structure, 0, rid):
+            if ignore_count > 0:
+                ignore_count -= 1
+                continue
+
             string_id = str(retriever['id'])
 
             if string_id in self.dynamic_retrievers.keys():
+                dr = self.dynamic_retrievers[string_id]
                 try:
-                    total_length += self.dynamic_retrievers[string_id]['length']
+                    total_length += dr['length']
+                    if 'static_length' in dr:
+                        ignore_count = dr['children']
                 except KeyError:
-                    print(self.dynamic_retrievers[string_id])
                     raise Exception("Owh no...")
             else:
-                total_length += get_static_retriever_length(retriever)
+                total_length += get_static_retriever_length(retriever) * retriever.get('repeat', 1)
         return total_length
 
 
