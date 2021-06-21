@@ -1,40 +1,48 @@
 import copy
 
 from AoE2ScenarioParser.sections.retrievers.datatype import datatype_to_type_length
+from AoE2ScenarioParser.sections.sectiondict import SectionDict
 
 
 def numbers():
     yield from range(99999)
 
 
+section_dict_keys = dir(SectionDict())
 counter = numbers()
 dynamic_retrievers = {}
 
 
 def mark_retrievers(path, section):
     for name, retriever in section['retrievers'].items():
-        retriever['id'] = next(counter)
-        # retriever['length'] = get_retriever_length(retriever)
+        validate_name(path, name)
 
-        # try:
-        #     del retriever['length']
-        # except KeyError:
-        #     pass
+        retriever['id'] = next(counter)
 
         if retriever_is_dynamic(retriever):
-            dynamic_retrievers[retriever['id']] = copy.copy(retriever)
-            rcopy = dynamic_retrievers[retriever['id']]
+            dynamic_retrievers[retriever['id']] = rcopy = copy.copy(retriever)
 
             rcopy['name'] = name
             rcopy['path'] = path + [name]
+            if retriever['type'][:7] == "struct:":
+                rcopy['children'] = len(section['structs'][retriever['type'][7:]]['retrievers'])
 
         if retriever['type'][:7] == "struct:":
             rtype = retriever['type'][7:]
-            mark_retrievers(path + [name + "[__index__]"], section['structs'][rtype])
+            struct = section['structs'][rtype]
 
-            struct = section['structs'][retriever['type'][7:]]
+            mark_retrievers(path + [name + "[__index__]"], struct)
+
             if not struct_content_is_dynamic(struct):
                 retriever['static_length'] = get_struct_length(struct)
+
+
+def validate_name(path, name):
+    if name in section_dict_keys:
+        p = ' -> '.join(path + [f"{name}"])
+        space_len = len(p) - len(name) + 35  # 35 == Error msg length
+        pointer = f"\n{' ' * space_len}{'^' * len(name)}"
+        raise ValueError(f"Illegal name found in: {p}{pointer}")
 
 
 def get_struct_length(struct) -> int:

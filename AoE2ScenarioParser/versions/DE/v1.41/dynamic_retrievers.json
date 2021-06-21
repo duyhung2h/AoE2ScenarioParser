@@ -59,7 +59,8 @@
         "path": [
             "DataHeader",
             "player_data_1"
-        ]
+        ],
+        "children": 5
     },
     "27": {
         "type": "30",
@@ -209,7 +210,8 @@
         "path": [
             "BackgroundImage",
             "bitmap_info"
-        ]
+        ],
+        "children": 13
     },
     "62": {
         "type": "u32",
@@ -330,7 +332,8 @@
         "path": [
             "PlayerDataTwo",
             "ai_files"
-        ]
+        ],
+        "children": 3
     },
     "69": {
         "type": "str32",
@@ -353,7 +356,8 @@
         "path": [
             "PlayerDataTwo",
             "resources"
-        ]
+        ],
+        "children": 7
     },
     "91": {
         "type": "struct:PlayerDiplomacyStruct",
@@ -365,7 +369,8 @@
         "path": [
             "Diplomacy",
             "per_player_diplomacy"
-        ]
+        ],
+        "children": 1
     },
     "98": {
         "type": "u32",
@@ -900,7 +905,8 @@
         "path": [
             "Map",
             "terrain_data"
-        ]
+        ],
+        "children": 4
     },
     "151": {
         "type": "struct:PlayerDataFourStruct",
@@ -912,7 +918,8 @@
         "path": [
             "Units",
             "player_data_4"
-        ]
+        ],
+        "children": 7
     },
     "160": {
         "type": "struct:PlayerDataThreeStruct",
@@ -923,7 +930,8 @@
         "path": [
             "Units",
             "player_data_3"
-        ]
+        ],
+        "children": 18
     },
     "161": {
         "type": "str16",
@@ -1090,7 +1098,8 @@
         "path": [
             "Units",
             "players_units"
-        ]
+        ],
+        "children": 2
     },
     "181": {
         "type": "struct:UnitStruct",
@@ -1115,7 +1124,8 @@
             "Units",
             "players_units[__index__]",
             "units"
-        ]
+        ],
+        "children": 9
     },
     "194": {
         "type": "struct:TriggerStruct",
@@ -1142,7 +1152,8 @@
         "path": [
             "Triggers",
             "trigger_data"
-        ]
+        ],
+        "children": 19
     },
     "205": {
         "type": "str32",
@@ -1199,7 +1210,8 @@
             "Triggers",
             "trigger_data[__index__]",
             "effect_data"
-        ]
+        ],
+        "children": 56
     },
     "213": {
         "type": "u8",
@@ -1385,7 +1397,8 @@
             "Triggers",
             "trigger_data[__index__]",
             "condition_data"
-        ]
+        ],
+        "children": 26
     },
     "294": {
         "type": "str32",
@@ -1459,7 +1472,8 @@
         "path": [
             "Triggers",
             "variable_data"
-        ]
+        ],
+        "children": 2
     },
     "301": {
         "type": "str32",
@@ -1554,7 +1568,8 @@
         "path": [
             "Files",
             "ai_files"
-        ]
+        ],
+        "children": 2
     },
     "309": {
         "type": "str32",
