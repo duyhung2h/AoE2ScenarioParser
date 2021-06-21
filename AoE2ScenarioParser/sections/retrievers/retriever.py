@@ -119,8 +119,6 @@ class Retriever:
         if self.datatype.repeat > 0 and self.datatype.repeat != len(bytes_list):
             raise ValueError("Unable to set bytes when bytes list isn't equal to repeat")
 
-        print(bytes_list)
-
         result = [parse_bytes_to_val(self, entry_bytes) for entry_bytes in bytes_list]
         self.data = bytes_parser.vorl(self, result)
 

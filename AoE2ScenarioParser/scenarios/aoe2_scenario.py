@@ -1,7 +1,7 @@
 import json
 import zlib
 from pathlib import Path
-from typing import Union
+from typing import Union, List, TYPE_CHECKING
 
 import AoE2ScenarioParser.datasets.conditions as conditions
 import AoE2ScenarioParser.datasets.effects as effects
@@ -17,6 +17,10 @@ from AoE2ScenarioParser.objects.managers.unit_manager import UnitManager
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
 from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager as Drm, resolve_path
 from AoE2ScenarioParser.sections.sectiondict import SectionDict
+
+
+if TYPE_CHECKING:
+    from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
 
 class AoE2Scenario:
@@ -49,6 +53,14 @@ class AoE2Scenario:
 
         # Injection
         self._drm.scenario = self
+
+    def get_retriever(self, path: List or str) -> 'Retriever':
+        if type(path) is str:
+            path = path.split(".")
+        sections = self.sections
+        for p in path:
+            sections = sections[p]
+        return sections
 
     # Todo: Can be removed once drm function has been split
     @property
