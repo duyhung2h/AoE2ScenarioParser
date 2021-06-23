@@ -54,7 +54,7 @@ class AoE2Scenario:
         # Injection
         self._drm.scenario = self
 
-    def get_retriever(self, path: List or str) -> 'Retriever':
+    def get_retriever(self, path: List or str) -> Union['Retriever', 'SectionDict']:
         if type(path) is str:
             path = path.split(".")
         sections = self.sections
