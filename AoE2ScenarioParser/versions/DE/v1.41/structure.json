@@ -166,8 +166,7 @@
                 "type": "struct:PlayerDataOneStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 17,
-                "static_length": 20
+                "id": 17
             },
             "conquest_mode": {
                 "type": "u8",
@@ -570,8 +569,7 @@
                 "type": "struct:ResourcesStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 72,
-                "static_length": 28
+                "id": 72
             }
         },
         "structs": {
@@ -700,8 +698,7 @@
                 "type": "struct:PlayerDiplomacyStruct",
                 "repeat": 16,
                 "default": null,
-                "id": 91,
-                "static_length": 4
+                "id": 91
             },
             "individual_victories": {
                 "type": "60",
@@ -1533,8 +1530,7 @@
                         ]
                     }
                 },
-                "id": 145,
-                "static_length": 7
+                "id": 145
             }
         },
         "structs": {
@@ -1582,8 +1578,7 @@
                 "type": "struct:PlayerDataFourStruct",
                 "repeat": 8,
                 "default": null,
-                "id": 151,
-                "static_length": 28
+                "id": 151
             },
             "number_of_players": {
                 "type": "u32",
@@ -1898,8 +1893,7 @@
                                 "target": "self:unit_count"
                             }
                         },
-                        "id": 181,
-                        "static_length": 29
+                        "id": 181
                     }
                 },
                 "structs": {

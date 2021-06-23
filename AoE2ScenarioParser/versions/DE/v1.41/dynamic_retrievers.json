@@ -206,6 +206,7 @@
             }
         },
         "id": 50,
+        "static_length": -1,
         "name": "bitmap_info",
         "path": [
             "BackgroundImage",
@@ -328,6 +329,7 @@
         "repeat": 16,
         "default": null,
         "id": 66,
+        "static_length": -1,
         "name": "ai_files",
         "path": [
             "PlayerDataTwo",
@@ -926,6 +928,7 @@
         "repeat": 8,
         "default": null,
         "id": 160,
+        "static_length": -1,
         "name": "player_data_3",
         "path": [
             "Units",
@@ -1094,6 +1097,7 @@
             }
         },
         "id": 179,
+        "static_length": -1,
         "name": "players_units",
         "path": [
             "Units",
@@ -1148,6 +1152,7 @@
             }
         },
         "id": 194,
+        "static_length": -1,
         "name": "trigger_data",
         "path": [
             "Triggers",
@@ -1205,6 +1210,7 @@
             }
         },
         "id": 209,
+        "static_length": -1,
         "name": "effect_data",
         "path": [
             "Triggers",
@@ -1392,6 +1398,7 @@
             }
         },
         "id": 268,
+        "static_length": -1,
         "name": "condition_data",
         "path": [
             "Triggers",
@@ -1468,6 +1475,7 @@
             }
         },
         "id": 299,
+        "static_length": -1,
         "name": "variable_data",
         "path": [
             "Triggers",
@@ -1564,6 +1572,7 @@
             }
         },
         "id": 308,
+        "static_length": -1,
         "name": "ai_files",
         "path": [
             "Files",

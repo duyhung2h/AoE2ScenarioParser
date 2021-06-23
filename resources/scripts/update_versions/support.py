@@ -18,6 +18,7 @@ def mark_retrievers(path, section):
         validate_name(path, name)
 
         retriever['id'] = next(counter)
+        rtype = retriever['type'][7:]
 
         if retriever_is_dynamic(retriever):
             dynamic_retrievers[retriever['id']] = rcopy = copy.copy(retriever)
@@ -25,16 +26,18 @@ def mark_retrievers(path, section):
             rcopy['name'] = name
             rcopy['path'] = path + [name]
             if retriever['type'][:7] == "struct:":
-                rcopy['children'] = len(section['structs'][retriever['type'][7:]]['retrievers'])
+                rcopy['children'] = len(section['structs'][rtype]['retrievers'])
+
+                struct = section['structs'][rtype]
+                if struct_content_is_dynamic(struct):
+                    rcopy['static_length'] = -1
+                else:
+                    rcopy['static_length'] = get_struct_length(struct)
 
         if retriever['type'][:7] == "struct:":
-            rtype = retriever['type'][7:]
             struct = section['structs'][rtype]
 
             mark_retrievers(path + [name + "[__index__]"], struct)
-
-            if not struct_content_is_dynamic(struct):
-                retriever['static_length'] = get_struct_length(struct)
 
 
 def validate_name(path, name):
