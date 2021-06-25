@@ -1,4 +1,5 @@
 import copy
+from typing import Dict, Optional
 
 from AoE2ScenarioParser.sections.retrievers.datatype import datatype_to_type_length
 from AoE2ScenarioParser.sections.sectiondict import SectionDict
@@ -13,7 +14,8 @@ counter = numbers()
 dynamic_retrievers = {}
 
 
-def mark_retrievers(path, section):
+def mark_retrievers(path, section, return_result=False) -> Optional[Dict[str, Dict]]:
+    child_retrievers = {}
     for name, retriever in section['retrievers'].items():
         validate_name(path, name)
 
@@ -21,23 +23,23 @@ def mark_retrievers(path, section):
         rtype = retriever['type'][7:]
 
         if retriever_is_dynamic(retriever):
-            dynamic_retrievers[retriever['id']] = rcopy = copy.copy(retriever)
+            rcopy = copy.copy(retriever)
+
+            if not return_result:
+                dynamic_retrievers[retriever['id']] = rcopy
 
             rcopy['name'] = name
             rcopy['path'] = path + [name]
             if retriever['type'][:7] == "struct:":
-                rcopy['children'] = len(section['structs'][rtype]['retrievers'])
-
                 struct = section['structs'][rtype]
-                if struct_content_is_dynamic(struct):
-                    rcopy['static_length'] = -1
-                else:
-                    rcopy['static_length'] = get_struct_length(struct)
 
-        if retriever['type'][:7] == "struct:":
-            struct = section['structs'][rtype]
+                rcopy['has_dynamic_content'] = struct_content_is_dynamic(struct)
+                rcopy['dynamic_children'] = mark_retrievers(path + [name + "[__index__]"], struct, True)
+                rcopy['child_count'] = len(struct['retrievers'])
+                rcopy['static_length'] = get_struct_length(struct)
 
-            mark_retrievers(path + [name + "[__index__]"], struct)
+            child_retrievers[rcopy['id']] = rcopy
+    return child_retrievers
 
 
 def validate_name(path, name):
@@ -54,7 +56,7 @@ def get_struct_length(struct) -> int:
 
 def get_retriever_length(retriever) -> int:
     datatype, length = datatype_to_type_length(retriever['type'])
-    return length if datatype not in ['str', 'struct'] else -1
+    return length if datatype not in ['str', 'struct'] else 0
 
 
 def retriever_is_dynamic(retriever) -> bool:

@@ -1,10 +1,9 @@
-import copy
+from pathlib import Path
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from AoE2ScenarioParser.helper.bytes_parser import retrieve_bytes_from_generator, slice_bytes
+from AoE2ScenarioParser.helper.bytes_parser import slice_bytes
 from AoE2ScenarioParser.helper.exceptions import TargetRetrieverReached
-from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
 from AoE2ScenarioParser.helper.list_functions import sum_len
 from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict, pretty_format_list
 from AoE2ScenarioParser.helper.printers import rprint
@@ -72,18 +71,24 @@ class DynamicRetrieverManager:
     def _write_debug_file(self):
         rprint("\nWriting debug file...")
         with open(Path(__file__).parent.parent / 'debug_file.txt', 'w') as f:
-            last_byte_loc = 0
             dc_file = self.scenario.decompressed_file
 
-            for byte_loc, block in sorted(self.debug_store.items()):
-                length, retr = block
+            print(self._dynamic_retrievers.keys())
+            print(pretty_format_list(list(map(lambda r: r[1], self.debug_store.values()))))
+
+            last_byte_loc = 0
+            for byte_loc, (length, rid, retr) in sorted(self.debug_store.items()):
 
                 unparsed_bytes_before = create_textual_hex(dc_file[last_byte_loc:byte_loc].hex())
                 own_bytes = add_tabs(create_textual_hex(dc_file[byte_loc:byte_loc + length].hex()), 2)
                 own_bytes += " (own)" if own_bytes.strip() != "" else "<<EMPTY>>"
+                try:
+                    dlength = self._dynamic_retrievers[str(rid)]['length']
+                except KeyError as e:
+                    dlength = -1
 
                 f.write(f"{unparsed_bytes_before}")
-                f.write(f"\n\n{retr}\n\n{own_bytes}\n\n")
+                f.write(f"\n\n[ID: {rid}, DL, L: {dlength}, {length}] {retr}\n\n{own_bytes}\n\n")
                 last_byte_loc = byte_loc + length
 
             f.write(create_textual_hex(dc_file[last_byte_loc:].hex()))
@@ -100,7 +105,7 @@ class DynamicRetrieverManager:
         parent_path[-1] = parent_path[-1].removesuffix('[__index__]')
         return self.scenario.get_retriever(parent_path).datatype.repeat != 0
 
-    # Todo: Split getting value and discovering until in different functions
+    # Todo: Split getting value and discovering until into different functions
     def determine_value(self, path):
         print(f">>> Get value function called. Path: {path}")
 
@@ -129,7 +134,7 @@ class DynamicRetrieverManager:
                 print("Result:")
                 print(f"{retriever}\n")
                 if self.debug_mode:
-                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever)
+                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever_id, retriever)
                 print(">>> End Getting Value")
                 return retriever
 
@@ -143,18 +148,18 @@ class DynamicRetrieverManager:
                 bytes_until = self.get_length_until(dynamic_retriever_id)
                 retriever = Retriever.from_structure(dr_structure, dr_structure['name'])
 
-                # Retriever inside struct. Check if parent has repeat > 1
-                if len(dr_structure['path']) > 2:
-                    if not self.parents_have_non_zero_repeat(dr_structure['path']):
-                        retriever.data = []
-                        self.dynamic_retrievers[str(dynamic_retriever_id)]['length'] = 0
-                        self.progress_id = dynamic_retriever_id
-
-                        if self.debug_mode:
-                            self.debug_store[bytes_until] = (0, retriever)
-                        print(f"Skipped due to zero repeat parent")
-                        print(">>> End Getting Value")
-                        continue
+                # # Retriever inside struct. Check if parent has repeat > 1
+                # if len(dr_structure['path']) > 2:
+                #     if not self.parents_have_non_zero_repeat(dr_structure['path']):
+                #         retriever.data = []
+                #         self.dynamic_retrievers[str(dynamic_retriever_id)]['length'] = 0
+                #         self.progress_id = dynamic_retriever_id
+                #
+                #         if self.debug_mode:
+                #             self.debug_store[bytes_until] = (0, retriever)
+                #         print(f"Skipped due to zero repeat parent")
+                #         print(">>> End Getting Value")
+                #         continue
 
                 if hasattr(retriever, 'on_construct'):
                     handle_retriever_dependency(
@@ -170,19 +175,19 @@ class DynamicRetrieverManager:
                     self.scenario.get_retriever(dr_structure['path'][:-1])[retriever.name] = retriever
 
                     if self.debug_mode:
-                        self.debug_store[bytes_until] = (0, retriever)
+                        self.debug_store[bytes_until] = (0, dynamic_retriever_id, retriever)
                     print(f"Skipped due to repeat = {retriever.datatype.repeat}")
-                    print(">>> End Getting Value")
+                    print(">>> End of unresolved Structure")
                     continue
 
                 necessary_bytes = []
                 model = None
                 if dr_structure['type'][:7] == "struct:":
                     static_length = dr_structure['static_length']
+                    has_dynamic_content = dr_structure['has_dynamic_content']
+                    struct_name = dr_structure['type'][7:]
 
-                    if static_length != -1:
-                        struct_name = dr_structure['type'][7:]
-
+                    if not has_dynamic_content:
                         total_static_length = retriever.datatype.repeat * static_length
                         byte_string = self.scenario.file_content[bytes_until:bytes_until + total_static_length]
                         necessary_bytes = split_string_blocks(byte_string, static_length)
@@ -193,6 +198,8 @@ class DynamicRetrieverManager:
                         model = model_dict_from_structure(section_structure, self)[struct_name]
                         model.parent_path = parent_path
                     else:
+                        print(pretty_format_dict(dr_structure['dynamic_children']['69']))
+                        # print(pretty_format_dict(dr_structure['children'][66]))
                         exit(99)
                 else:
                     necessary_bytes, _ = slice_bytes(retriever, self.scenario.file_content, bytes_until)
@@ -207,7 +214,7 @@ class DynamicRetrieverManager:
                 print(resolve_path(self.structure, dr_structure['path']))
                 self.scenario.get_retriever(dr_structure['path'][:-1])[retriever.name] = retriever
                 if self.debug_mode:
-                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), retriever)
+                    self.debug_store[bytes_until] = (sum_len(necessary_bytes), dynamic_retriever_id, retriever)
                 print(">>> End Getting Value")
                 if retriever_id == dynamic_retriever_id:
                     return retriever
@@ -225,13 +232,13 @@ class DynamicRetrieverManager:
             if string_id in self.dynamic_retrievers.keys():
                 dr = self.dynamic_retrievers[string_id]
                 try:
-                    total_length += dr['length']
-                    if 'static_length' in dr:
-                        ignore_count = dr['children']
+                    current_len = dr['length']
+                    ignore_count = dr.get('child_count', 0)
                 except KeyError:
                     raise Exception("Owh no...")
             else:
-                total_length += get_static_retriever_length(retriever) * retriever.get('repeat', 1)
+                current_len = get_static_retriever_length(retriever) * retriever.get('repeat', 1)
+            total_length += current_len
         return total_length
 
 
