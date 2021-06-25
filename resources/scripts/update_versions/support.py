@@ -56,7 +56,7 @@ def get_struct_length(struct) -> int:
 
 def get_retriever_length(retriever) -> int:
     datatype, length = datatype_to_type_length(retriever['type'])
-    return length if datatype not in ['str', 'struct'] else 0
+    return (length if datatype not in ['str', 'struct'] else 0) * retriever.get('repeat', 1)
 
 
 def retriever_is_dynamic(retriever) -> bool:

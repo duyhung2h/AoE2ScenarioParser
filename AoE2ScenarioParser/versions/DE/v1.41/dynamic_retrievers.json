@@ -384,7 +384,7 @@
         "has_dynamic_content": false,
         "dynamic_children": {},
         "child_count": 1,
-        "static_length": 4
+        "static_length": 64
     },
     "98": {
         "type": "u32",
@@ -1097,7 +1097,7 @@
             }
         },
         "child_count": 18,
-        "static_length": 113
+        "static_length": 151
     },
     "179": {
         "type": "struct:PlayerUnitsStruct",
