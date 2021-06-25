@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import List
+
 from AoE2ScenarioParser.helper import bytes_parser, string_manipulations
 from AoE2ScenarioParser.helper.bytes_conversions import parse_bytes_to_val, parse_val_to_bytes
+from AoE2ScenarioParser.helper.bytes_parser import slice_bytes
 from AoE2ScenarioParser.helper.list_functions import listify
 from AoE2ScenarioParser.helper.pretty_format import pretty_format_list, pretty_format_dict
+from AoE2ScenarioParser.helper.string_manipulations import add_tabs
 from AoE2ScenarioParser.sections.dependencies.dependency_action import DependencyAction
 from AoE2ScenarioParser.sections.dependencies.retriever_dependency import RetrieverDependency
 from AoE2ScenarioParser.sections.retrievers.datatype import DataType
@@ -113,11 +117,15 @@ class Retriever:
 
         return joined_result
 
-    def set_data_from_bytes(self, bytes_list):
+    def set_data_from_byte_string(self, byte_string, start_from) -> None:
+        necessary_bytes, _ = slice_bytes(self, byte_string, start_from)
+        self.set_data_from_bytes(necessary_bytes)
+
+    def set_data_from_bytes(self, bytes_list) -> None:
         if self.datatype.repeat > 0 and len(bytes_list) == 0:
             raise ValueError("Unable to set bytes when no bytes are given")
         if self.datatype.repeat > 0 and self.datatype.repeat != len(bytes_list):
-            raise ValueError("Unable to set bytes when bytes list isn't equal to repeat")
+            raise ValueError(f"Unable to set bytes when length of bytes list ({len(bytes_list)}) isn't equal to repeat ({self.datatype.repeat})")
 
         result = [parse_bytes_to_val(self, entry_bytes) for entry_bytes in bytes_list]
         self.data = bytes_parser.vorl(self, result)
