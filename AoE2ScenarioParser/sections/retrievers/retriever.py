@@ -66,7 +66,7 @@ class Retriever:
             # When `self._data` doesn't exist. (caused by using `del ...`)
             if self._data_as_bytes is None:
                 raise ValueError("Unable to restore data value from bytes when _data_as_bytes is None.")
-            if self._model:
+            if self._model is not None:
                 self.data = []
                 for i in range(self.datatype.repeat):
                     sdict = SectionDict.from_model(self._model)
@@ -87,12 +87,12 @@ class Retriever:
     def data(self):
         del self._data
 
-    def setup_data_as_bytes(self, bytes_list, model=None):
+    def setup_data_as_bytes(self, bytes_list, model=None) -> None:
         self._data_as_bytes = bytes_list
         self._model = model
         del self.data
 
-    def get_data_as_bytes(self):
+    def get_data_as_bytes(self) -> bytes:
         self.update_datatype_repeat()
 
         if self.data is not None and self.datatype.repeat != 0:
@@ -122,11 +122,11 @@ class Retriever:
         result = [parse_bytes_to_val(self, entry_bytes) for entry_bytes in bytes_list]
         self.data = bytes_parser.vorl(self, result)
 
-    def update_datatype_repeat(self):
+    def update_datatype_repeat(self) -> None:
         if type(self.data) == list:
             self.datatype.repeat = len(self.data)
 
-    def set_data_to_default(self):
+    def set_data_to_default(self) -> None:
         if self.datatype.type == "data":
             data = bytes.fromhex(self.default_value)
         elif type(self.default_value) is list:
@@ -210,8 +210,11 @@ class Retriever:
         if type(self.data) is list:
             data = str(pretty_format_list(self.data))
         else:
-            data = string_manipulations.q_str(self.data)
-
+            data = self.data
+            if len(str(data).splitlines()) > 1:
+                data = f"\n{self.data}"
+            data = string_manipulations.q_str(data)
+        data = add_tabs(data, 1)
         # extra = []
         # for attr in attributes:
         #     if hasattr(self, attr):

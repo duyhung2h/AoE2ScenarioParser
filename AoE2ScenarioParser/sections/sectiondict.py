@@ -2,6 +2,8 @@ import pickle
 from typing import TYPE_CHECKING, List, Dict
 
 from AoE2ScenarioParser.helper.bytes_parser import slice_bytes
+from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict
+from AoE2ScenarioParser.helper.string_manipulations import add_tabs
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
 
 if TYPE_CHECKING:
@@ -10,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class SectionDict(dict):
-    def __init__(self, d=None, drm=None, parent_path=None) -> None:
+    def __init__(self, d=None, drm=None, parent_path=None, index=-1) -> None:
         """
         Dict object that will notice when given key is not present.
 
@@ -21,6 +23,7 @@ class SectionDict(dict):
         """
         self.__drm: Drm = drm
         self.__parent_path = [] if parent_path is None else parent_path
+        self.__index = index
 
         super().__init__({} if d is None else d)
 
@@ -77,6 +80,9 @@ class SectionDict(dict):
 
         return self.setdefault(key, value)
 
+    def __repr__(self) -> str:
+        return f"[SectionDict] " + pretty_format_dict(self)
+
         # parent_list = get_value(self._structure_ref, self.__parent_path)
         # val = get_value(self._structure_ref, path)
         # print(f"key:         {key}")
@@ -91,6 +97,7 @@ class SectionDict(dict):
         #         dynamic_retriever_manager=self.__drm,
         #         parent_path=self.__parent_path + [key]
         #     ))
+
 
 
 if __name__ == '__main__':
