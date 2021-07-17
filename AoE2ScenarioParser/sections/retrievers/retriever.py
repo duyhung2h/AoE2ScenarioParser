@@ -127,6 +127,8 @@ class Retriever:
         if self.datatype.repeat > 0 and self.datatype.repeat != len(bytes_list):
             raise ValueError(f"Unable to set bytes when length of bytes list ({len(bytes_list)}) isn't equal to repeat ({self.datatype.repeat})")
 
+        # print(f"bytes_list: {bytes_list}")
+
         result = [parse_bytes_to_val(self, entry_bytes) for entry_bytes in bytes_list]
         self.data = bytes_parser.vorl(self, result)
 
@@ -160,10 +162,9 @@ class Retriever:
 
     @classmethod
     def from_structure(cls, structure, name=None):
-        if name is None:
-            if 'name' not in structure:
-                raise ValueError("Parameter name is mandatory when not available in structure.")
-            name = structure['name']
+        if name is None and 'name' not in structure:
+            raise ValueError("Parameter name is mandatory when not available in structure.")
+        name = name or structure['name']
 
         datatype = DataType(var=structure.get('type'), repeat=structure.get('repeat', 1))
         retriever = cls(

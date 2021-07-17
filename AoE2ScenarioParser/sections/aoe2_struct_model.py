@@ -17,7 +17,7 @@ class AoE2StructModel:
         Args:
             name (str): The name
             retriever_map (Dict[str, Retriever]): The retriever map associated with it
-            structs (Dict[AoE2StructModel]): The possible sub-struct models
+            structs (Dict[str, AoE2StructModel]): The possible sub-struct models
             drm (DynamicRetrieverManager): The DynamicRetrieverManager for this scenario
         """
         self.name = name
@@ -39,7 +39,7 @@ class AoE2StructModel:
         return f"[AoE2StructModel] {self.name} -> retrievers: " + pretty_format_dict(self.retriever_map)
 
 
-def model_dict_from_structure(structure, drm) -> Dict[AoE2StructModel]:
+def model_dict_from_structure(structure, drm) -> Dict[str, AoE2StructModel]:
     models = {}
     for name, attr in structure.get('structs', {}).items():
         # Create struct model

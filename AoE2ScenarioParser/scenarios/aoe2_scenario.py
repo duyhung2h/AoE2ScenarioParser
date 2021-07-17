@@ -124,7 +124,7 @@ class AoE2Scenario:
 
         # Todo: necessary because `get_length_until` doesn't reolve retrievers
         self._drm.determine_value(['FileHeader', '__END_OF_HEADER_MARK__'])
-        header_length = self._drm.get_length_until(end_of_header_id)
+        header_length = self._drm.get_number_of_bytes_before(end_of_header_id)
 
         header, body = split_string_at_index(raw_file_igenerator.file_content, header_length)
         body = decompress_bytes(body)

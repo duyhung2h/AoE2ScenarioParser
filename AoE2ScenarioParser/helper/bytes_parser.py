@@ -40,12 +40,16 @@ def slice_bytes(retriever: 'Retriever', byte_string: bytes, start_from: int) -> 
     retrieved_bytes = []
     progress = start_from
 
+    # print(f"retriever: {retriever}")
+    # print(f"var_len: {var_len}")
+
     def get_bytes(amount) -> bytes:
         nonlocal progress
         if len(byte_string) < progress + amount:
             raise EndOfFileError("End of byte_string reached")  # Todo: Add different error
         result = byte_string[progress:progress + amount]
         progress += amount
+        # print(f"result: {result}")
         return result
 
     try:

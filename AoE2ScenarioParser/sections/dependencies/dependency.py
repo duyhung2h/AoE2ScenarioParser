@@ -20,11 +20,10 @@ def execute_refresh_action(retriever, section, sections):
 
 
 def handle_retriever_dependency(retriever: 'Retriever', state, section, sections):
-    on_x = f'on_{state}'
-    if not hasattr(retriever, on_x):
+    if not hasattr(retriever, f'on_{state}'):
         return
 
-    retriever_event = getattr(retriever, on_x)  # construct, commit or refresh
+    retriever_event = getattr(retriever, f'on_{state}')  # on_construct, on_commit or on_refresh
 
     action = retriever_event.dependency_action
 

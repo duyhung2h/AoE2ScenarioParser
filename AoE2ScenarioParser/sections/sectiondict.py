@@ -3,8 +3,6 @@ from typing import TYPE_CHECKING, List, Dict
 
 from AoE2ScenarioParser.helper.bytes_parser import slice_bytes
 from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict
-from AoE2ScenarioParser.helper.string_manipulations import add_tabs
-from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
 
 if TYPE_CHECKING:
     from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
@@ -82,22 +80,6 @@ class SectionDict(dict):
 
     def __repr__(self) -> str:
         return f"[SectionDict] " + pretty_format_dict(self)
-
-        # parent_list = get_value(self._structure_ref, self.__parent_path)
-        # val = get_value(self._structure_ref, path)
-        # print(f"key:         {key}")
-        # print(f"path:        {path}")
-        # print(f"val:         {val}")
-        # print(f"parent_list: {parent_list}")
-        #
-        # if 'type' in val:
-        #     return self.__drm.get_value(path[-1], val)
-        # else:
-        #     return self.setdefault(key, SectionDict(
-        #         dynamic_retriever_manager=self.__drm,
-        #         parent_path=self.__parent_path + [key]
-        #     ))
-
 
 
 if __name__ == '__main__':
