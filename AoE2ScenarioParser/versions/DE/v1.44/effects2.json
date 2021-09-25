@@ -1,0 +1,1194 @@
+{
+    "0": {
+        "name": "none",
+        "attributes": [
+            "effect_type"
+        ],
+        "default_attributes": {
+            "effect_type": 0
+        }
+    },
+    "1": {
+        "name": "change_diplomacy",
+        "attributes": [
+            "effect_type",
+            "diplomacy",
+            "source_player",
+            "target_player"
+        ],
+        "default_attributes": {
+            "effect_type": 1,
+            "diplomacy": 0,
+            "source_player": 1,
+            "target_player": 2
+        }
+    },
+    "2": {
+        "name": "research_technology",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "technology",
+            "force_research_technology"
+        ],
+        "default_attributes": {
+            "effect_type": 2,
+            "source_player": 1,
+            "technology": 16,
+            "force_research_technology": 0
+        }
+    },
+    "3": {
+        "name": "send_chat",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "string_id",
+            "message",
+            "sound_name"
+        ],
+        "default_attributes": {
+            "effect_type": 3,
+            "source_player": 1
+        }
+    },
+    "4": {
+        "name": "play_sound",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "location_x",
+            "location_y",
+            "location_object_reference",
+            "sound_name"
+        ],
+        "default_attributes": {
+            "effect_type": 4,
+            "source_player": 1
+        }
+    },
+    "5": {
+        "name": "tribute",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "tribute_list",
+            "source_player",
+            "target_player"
+        ],
+        "default_attributes": {
+            "effect_type": 5,
+            "tribute_list": 0,
+            "source_player": 1,
+            "target_player": 2
+        }
+    },
+    "6": {
+        "name": "unlock_gate",
+        "attributes": [
+            "effect_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 6
+        }
+    },
+    "7": {
+        "name": "lock_gate",
+        "attributes": [
+            "effect_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 7
+        }
+    },
+    "8": {
+        "name": "activate_trigger",
+        "attributes": [
+            "effect_type",
+            "trigger_id"
+        ],
+        "default_attributes": {
+            "effect_type": 8
+        }
+    },
+    "9": {
+        "name": "deactivate_trigger",
+        "attributes": [
+            "effect_type",
+            "trigger_id"
+        ],
+        "default_attributes": {
+            "effect_type": 9
+        }
+    },
+    "10": {
+        "name": "ai_script_goal",
+        "attributes": [
+            "effect_type",
+            "ai_script_goal"
+        ],
+        "default_attributes": {
+            "effect_type": 10,
+            "ai_script_goal": 1
+        }
+    },
+    "11": {
+        "name": "create_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "item_id",
+            "facet"
+        ],
+        "default_attributes": {
+            "effect_type": 11,
+            "source_player": 1
+        }
+    },
+    "12": {
+        "name": "task_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "location_object_reference",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "action_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 12,
+            "source_player": 1,
+            "action_type": 0
+        }
+    },
+    "13": {
+        "name": "declare_victory",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "enabled"
+        ],
+        "default_attributes": {
+            "effect_type": 13,
+            "source_player": 1,
+            "enabled": 1
+        }
+    },
+    "14": {
+        "name": "kill_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 14,
+            "source_player": 1
+        }
+    },
+    "15": {
+        "name": "remove_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "object_state",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 15,
+            "source_player": 1,
+            "object_state": 2
+        }
+    },
+    "16": {
+        "name": "change_view",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "location_x",
+            "location_y",
+            "scroll"
+        ],
+        "default_attributes": {
+            "effect_type": 16,
+            "source_player": 1,
+            "scroll": 1,
+            "operation": 1,
+            "variable": 0
+        }
+    },
+    "17": {
+        "name": "unload",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "location_object_reference",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 17,
+            "source_player": 1
+        }
+    },
+    "18": {
+        "name": "change_ownership",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "target_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "flash_object",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 18,
+            "source_player": 1,
+            "target_player": 2,
+            "flash_object": 0
+        }
+    },
+    "19": {
+        "name": "patrol",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 19,
+            "source_player": 1
+        }
+    },
+    "20": {
+        "name": "display_instructions",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "string_id",
+            "display_time",
+            "instruction_panel_position",
+            "play_sound",
+            "message",
+            "sound_name"
+        ],
+        "default_attributes": {
+            "effect_type": 20,
+            "source_player": 1,
+            "display_time": 10,
+            "instruction_panel_position": 0,
+            "play_sound": 0
+        }
+    },
+    "21": {
+        "name": "clear_instructions",
+        "attributes": [
+            "effect_type",
+            "instruction_panel_position"
+        ],
+        "default_attributes": {
+            "effect_type": 21,
+            "instruction_panel_position": 0
+        }
+    },
+    "22": {
+        "name": "freeze_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 22,
+            "source_player": 1
+        }
+    },
+    "23": {
+        "name": "use_advanced_buttons",
+        "attributes": [
+            "effect_type"
+        ],
+        "default_attributes": {
+            "effect_type": 23
+        }
+    },
+    "24": {
+        "name": "damage_object",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 24,
+            "source_player": 1
+        }
+    },
+    "25": {
+        "name": "place_foundation",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y"
+        ],
+        "default_attributes": {
+            "effect_type": 25,
+            "source_player": 1
+        }
+    },
+    "26": {
+        "name": "change_object_name",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "string_id",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "message",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 26,
+            "source_player": 1
+        }
+    },
+    "27": {
+        "name": "change_object_hp",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "operation",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 27,
+            "source_player": 1,
+            "operation": 2
+        }
+    },
+    "28": {
+        "name": "change_object_attack",
+        "attributes": [
+            "effect_type",
+            "armour_attack_quantity",
+            "armour_attack_class",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "operation",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 28,
+            "armour_attack_quantity": 1,
+            "armour_attack_class": 0,
+            "source_player": 1,
+            "operation": 3
+        }
+    },
+    "29": {
+        "name": "stop_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 29,
+            "source_player": 1
+        }
+    },
+    "30": {
+        "name": "attack_move",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "location_object_reference",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 30,
+            "source_player": 1
+        }
+    },
+    "31": {
+        "name": "change_object_armor",
+        "attributes": [
+            "effect_type",
+            "armour_attack_quantity",
+            "armour_attack_class",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "operation",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 31,
+            "armour_attack_quantity": 1,
+            "armour_attack_class": 0,
+            "source_player": 1,
+            "operation": 3
+        }
+    },
+    "32": {
+        "name": "change_object_range",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "operation",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 32,
+            "source_player": 1,
+            "operation": 2
+        }
+    },
+    "33": {
+        "name": "change_object_speed",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 33,
+            "source_player": 1
+        }
+    },
+    "34": {
+        "name": "heal_object",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 34,
+            "source_player": 1
+        }
+    },
+    "35": {
+        "name": "teleport_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 35,
+            "source_player": 1
+        }
+    },
+    "36": {
+        "name": "change_object_stance",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "attack_stance",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 36,
+            "source_player": 1,
+            "attack_stance": 0
+        }
+    },
+    "37": {
+        "name": "display_timer",
+        "attributes": [
+            "effect_type",
+            "string_id",
+            "display_time",
+            "time_unit",
+            "timer",
+            "reset_timer",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 37,
+            "display_time": 10,
+            "time_unit": 0,
+            "timer": 0,
+            "reset_timer": 0
+        }
+    },
+    "38": {
+        "name": "enable/disable_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "enabled",
+            "item_id"
+        ],
+        "default_attributes": {
+            "effect_type": 38,
+            "source_player": 1,
+            "enabled": 1
+        }
+    },
+    "39": {
+        "name": "enable/disable_technology",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "technology",
+            "enabled",
+            "item_id"
+        ],
+        "default_attributes": {
+            "effect_type": 39,
+            "source_player": 1,
+            "technology": 16,
+            "enabled": 1
+        }
+    },
+    "40": {
+        "name": "change_object_cost",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "food",
+            "wood",
+            "stone",
+            "gold"
+        ],
+        "default_attributes": {
+            "effect_type": 40,
+            "source_player": 1
+        }
+    },
+    "41": {
+        "name": "set_player_visibility",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "target_player",
+            "visibility_state"
+        ],
+        "default_attributes": {
+            "effect_type": 41,
+            "source_player": 1,
+            "target_player": 2,
+            "visibility_state": 0
+        }
+    },
+    "42": {
+        "name": "change_object_icon",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "object_list_unit_id_2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 42,
+            "source_player": 1
+        }
+    },
+    "43": {
+        "name": "replace_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "target_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_group",
+            "object_type",
+            "object_list_unit_id_2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 43,
+            "source_player": 1,
+            "target_player": 2
+        }
+    },
+    "44": {
+        "name": "change_object_description",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 44,
+            "source_player": 1
+        }
+    },
+    "45": {
+        "name": "change_player_name",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 45,
+            "source_player": 1
+        }
+    },
+    "46": {
+        "name": "change_train_location",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "object_list_unit_id_2",
+            "button_location"
+        ],
+        "default_attributes": {
+            "effect_type": 46,
+            "source_player": 1,
+            "button_location": 0
+        }
+    },
+    "47": {
+        "name": "change_research_location",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "technology",
+            "object_list_unit_id_2",
+            "button_location"
+        ],
+        "default_attributes": {
+            "effect_type": 47,
+            "source_player": 1,
+            "technology": 16,
+            "object_list_unit_id_2": 82,
+            "button_location": 7
+        }
+    },
+    "48": {
+        "name": "change_civilization_name",
+        "attributes": [
+            "effect_type",
+            "source_player",
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 48,
+            "source_player": 1
+        }
+    },
+    "49": {
+        "name": "create_garrisoned_object",
+        "attributes": [
+            "effect_type",
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "object_list_unit_id_2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 49,
+            "source_player": 1
+        }
+    },
+    "50": {
+        "name": "acknowledge_ai_signal",
+        "attributes": [
+            "effect_type",
+            "ai_signal_value"
+        ],
+        "default_attributes": {
+            "effect_type": 50,
+            "ai_signal_value": 0
+        }
+    },
+    "51": {
+        "name": "modify_attribute",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "armour_attack_quantity",
+            "armour_attack_class",
+            "object_list_unit_id",
+            "source_player",
+            "item_id",
+            "operation",
+            "object_attributes"
+        ],
+        "default_attributes": {
+            "effect_type": 51,
+            "source_player": 1,
+            "operation": 1,
+            "object_attributes": 0
+        }
+    },
+    "52": {
+        "name": "modify_resource",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "tribute_list",
+            "source_player",
+            "item_id",
+            "operation"
+        ],
+        "default_attributes": {
+            "effect_type": 52,
+            "tribute_list": 0,
+            "source_player": 1,
+            "operation": 1
+        }
+    },
+    "53": {
+        "name": "modify_resource_by_variable",
+        "attributes": [
+            "effect_type",
+            "tribute_list",
+            "source_player",
+            "item_id",
+            "operation",
+            "variable"
+        ],
+        "default_attributes": {
+            "effect_type": 53,
+            "tribute_list": 0,
+            "source_player": 1,
+            "operation": 1,
+            "variable": 0
+        }
+    },
+    "54": {
+        "name": "set_building_gather_point",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "location_x",
+            "location_y",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 54,
+            "source_player": 1
+        }
+    },
+    "55": {
+        "name": "script_call",
+        "attributes": [
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 55
+        }
+    },
+    "56": {
+        "name": "change_variable",
+        "attributes": [
+            "effect_type",
+            "quantity",
+            "operation",
+            "variable",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 56,
+            "operation": 1,
+            "variable": 0
+        }
+    },
+    "57": {
+        "name": "clear_timer",
+        "attributes": [
+            "effect_type",
+            "timer"
+        ],
+        "default_attributes": {
+            "effect_type": 57,
+            "timer": 0
+        }
+    },
+    "58": {
+        "name": "change_object_player_color",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "player_color",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 58,
+            "source_player": 1,
+            "player_color": 0
+        }
+    },
+    "59": {
+        "name": "change_object_civilization_name",
+        "attributes": [
+            "string_id",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "message",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 59
+        }
+    },
+    "60": {
+        "name": "change_object_player_name",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "string_id",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "message",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 60,
+            "source_player": 1
+        }
+    },
+    "61": {
+        "name": "disable_unit_targeting",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 61,
+            "source_player": 1
+        }
+    },
+    "62": {
+        "name": "enable_unit_targeting",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 62,
+            "source_player": 1
+        }
+    },
+    "63": {
+        "name": "change_technology_cost",
+        "attributes": [
+            "source_player",
+            "technology",
+            "food",
+            "wood",
+            "stone",
+            "gold"
+        ],
+        "default_attributes": {
+            "effect_type": 63,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "64": {
+        "name": "change_technology_research_time",
+        "attributes": [
+            "quantity",
+            "source_player",
+            "technology"
+        ],
+        "default_attributes": {
+            "effect_type": 64,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "65": {
+        "name": "change_technology_name",
+        "attributes": [
+            "source_player",
+            "technology",
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 65,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "66": {
+        "name": "change_technology_description",
+        "attributes": [
+            "source_player",
+            "technology",
+            "string_id",
+            "message"
+        ],
+        "default_attributes": {
+            "effect_type": 66,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "67": {
+        "name": "enable_technology_stacking",
+        "attributes": [
+            "source_player",
+            "technology"
+        ],
+        "default_attributes": {
+            "effect_type": 67,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "68": {
+        "name": "disable_technology_stacking",
+        "attributes": [
+            "source_player",
+            "technology"
+        ],
+        "default_attributes": {
+            "effect_type": 68,
+            "source_player": 1,
+            "technology": 16
+        }
+    },
+    "69": {
+        "name": "acknowledge_multiplayer_ai_signal",
+        "attributes": [
+            "ai_signal_value"
+        ],
+        "default_attributes": {
+            "effect_type": 69,
+            "ai_signal_value": 0
+        }
+    },
+    "70": {
+        "name": "disable_object_selection",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 70,
+            "source_player": 1
+        }
+    },
+    "71": {
+        "name": "enable_object_selection",
+        "attributes": [
+            "object_list_unit_id",
+            "source_player",
+            "area_x1",
+            "area_y1",
+            "area_x2",
+            "area_y2",
+            "selected_object_ids"
+        ],
+        "default_attributes": {
+            "effect_type": 71,
+            "source_player": 1
+        }
+    },
+    "72": {
+        "name": "change_color_mood",
+        "attributes": [
+            "quantity",
+            "color_mood"
+        ],
+        "default_attributes": {
+            "effect_type": 72,
+            "source_player": 1,
+            "color_mood": 0
+        }
+    }
+}
