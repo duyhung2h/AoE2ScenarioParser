@@ -1,3 +1,18 @@
+# THE LAZY LOAD REWORK BRANCH
+
+This is a **huge** rework project I started quiet a while ago.  
+It's intended to read scenarios in a very smart way. 
+It figures out which retrievers have values of dynamic lengths and only reads those.  
+So when a value is requested, it figures out what the dynamic values are, skips everything else.
+
+This should help an **INSANE** amount with reading and writing.
+Easily 100x faster for large files that don't need a lot of data.
+
+The only problem with it, is that it's also **INSANELY** complicated...  
+So I'm not sure if this branch will ever get finished...
+
+---
+
 # AoE2ScenarioParser
 
 This is a project for editing parts of an `aoe2scenario` file from **Age of Empires 2 Definitive Edition** outside
