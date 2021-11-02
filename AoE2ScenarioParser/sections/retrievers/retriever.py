@@ -37,7 +37,7 @@ class Retriever:
     on_commit: RetrieverDependency
     on_refresh: RetrieverDependency
 
-    def __init__(self, name, default_value, datatype=DataType(), is_list=None, log_value=False):
+    def __init__(self, name, default_value=None, datatype=DataType(), is_list=None, log_value=False):
         """
         Args:
             name (str): The name of the item. Has to be unique within the Section or Struct
@@ -208,9 +208,9 @@ class Retriever:
                 data = pretty_format_list(self.data)
             else:
                 data = string_manipulations.q_str(self.data)
-            return self.name + " (" + self.datatype.to_simple_string() + "): " + data
         else:
-            return "<None>"
+            data = "<None>"
+        return f"{self.name} ({self.datatype.to_simple_string()}): {data}"
 
     def to_simple_string(self):
         return f"[Retriever] {self.name}: {self.datatype} (Default: {string_manipulations.q_str(self.default_value)})"

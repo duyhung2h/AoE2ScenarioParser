@@ -2,6 +2,43 @@ from AoE2ScenarioParser.datasets.support.info_dataset_base import InfoDatasetBas
 
 
 class HeroInfo(InfoDatasetBase):
+    """
+    **Description**
+
+    This enum class provides information about most of the heroes in the game. Information about the following
+    properties of a hero is found in this class:
+     - Unit ID
+     - Icon ID
+     - Dead Unit ID
+     - HotKey ID
+     - If the hero is a gaia only unit
+
+    **Inherited Methods from class InfoDatasetBase**
+
+    >>> InfoDatasetBase.from_id()
+    >>> InfoDatasetBase.from_dead_id()
+    >>> InfoDatasetBase.from_icon_id()
+    >>> InfoDatasetBase.from_hotkey_id()
+    >>> InfoDatasetBase.gaia_only()
+    >>> InfoDatasetBase.non_gaia()
+
+    **Examples**
+
+    >>> HeroInfo.WILLIAM_WALLACE.ID
+    >>> 432
+
+    >>> HeroInfo.WILLIAM_WALLACE.ICON_ID
+    >>> 363
+
+    >>> HeroInfo.WILLIAM_WALLACE.DEAD_ID
+    >>> 433
+
+    >>> HeroInfo.WILLIAM_WALLACE.HOTKEY_ID
+    >>> 16299
+
+    >>> HeroInfo.WILLIAM_WALLACE.IS_GAIA_ONLY
+    >>> False
+    """
     KHOSRAU = 1297, 172, 874, 16311, False
     LIEF_ERIKSON = 106, 118, -1, 16457, False
     RICHARD_THE_LIONHEART = 160, 92, 570, 16633, False
@@ -158,3 +195,14 @@ class HeroInfo(InfoDatasetBase):
     WARWOLF_TREBUCHET = 1690, 94, 194, 16097, False
     WARWOLF_TREBUCHET_PACKED = 1691, 313, 735, 16381, False
     JACQUELINE_OF_HAINAUT = 1692, 367, 1328, 16307, False
+    STOERTEBEKER = 114, 88, -1, 16703, False
+    JAN_ZIZKA = 1713, 373, 1714, 16724, False
+    JADWIGA = 1715, 374, 1716, 16691, False
+    JOGAILA = 1718, 375, 1719, 16724, False
+    KESTUTIS = 1721, 376, 1722, 16724, False
+    ALGIRDAS = 1725, 378, 1726, 16724, False
+    ULRICH_VON_JUNGINGEN = 1727, 379, 1728, 16562, False
+    EMPEROR_SIGISMUND = 1729, 380, 633, 16562, False
+    DMITRY_OF_MOSCOW = 1730, 381, 139, 16639, False
+    MIKHAIL_OF_TVER = 1731, 382, 877, 16639, False
+    YOUNG_JADWIGA = 1732, 383, 431, 16297, False

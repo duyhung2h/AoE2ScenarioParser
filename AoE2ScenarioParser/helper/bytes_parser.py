@@ -140,7 +140,7 @@ def handle_end_of_file_mark(igenerator, retriever) -> None:
             ">>> from AoE2ScenarioParser import settings",
             ">>> settings.NOTIFY_UNKNOWN_BYTES = False",
             "",
-            "Please be so kind and include the map in question. Thanks again!\n\n",
+            "Please be so kind and include the map in question. Thanks again!",
             "",
             "Extra data found in the file:",
             f"\t'{retrieved_bytes}'"

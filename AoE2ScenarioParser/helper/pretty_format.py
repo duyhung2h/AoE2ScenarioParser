@@ -36,7 +36,11 @@ def pretty_format_list(plist: List, inline_types: Dict[str, int] = None):
 def pretty_format_dict(pdict: dict):
     return_string = ""
     for key, value in pdict.items():
-        newline = f"{key}: {value}"
+        if type(value) is dict:
+            value = add_tabs(pretty_format_dict(value), 1)
+        if type(value) is list:
+            value = add_tabs(pretty_format_list(value), 1)
+        newline = f"\t{key}: {value}"
         if newline[::-2] != "\n":
             newline += "\n"
         return_string += newline

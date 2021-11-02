@@ -1,19 +1,21 @@
 import json
+import uuid
 import zlib
 from pathlib import Path
 from typing import Union, List, TYPE_CHECKING
 
 import AoE2ScenarioParser.datasets.conditions as conditions
 import AoE2ScenarioParser.datasets.effects as effects
+from AoE2ScenarioParser.helper.printers import s_print
 from AoE2ScenarioParser.helper.exceptions import InvalidScenarioStructureError, UnknownScenarioStructureError, \
     UnknownStructureError
+from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex
 from AoE2ScenarioParser.helper.incremental_generator import IncrementalGenerator
-from AoE2ScenarioParser.helper.printers import s_print
-from AoE2ScenarioParser.helper.string_manipulations import create_textual_hex, split_string_at_index
 from AoE2ScenarioParser.objects.aoe2_object_manager import AoE2ObjectManager
 from AoE2ScenarioParser.objects.managers.map_manager import MapManager
 from AoE2ScenarioParser.objects.managers.trigger_manager import TriggerManager
 from AoE2ScenarioParser.objects.managers.unit_manager import UnitManager
+from AoE2ScenarioParser.scenarios import scenario_store
 from AoE2ScenarioParser.sections.aoe2_file_section import AoE2FileSection
 from AoE2ScenarioParser.sections.dynamic_retriever_manager import DynamicRetrieverManager as Drm, resolve_path
 from AoE2ScenarioParser.sections.sectiondict import SectionDict
@@ -36,7 +38,9 @@ class AoE2Scenario:
     def map_manager(self) -> MapManager:
         return self._object_manager.managers['Map']
 
-    def __init__(self):
+    def __init__(self, source_location):
+        self.source_location = source_location
+
         self.read_mode = None
         self.scenario_version = "???"
         self.game_version = "???"
@@ -54,6 +58,9 @@ class AoE2Scenario:
         # Injection
         self._drm.scenario = self
 
+        self.uuid = uuid.uuid4()
+        scenario_store.register_scenario(self)
+
     def get_retriever(self, path: List or str) -> Union['Retriever', 'SectionDict']:
         if type(path) is str:
             path = path.split(".")
@@ -70,23 +77,24 @@ class AoE2Scenario:
 
     @classmethod
     def from_file(cls, filename, game_version):
-        scenario = cls()
+        python_version_check()
 
-        print(f"\nReading file: '{filename}'")
+        s_print(f"\nReading file: '{filename}'", final=True, color="magenta")
         s_print("Reading scenario file...")
         igenerator = IncrementalGenerator.from_file(filename)
         scenario.compressed_file = igenerator.file_content
         s_print("Reading scenario file finished successfully.", final=True)
 
+        scenario = cls(filename)
         scenario.read_mode = "from_file"
         scenario.game_version = game_version
         scenario.scenario_version = get_file_version(igenerator)
 
         # Log game and scenario version
-        print("\n############### Attributes ###############")
-        print(f">>> Game version: '{scenario.game_version}'")
-        print(f">>> Scenario version: {scenario.scenario_version}")
-        print("##########################################")
+        s_print("\n############### Attributes ###############", final=True, color="blue")
+        s_print(f">>> Game version: '{scenario.game_version}'", final=True, color="blue")
+        s_print(f">>> Scenario version: {scenario.scenario_version}", final=True, color="blue")
+        s_print("##########################################", final=True, color="blue")
 
         s_print(f"\nLoading scenario structure...")
         scenario._load_structure()
@@ -104,12 +112,8 @@ class AoE2Scenario:
         # scenario._load_content_sections(igenerator)
         # s_print(f"Parsing scenario file finished successfully.", final=True)
 
-        scenario._object_manager = AoE2ObjectManager(
-            sections=scenario.sections,
-            game_version=scenario.game_version,
-            scenario_version=scenario.scenario_version
-        )
-        # scenario._object_manager.setup()
+        scenario._object_manager = AoE2ObjectManager(scenario.uuid)
+        scenario._object_manager.setup()
 
         return scenario
 
@@ -141,10 +145,9 @@ class AoE2Scenario:
             self.sections[section_name] = SectionDict(drm=self._drm, parent_path=[section_name])
 
     def _load_content_sections(self, raw_file_igenerator: IncrementalGenerator):
-        data_igenerator = IncrementalGenerator(
-            name='Scenario Data',
-            file_content=decompress_bytes(raw_file_igenerator.get_remaining_bytes())
-        )
+        self._decompressed_file_data = decompress_bytes(raw_file_igenerator.get_remaining_bytes())
+
+        data_igenerator = IncrementalGenerator(name='Scenario Data', file_content=self._decompressed_file_data)
 
         for section_name in self.structure.keys():
             if section_name == "FileHeader":
@@ -158,14 +161,11 @@ class AoE2Scenario:
                 raise e
 
     def _create_and_load_section(self, name, igenerator):
-        s_print(f"\t🔄 Parsing {name}...")
-        section = AoE2FileSection.from_structure(
-            name, self.structure.get(name),
-            SectionDict(drm=self._drm)
-        )
-        s_print(f"\t🔄 Gathering {name} data...")
-        section.set_data_from_generator(igenerator, self.sections)
-        s_print(f"\t✔ {name}", final=True)
+        s_print(f"\t🔄 Parsing {name}...", color="yellow")
+        section = AoE2FileSection.from_structure(name, self.structure.get(name), self.uuid)
+        s_print(f"\t🔄 Gathering {name} data...", color="yellow")
+        section.set_data_from_generator(igenerator)
+        s_print(f"\t✔ {name}", final=True, color="green")
         return section
 
     def _add_to_sections(self, section):
@@ -187,30 +187,27 @@ class AoE2Scenario:
         self._write_from_structure(filename, skip_reconstruction)
 
     def _write_from_structure(self, filename, skip_reconstruction=False):
+        if not settings.DISABLE_ERROR_ON_OVERWRITING_SOURCE and self.source_location == filename:
+            raise ValueError("Overwriting the source scenario file is disallowed. This behaviour can be enabled in the settings file.")
         if not skip_reconstruction:
             self._object_manager.reconstruct()
 
         s_print("\nFile writing from structure started...", final=True)
-        binary = self._get_file_section_data(self.sections.get('FileHeader'))
+        binary = _get_file_section_data(self.sections.get('FileHeader'))
 
         binary_list_to_be_compressed = []
         for file_part in self.sections.values():
             if file_part.name == "FileHeader":
                 continue
-            binary_list_to_be_compressed.append(self._get_file_section_data(file_part))
+            binary_list_to_be_compressed.append(_get_file_section_data(file_part))
+
         compressed = compress_bytes(b''.join(binary_list_to_be_compressed))
 
         with open(filename, 'wb') as f:
             f.write(binary + compressed)
 
         s_print("File writing finished successfully.", final=True)
-        print(f"File successfully written to: '{filename}'")
-
-    def _get_file_section_data(self, file_section: AoE2FileSection):
-        s_print(f"\t🔄 Reconstructing {file_section.name}...")
-        value = file_section.get_data_as_bytes()
-        s_print(f"\t✔ {file_section.name}", final=True)
-        return value
+        s_print(f"File successfully written to: '{filename}'", color="magenta")
 
     def write_error_file(self, filename="error_file.txt", trail_generator=None):
         self._debug_byte_structure_to_file(filename=filename, trail_generator=trail_generator)
@@ -241,22 +238,18 @@ class AoE2Scenario:
     #     file.close()
     #     print("File writing finished successfully.")
 
-    def _retrieve_byte_structure(self, file_part):
-        s_print(f"\t🔄 Writing {file_part.name}...")
-        value = file_part.get_byte_structure_as_string(self.sections)
-        s_print(f"\t✔ {file_part.name}", final=True)
-        return value
-
     def _debug_byte_structure_to_file(self, filename, trail_generator: IncrementalGenerator = None, commit=False):
         """ Used for debugging - Writes structure from read file to the filesystem in a easily readable manner. """
         if commit and hasattr(self, '_object_manager'):
             self._object_manager.reconstruct()
 
         s_print("\nWriting structure to file...", final=True)
-        with open(filename, 'w', encoding="utf-8") as f:
+        with open(filename, 'w', encoding=settings.MAIN_CHARSET) as f:
             result = []
             for section in self.sections.values():
-                result.append(self._retrieve_byte_structure(section))
+                s_print(f"\t🔄 Writing {section.name}...")
+                result.append(section.get_byte_structure_as_string())
+                s_print(f"\t✔ {section.name}", final=True)
 
             if trail_generator is not None:
                 s_print("\tWriting trail...")
@@ -276,18 +269,35 @@ def load_trigger_version_dependencies(game_version, scenario_version):
     for condition_id, structure in condition_json.items():
         condition_id = int(condition_id)
 
+        if condition_id == -1:
+            conditions.attribute_presentation[condition_id] = structure['attribute_presentation']
+            continue
+
         conditions.condition_names[condition_id] = structure['name']
         conditions.default_attributes[condition_id] = structure['default_attributes']
         conditions.attributes[condition_id] = structure['attributes']
+        conditions.attribute_presentation[condition_id] = structure.get('attribute_presentation', {})
 
     effect_json = get_version_dependant_structure_file(game_version, scenario_version, "effects")
 
     for effect_id, structure in effect_json.items():
         effect_id = int(effect_id)
 
+        if effect_id == -1:
+            effects.attribute_presentation[effect_id] = structure['attribute_presentation']
+            continue
+
         effects.effect_names[effect_id] = structure['name']
         effects.default_attributes[effect_id] = structure['default_attributes']
         effects.attributes[effect_id] = structure['attributes']
+        effects.attribute_presentation[effect_id] = structure.get('attribute_presentation', {})
+
+
+def _get_file_section_data(file_section: AoE2FileSection):
+    s_print(f"\t🔄 Reconstructing {file_section.name}...", color="yellow")
+    value = file_section.get_data_as_bytes()
+    s_print(f"\t✔ {file_section.name}", final=True, color="green")
+    return value
 
 
 def get_file_version(generator: IncrementalGenerator):

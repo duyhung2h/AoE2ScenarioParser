@@ -1,9 +1,16 @@
 from enum import IntEnum
 
-from bidict import bidict
-
 
 class EffectId(IntEnum):
+    """
+    This enum class provides the integer values used to reference the effects in the game. Used in every effect to
+    indicate which type of effect it is
+
+    **Examples**
+
+    >>> EffectId.RESEARCH_TECHNOLOGY
+    >>> 2
+    """
     NONE = 0
     """Attributes for the **none** effect are: \n
     ... none... Just like Conditions... People these days... """
@@ -57,7 +64,6 @@ class EffectId(IntEnum):
     - source_player
     - location_x
     - location_y
-    - item_id
     - facet"""
     TASK_OBJECT = 12
     """Attributes for the **task_object** effect are: \n
@@ -72,6 +78,7 @@ class EffectId(IntEnum):
     - area_y2
     - object_group
     - object_type
+    - action_type
     - selected_object_ids"""
     DECLARE_VICTORY = 13
     """Attributes for the **declare_victory** effect are: \n
@@ -98,6 +105,7 @@ class EffectId(IntEnum):
     - area_y2
     - object_group
     - object_type
+    - object_state
     - selected_object_ids"""
     CHANGE_VIEW = 16
     """Attributes for the **change_view** effect are: \n
@@ -337,19 +345,18 @@ class EffectId(IntEnum):
     - display_time
     - time_unit
     - timer
+    - reset_timer
     - message"""
     ENABLE_DISABLE_OBJECT = 38
     """Attributes for the **enable_disable_object** effect are: \n
     - object_list_unit_id
     - source_player
-    - enabled
-    - item_id"""
+    - enabled"""
     ENABLE_DISABLE_TECHNOLOGY = 39
     """Attributes for the **enable_disable_technology** effect are: \n
     - source_player
     - technology
-    - enabled
-    - item_id"""
+    - enabled"""
     CHANGE_OBJECT_COST = 40
     """Attributes for the **change_object_cost** effect are: \n
     - object_list_unit_id
@@ -434,7 +441,6 @@ class EffectId(IntEnum):
     - quantity
     - object_list_unit_id
     - source_player
-    - item_id
     - operation
     - object_attributes"""
     MODIFY_RESOURCE = 52
@@ -442,13 +448,11 @@ class EffectId(IntEnum):
     - quantity
     - tribute_list
     - source_player
-    - item_id
     - operation"""
     MODIFY_RESOURCE_BY_VARIABLE = 53
     """Attributes for the **modify_resource_by_variable** effect are: \n
     - tribute_list
     - source_player
-    - item_id
     - operation
     - variable"""
     SET_BUILDING_GATHER_POINT = 54
@@ -576,6 +580,13 @@ class EffectId(IntEnum):
     - area_x2
     - area_y2
     - selected_object_ids"""
+    CHANGE_COLOR_MOOD = 72
+    """Attributes for the **change_color_mood** effect are: \n
+    - quantity
+    - color_mood
+    
+    **Version notice**: \n
+    This condition is supported since: 1.42"""
     # Possibly used for marking when achievements should be achieved. Doesn't seem to work in scenario's. F
     # UNKNOWN_0 = 58  # Was 58... Not anymore (?)
 
@@ -627,12 +638,17 @@ empty_attributes = {
     "facet": -1,
     "play_sound": -1,
     "player_color": -1,
-    "message": '',
-    "sound_name": '',
+    "color_mood": -1,
+    "reset_timer": -1,
+    "object_state": -1,
+    "action_type": -1,
+    "message": "",
+    "sound_name": "",
     "selected_object_ids": -1,
 }
 
 # Set using the version json files
-effect_names = bidict()
+effect_names = {}
 default_attributes = {}
 attributes = {}
+attribute_presentation = {}

@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import List
 
 import AoE2ScenarioParser.datasets.conditions as condition_dataset
@@ -8,11 +7,14 @@ from AoE2ScenarioParser.datasets.effects import EffectId
 from AoE2ScenarioParser.helper.exceptions import UnsupportedAttributeError
 from AoE2ScenarioParser.helper.helper import exclusive_if
 from AoE2ScenarioParser.helper.list_functions import list_changed, update_order_array, hash_list
+from AoE2ScenarioParser.helper.string_manipulations import add_tabs
 from AoE2ScenarioParser.objects.aoe2_object import AoE2Object
 from AoE2ScenarioParser.objects.data_objects.condition import Condition
 from AoE2ScenarioParser.objects.data_objects.effect import Effect
 from AoE2ScenarioParser.objects.support.new_condition import NewConditionSupport
 from AoE2ScenarioParser.objects.support.new_effect import NewEffectSupport
+from AoE2ScenarioParser.objects.support.uuid_list import UuidList
+from AoE2ScenarioParser.scenarios import scenario_store
 from AoE2ScenarioParser.sections.retrievers.retriever_object_link import RetrieverObjectLink
 
 
@@ -60,7 +62,10 @@ class Trigger(AoE2Object):
                  effects: List[Effect] = None,
                  effect_order: List[int] = None,
                  trigger_id: int = -1,
+                 **kwargs
                  ):
+        super().__init__(**kwargs)
+
         if conditions is None:
             conditions = []
         if condition_order is None:
@@ -92,8 +97,6 @@ class Trigger(AoE2Object):
 
         self.new_effect = NewEffectSupport(self)
         self.new_condition = NewConditionSupport(self)
-
-        super().__init__()
 
     def __deepcopy__(self, memo):
         cls = self.__class__
@@ -133,7 +136,7 @@ class Trigger(AoE2Object):
 
     @conditions.setter
     def conditions(self, val: List[Condition]) -> None:
-        self._conditions = val
+        self._conditions = UuidList(self._host_uuid, val)
         self.condition_order = list(range(0, len(val)))
 
     @property
@@ -142,7 +145,7 @@ class Trigger(AoE2Object):
 
     @effects.setter
     def effects(self, val: List[Effect]) -> None:
-        self._effects = val
+        self._effects = UuidList(self._host_uuid, val)
         self.effect_order = list(range(0, len(val)))
 
     def _add_effect(self, effect_type: EffectId, ai_script_goal=None, armour_attack_quantity=None,
@@ -155,24 +158,26 @@ class Trigger(AoE2Object):
                     flash_object=None, force_research_technology=None, visibility_state=None, scroll=None,
                     operation=None, object_list_unit_id_2=None, button_location=None, ai_signal_value=None,
                     object_attributes=None, variable=None, timer=None, facet=None, play_sound=None, message=None,
-                    player_color=None, sound_name=None, selected_object_ids=None) -> Effect:
+                    player_color=None, sound_name=None, selected_object_ids=None, color_mood=None, reset_timer=None,
+                    object_state=None, action_type=None, ) -> Effect:
         """Used to add new effect to trigger. Please use trigger.new_effect.<effect_name> instead"""
 
         def get_default_effect_attributes(eff_type):
             """Gets the default effect attributes based on a certain effect type, with exception handling"""
+            sv = scenario_store.get_scenario_version(self._host_uuid)
             try:
                 return effect_dataset.default_attributes[eff_type]
             except KeyError:
                 effect = EffectId(eff_type)
                 raise UnsupportedAttributeError(
-                    f"The effect {effect.name} is not supported in scenario version {self._scenario_version}"
+                    f"The effect {effect.name} is not supported in scenario version {sv}"
                 ) from None
 
         effect_defaults = get_default_effect_attributes(effect_type)
         effect_attr = {}
         for key, value in effect_defaults.items():
             effect_attr[key] = (locals()[key] if locals()[key] is not None else value)
-        new_effect = Effect(**effect_attr)
+        new_effect = Effect(**effect_attr, host_uuid=self._host_uuid)
         self.effects.append(new_effect)
         return new_effect
 
@@ -180,24 +185,26 @@ class Trigger(AoE2Object):
                        attribute=None, unit_object=None, next_object=None, object_list=None,
                        source_player=None, technology=None, timer=None, area_x1=None, area_y1=None, area_x2=None,
                        area_y2=None, object_group=None, object_type=None, ai_signal=None, inverted=None, variable=None,
-                       comparison=None, target_player=None, unit_ai_action=None, xs_function=None) -> Condition:
+                       comparison=None, target_player=None, unit_ai_action=None, xs_function=None, object_state=None
+                       ) -> Condition:
         """Used to add new condition to trigger. Please use trigger.new_condition.<condition_name> instead"""
 
         def get_default_condition_attributes(cond_type):
             """Gets the default condition attributes based on a certain condition type, with exception handling"""
+            sv = scenario_store.get_scenario_version(self._host_uuid)
             try:
                 return condition_dataset.default_attributes[cond_type]
             except KeyError:
                 condition = ConditionId(cond_type)
                 raise UnsupportedAttributeError(
-                    f"The condition {condition.name} is not supported in scenario version {self._scenario_version}"
+                    f"The condition {condition.name} is not supported in scenario version {sv}"
                 ) from None
 
         condition_defaults = get_default_condition_attributes(condition_type)
         condition_attr = {}
         for key, value in condition_defaults.items():
             condition_attr[key] = (locals()[key] if locals()[key] is not None else value)
-        new_condition = Condition(**condition_attr)
+        new_condition = Condition(**condition_attr, host_uuid=self._host_uuid)
         self.conditions.append(new_condition)
         return new_condition
 
@@ -225,16 +232,10 @@ class Trigger(AoE2Object):
 
         if effect is not None:
             effect_index = self.effects.index(effect)
-
         if effect_index is None:
             effect_index = self.effect_order[display_index]
-        else:
-            display_index = self.effect_order.index(effect_index)
 
         del self.effects[effect_index]
-        del self.effect_order[display_index]
-
-        self.effect_order = [x - 1 if x > effect_index else x for x in self.effect_order]
 
     def remove_condition(self, condition_index: int = None, display_index: int = None, condition: Condition = None) \
             -> None:
@@ -246,16 +247,12 @@ class Trigger(AoE2Object):
 
         if condition_index is None:
             condition_index = self.condition_order[display_index]
-        else:
-            display_index = self.condition_order.index(condition_index)
 
         del self.conditions[condition_index]
-        del self.condition_order[display_index]
 
-        self.condition_order = [x - 1 if x > condition_index else x for x in self.condition_order]
-
-    def get_content_as_string(self) -> str:
+    def get_content_as_string(self, include_trigger_definition=False) -> str:
         return_string = ""
+
         data_tba = {
             'enabled': self.enabled != 0,
             'looping': self.looping != 0
@@ -281,24 +278,29 @@ class Trigger(AoE2Object):
             data_tba['mute_objectives'] = (self.mute_objectives != 0)
 
         for key, value in data_tba.items():
-            return_string += f"\t\t{key}: {value}\n"
+            return_string += f"{key}: {value}\n"
 
         if len(self.condition_order) > 0:
-            return_string += "\t\tconditions:\n"
+            return_string += "conditions:\n"
             for c_display_order, condition_id in enumerate(self.condition_order):
                 condition = self.conditions[condition_id]
 
-                return_string += f"\t\t\t{condition_dataset.condition_names[condition.condition_type]} " \
+                return_string += f"\t{condition_dataset.condition_names[condition.condition_type]} " \
                                  f"[Index: {condition_id}, Display: {c_display_order}]:\n"
-                return_string += condition.get_content_as_string()
+                return_string += add_tabs(condition.get_content_as_string(), 2)
 
         if len(self.effect_order) > 0:
-            return_string += "\t\teffects:\n"
+            return_string += "effects:\n"
             for e_display_order, effect_id in enumerate(self.effect_order):
                 effect = self.effects[effect_id]
 
-                return_string += f"\t\t\t{effect_dataset.effect_names[effect.effect_type]}" \
+                return_string += f"\t{effect_dataset.effect_names[effect.effect_type]}" \
                                  f" [Index: {effect_id}, Display: {e_display_order}]:\n"
-                return_string += effect.get_content_as_string()
+                return_string += add_tabs(effect.get_content_as_string(), 2)
 
+        if include_trigger_definition:
+            return f"\"{self.name}\" [Index: {self.trigger_id}]\n" + add_tabs(return_string, 1)
         return return_string
+
+    def __str__(self) -> str:
+        return f"[Trigger] {self.get_content_as_string(include_trigger_definition=True)}"

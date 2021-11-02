@@ -4,6 +4,59 @@ All changes made to the scenario file will be documented in this file.
 
 ---
 
+## Scenario v1.43
+
+No changes except for default civilization changed to 38 (from 36) because of the 2 new civs (DotD)
+
+---
+
+## Scenario v1.42
+
+### Added
+
+- Map
+    - Renamed:
+      `block_humanity_team_change` to `lock_coop_alliances`
+    - Changed order:
+    ```
+    script_name
+    ...
+    block_humanity_team_change  -->  collide_and_correct
+    collide_and_correct         -->  villager_force_drop
+    villager_force_drop         -->  unknown
+    unknown                     -->  lock_coop_alliances 
+    ...
+    player_1_camera_y
+    ```
+    - Added (After reorder & rename):
+        - Between `lock_coop_alliances` and `player_1_camera_y`
+        ```json
+        "ai_map_type": {
+            "type": "s32",
+            "default": 0
+        },  
+        ```
+
+- Triggers
+    - Effects
+        - Between `unknown_4` and `message`
+        ```json
+        "color_mood": {
+            "type": "s32",
+            "default": -1
+        },
+        ```
+    - Conditions
+        - Between `unknown_4` and `xs_function`
+        ```json
+        "object_state": {
+            "type": "s32",
+            "default": -1
+        },
+        ```
+
+---
+
 ## Scenario v1.41
 
 ### Added
@@ -16,6 +69,8 @@ All changes made to the scenario file will be documented in this file.
             "default": 0
         },
         ```
+
+---
 
 ## Scenario v1.40
 
@@ -208,3 +263,25 @@ All changes made to the scenario file will be documented in this file.
           "default": 0
         },
         ```
+
+---
+
+## Scenario v1.37
+
+### Added
+
+-   Map:
+
+    -   Between `collide_and_correct` and `player_1_camera_y`
+        ```json
+        "villager_force_drop": {
+                "type": "u8",
+                "default": 0
+            },
+        ```
+
+---
+
+## Scenario v1.36
+
+> First DE scenario file version.

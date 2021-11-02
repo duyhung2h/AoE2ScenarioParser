@@ -1,9 +1,16 @@
 from enum import IntEnum
 
-from bidict import bidict
-
 
 class ConditionId(IntEnum):
+    """
+    This enum class provides the integer values used to reference the conditions in the game. Used in every condition
+    to indicate which type of condition it is
+
+    **Examples**
+
+    >>> ConditionId.BRING_OBJECT_TO_AREA
+    >>> 1
+    """
     NONE = 0
     """
     Attributes for the **none**  condition are:\n
@@ -60,6 +67,7 @@ class ConditionId(IntEnum):
     - area_y2
     - object_group
     - object_type
+    - object_state
     - inverted
     """
     DESTROY_OBJECT = 6
@@ -200,9 +208,9 @@ class ConditionId(IntEnum):
     **Version notice**: \n
     This condition is supported since: 1.40
     """
-    OBJECT_VISIBLE_MULTIPLAYER = 26
+    OBJECT_SELECTED_MULTIPLAYER = 26
     """
-    Attributes for the **object_visible_multiplayer** condition are:\n
+    Attributes for the **object_selected_multiplayer** condition are:\n
     - unit_object
     - source_player
     - inverted
@@ -210,9 +218,9 @@ class ConditionId(IntEnum):
     **Version notice**: \n
     This condition is supported since: 1.40
     """
-    OBJECT_SELECTED_MULTIPLAYER = 27
+    OBJECT_VISIBLE_MULTIPLAYER = 27
     """
-    Attributes for the **object_selected_multiplayer** condition are:\n
+    Attributes for the **object_visible_multiplayer** condition are:\n
     - unit_object
     - source_player
     - inverted
@@ -271,10 +279,12 @@ empty_attributes = {
     "comparison": -1,
     "target_player": -1,
     "unit_ai_action": -1,
+    "object_state": -1,
     "xs_function": ""
 }
 
 # Set using the version json files
-condition_names = bidict()
+condition_names = {}
 default_attributes = {}
 attributes = {}
+attribute_presentation = {}

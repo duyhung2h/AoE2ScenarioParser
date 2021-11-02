@@ -90,7 +90,7 @@
                 "type": "f32",
                 "default": 1.399999976158142
             },
-            "player_names": {
+            "tribe_names": {
                 "type": "c256",
                 "repeat": 16,
                 "default": [
@@ -139,49 +139,14 @@
                 "repeat": 16,
                 "default": null
             },
-            "conquest_mode": {
-                "type": "u8",
-                "default": 0
-            },
-            "mission_items_counter": {
-                "type": "u16",
-                "default": 0,
-                "dependencies": {
-                    "on_refresh": {
-                        "action": "SET_VALUE",
-                        "target": "self:mission_item",
-                        "eval": "len(mission_item)"
-                    }
-                }
-            },
-            "mission_available": {
-                "type": "u16",
-                "default": 0
-            },
-            "mission_timeline": {
-                "type": "f32",
-                "default": 0.0
-            },
-            "mission_item": {
-                "type": "30",
-                "default": [],
-                "dependencies": {
-                    "on_refresh": {
-                        "action": "SET_REPEAT",
-                        "target": "self:mission_items_counter"
-                    },
-                    "on_construct": {
-                        "action": "REFRESH_SELF"
-                    },
-                    "on_commit": {
-                        "action": "REFRESH",
-                        "target": "self:mission_items_counter"
-                    }
-                }
+            "per_player_lock_civilization": {
+                "type": "u32",
+                "repeat": 16,
+                "default": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             },
             "unknown": {
-                "type": "64",
-                "default": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000"
+                "type": "9",
+                "default": "000000000000000000"
             },
             "filename": {
                 "type": "str16",
@@ -311,8 +276,11 @@
                 "dependencies": {
                     "on_construct": {
                         "action": "SET_REPEAT",
-                        "target": "self:picture_orientation",
-                        "eval": "1 if picture_orientation in [-1, 2] else 0"
+                        "target": [
+                            "self:bitmap_width",
+                            "self:bitmap_height"
+                        ],
+                        "eval": "1 if bitmap_width * bitmap_height else 0"
                     }
                 }
             }
@@ -475,11 +443,7 @@
             "AIStruct": {
                 "retrievers": {
                     "unknown": {
-                        "type": "u32",
-                        "default": 0
-                    },
-                    "unknown_2": {
-                        "type": "u32",
+                        "type": "8",
                         "default": 0
                     },
                     "ai_per_file_text": {
@@ -536,7 +500,7 @@
                 "type": "u32",
                 "default": 0
             },
-            "artifacts": {
+            "artifacts_required": {
                 "type": "u32",
                 "default": 0
             },
@@ -548,7 +512,7 @@
                 "type": "u32",
                 "default": 0
             },
-            "gold": {
+            "gold_required": {
                 "type": "u32",
                 "default": 0
             },
@@ -784,9 +748,21 @@
                 "repeat": 16,
                 "default": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             },
-            "unknown": {
-                "type": "4",
-                "default": "00010004"
+            "lock_teams": {
+                "type": "u8",
+                "default": 0
+            },
+            "allow_players_choose_teams": {
+                "type": "u8",
+                "default": 1
+            },
+            "random_start_points": {
+                "type": "u8",
+                "default": 0
+            },
+            "max_number_of_teams": {
+                "type": "u8",
+                "default": 4
             }
         },
         "structs": {
@@ -836,7 +812,7 @@
                             "self:disabled_tech_ids_player_7",
                             "self:disabled_tech_ids_player_8"
                         ],
-                        "eval": "[len(x) for x in [disabled_tech_ids_player_1, disabled_tech_ids_player_2, disabled_tech_ids_player_3, disabled_tech_ids_player_4, disabled_tech_ids_player_5, disabled_tech_ids_player_6, disabled_tech_ids_player_7, disabled_tech_ids_player_8]]"
+                        "eval": "[len(x) for x in [disabled_tech_ids_player_1, disabled_tech_ids_player_2, disabled_tech_ids_player_3, disabled_tech_ids_player_4, disabled_tech_ids_player_5, disabled_tech_ids_player_6, disabled_tech_ids_player_7, disabled_tech_ids_player_8]] + [0, 0, 0, 0, 0, 0, 0, 0]"
                     }
                 }
             },
@@ -964,7 +940,7 @@
                             "self:disabled_building_ids_player_7",
                             "self:disabled_building_ids_player_8"
                         ],
-                        "eval": "[len(x) for x in [disabled_building_ids_player_1, disabled_building_ids_player_2, disabled_building_ids_player_3, disabled_building_ids_player_4, disabled_building_ids_player_5, disabled_building_ids_player_6, disabled_building_ids_player_7, disabled_building_ids_player_8]]"
+                        "eval": "[len(x) for x in [disabled_building_ids_player_1, disabled_building_ids_player_2, disabled_building_ids_player_3, disabled_building_ids_player_4, disabled_building_ids_player_5, disabled_building_ids_player_6, disabled_building_ids_player_7, disabled_building_ids_player_8]] + [0, 0, 0, 0, 0, 0, 0, 0]"
                     }
                 }
             },
@@ -1092,7 +1068,7 @@
                             "self:disabled_unit_ids_player_7",
                             "self:disabled_unit_ids_player_8"
                         ],
-                        "eval": "[len(x) for x in [disabled_unit_ids_player_1, disabled_unit_ids_player_2, disabled_unit_ids_player_3, disabled_unit_ids_player_4, disabled_unit_ids_player_5, disabled_unit_ids_player_6, disabled_unit_ids_player_7, disabled_unit_ids_player_8]]"
+                        "eval": "[len(x) for x in [disabled_unit_ids_player_1, disabled_unit_ids_player_2, disabled_unit_ids_player_3, disabled_unit_ids_player_4, disabled_unit_ids_player_5, disabled_unit_ids_player_6, disabled_unit_ids_player_7, disabled_unit_ids_player_8]] + [0, 0, 0, 0, 0, 0, 0, 0]"
                     }
                 }
             },
@@ -1217,8 +1193,18 @@
                 "type": "u32",
                 "repeat": 16
             },
-            "unknown": {
-                "type": "32"
+            "unknown_1": {
+                "type": "17",
+                "default": "0000000000000000000000000000000000"
+            },
+            "per_player_base_priority": {
+                "type": "u8",
+                "repeat": 8,
+                "default": [0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            "unknown_2": {
+                "type": "7",
+                "default": "00000000000000"
             },
             "number_of_triggers": {
                 "type": "u32",
@@ -1436,19 +1422,19 @@
                         "type": "str16",
                         "default": "Scenario Editor Phantom"
                     },
+                    "editor_camera_x": {
+                        "type": "f32",
+                        "default": 72.0
+                    },
+                    "editor_camera_y": {
+                        "type": "f32",
+                        "default": 72.0
+                    },
                     "initial_camera_x": {
-                        "type": "f32",
-                        "default": 72.0
-                    },
-                    "initial_camera_y": {
-                        "type": "f32",
-                        "default": 72.0
-                    },
-                    "unknown_similar_to_camera_x": {
                         "type": "s16",
                         "default": 72
                     },
-                    "unknown_similar_to_camera_y": {
+                    "initial_camera_y": {
                         "type": "s16",
                         "default": 72
                     },
@@ -1896,18 +1882,7 @@
                         "retrievers": {
                             "effect_type": {
                                 "type": "s32",
-                                "default": 0,
-                                "dependencies": {
-                                    "on_commit": {
-                                        "action": "REFRESH",
-                                        "target": [
-                                            "self:armour_attack_quantity",
-                                            "self:armour_attack_class",
-                                            "self:armour_attack_unused",
-                                            "self:quantity"
-                                        ]
-                                    }
-                                }
+                                "default": 0
                             },
                             "static_value_46": {
                                 "type": "s32",
@@ -1917,66 +1892,9 @@
                                 "type": "s32",
                                 "default": -1
                             },
-                            "armour_attack_quantity": {
-                                "type": "u8",
-                                "default": -1,
-                                "is_list": false,
-                                "dependencies": {
-                                    "on_refresh": {
-                                        "action": "SET_REPEAT",
-                                        "target": "self:effect_type",
-                                        "eval": "1 if effect_type in [28, 31] else 0"
-                                    },
-                                    "on_construct": {
-                                        "action": "REFRESH_SELF"
-                                    }
-                                }
-                            },
-                            "armour_attack_class": {
-                                "type": "u8",
-                                "default": -1,
-                                "is_list": false,
-                                "dependencies": {
-                                    "on_refresh": {
-                                        "action": "SET_REPEAT",
-                                        "target": "self:effect_type",
-                                        "eval": "1 if effect_type in [28, 31] else 0"
-                                    },
-                                    "on_construct": {
-                                        "action": "REFRESH_SELF"
-                                    }
-                                }
-                            },
-                            "armour_attack_unused": {
-                                "comment": "These 2 bytes are unused but present when armour_attack is used.",
-                                "type": "u16",
-                                "default": -1,
-                                "is_list": false,
-                                "dependencies": {
-                                    "on_refresh": {
-                                        "action": "SET_REPEAT",
-                                        "target": "self:effect_type",
-                                        "eval": "1 if effect_type in [28, 31] else 0"
-                                    },
-                                    "on_construct": {
-                                        "action": "REFRESH_SELF"
-                                    }
-                                }
-                            },
                             "quantity": {
                                 "type": "s32",
-                                "default": -1,
-                                "is_list": false,
-                                "dependencies": {
-                                    "on_refresh": {
-                                        "action": "SET_REPEAT",
-                                        "target": "self:effect_type",
-                                        "eval": "1 if effect_type not in [28, 31] else 0"
-                                    },
-                                    "on_construct": {
-                                        "action": "REFRESH_SELF"
-                                    }
-                                }
+                                "default": -1
                             },
                             "tribute_list": {
                                 "type": "s32",
@@ -1997,7 +1915,7 @@
                                     }
                                 }
                             },
-                            "unknown": {
+                            "legacy_location_object_reference": {
                                 "type": "s32",
                                 "default": -1
                             },

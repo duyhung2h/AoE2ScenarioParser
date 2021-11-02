@@ -102,6 +102,7 @@ class NewConditionSupport:
             object_group: Union[int, None] = None,
             object_type: Union[int, None] = None,
             inverted: Union[int, None] = None,
+            object_state: Union[int, None] = None,
     ) -> Condition:
         return self.trigger_ref._add_condition(
             ConditionId.OBJECTS_IN_AREA,
@@ -115,6 +116,7 @@ class NewConditionSupport:
             object_group=object_group,
             object_type=object_type,
             inverted=inverted,
+            object_state=object_state,
         )
 
     def destroy_object(
@@ -395,6 +397,9 @@ class NewConditionSupport:
             self,
             unit_object: Union[int, None] = None,
             next_object: Union[int, None] = None,
+            object_list: Union[int, None] = None,
+            object_group: Union[int, None] = None,
+            object_type: Union[int, None] = None,
             inverted: Union[int, None] = None,
             unit_ai_action: Union[int, None] = None,
     ) -> Condition:
@@ -402,6 +407,9 @@ class NewConditionSupport:
             ConditionId.OBJECT_HAS_ACTION,
             unit_object=unit_object,
             next_object=next_object,
+            object_list=object_list,
+            object_group=object_group,
+            object_type=object_type,
             inverted=inverted,
             unit_ai_action=unit_ai_action,
         )

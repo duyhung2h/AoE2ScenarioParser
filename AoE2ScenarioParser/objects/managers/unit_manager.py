@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Union
 
 from AoE2ScenarioParser.datasets.players import PlayerId
-from AoE2ScenarioParser.objects.support.tile import Tile
 from AoE2ScenarioParser.objects.aoe2_object import AoE2Object
 from AoE2ScenarioParser.objects.data_objects.unit import Unit
+from AoE2ScenarioParser.objects.support.tile import Tile
+from AoE2ScenarioParser.objects.support.uuid_list import UuidList
 from AoE2ScenarioParser.sections.retrievers.retriever_object_link import RetrieverObjectLink
 
 
@@ -16,10 +17,12 @@ class UnitManager(AoE2Object):
         RetrieverObjectLink("units", "Units", "players_units[].units", process_as_object=Unit)
     ]
 
-    def __init__(self, units: List[List[Unit]]):
-        self.units = units
+    def __init__(self, units: List[List[Unit]], **kwargs):
+        super().__init__(**kwargs)
 
-        super().__init__()
+        self.units = units
+        # `self.find_highest_reference_id()` can be replaced by the value for next_unit_id_to_place in retrievers
+        self.reference_id_generator = create_id_generator(self.find_highest_reference_id() + 1)
 
     @property
     def units(self):
@@ -28,17 +31,31 @@ class UnitManager(AoE2Object):
     @units.setter
     def units(self, value: List[List[Unit]]):
         def _raise():
-            raise ValueError("Units should be list with 9 sub lists, example: [[Unit], [Unit, Unit], ...]")
+            raise ValueError("Units should be list with a maximum of 9 sub lists, example: [[Unit], [Unit, Unit], ...]")
 
         if len(value) > 9:
             _raise()
         elif len(value) < 9:
             value.extend([[] for _ in range(9 - len(value))])
 
-        self._units = value
+        self._units = UuidList(self._host_uuid, value)
 
-    def add_unit(self, player: PlayerId, unit_const: int, x: float, y: float, z: float = 0, rotation: float = 0,
-                 garrisoned_in_id: int = -1, animation_frame: int = 0, status: int = 2,
+    def update_unit_player_values(self):
+        """Function to update all player values in all units. Useful when units are moved manually (in mass)."""
+        for player in PlayerId.all():
+            for unit in self.units[player]:
+                unit._player = player
+
+    def add_unit(self,
+                 player: Union[int, PlayerId],
+                 unit_const: int,
+                 x: float,
+                 y: float,
+                 z: float = 0,
+                 rotation: float = 0,
+                 garrisoned_in_id: int = -1,
+                 animation_frame: int = 0,
+                 status: int = 2,
                  reference_id: int = None, ) -> Unit:
         """
         Adds a unit to the scenario.
@@ -72,21 +89,22 @@ class UnitManager(AoE2Object):
             rotation=rotation,
             initial_animation_frame=animation_frame,
             garrisoned_in_id=garrisoned_in_id,
+            host_uuid=self._host_uuid
         )
 
-        self.units[player.value].append(unit)
+        self.units[player].append(unit)
         return unit
 
-    def get_player_units(self, player: PlayerId) -> List[Unit]:
+    def get_player_units(self, player: Union[int, PlayerId]) -> List[Unit]:
         """
         Returns a list of UnitObjects for the given player.
 
         Raises:
             ValueError: If player is not between 0 (GAIA) and 8 (EIGHT)
         """
-        if not 0 <= player.value <= 8:
+        if not 0 <= player <= 8:
             raise ValueError("Player must have a value between 0 and 8")
-        return self.units[player.value]
+        return self.units[player]
 
     def get_all_units(self) -> List[Unit]:
         units = []
@@ -94,9 +112,33 @@ class UnitManager(AoE2Object):
             units += player_units
         return units
 
-    def remove_eye_candy(self) -> None:
-        eye_candy_ids = [1351, 1352, 1353, 1354, 1355, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366]
-        self.units[0] = [gaia_unit for gaia_unit in self.units[0] if gaia_unit.unit_const not in eye_candy_ids]
+    def filter_units_by_const(self,
+                              unit_consts: List[int],
+                              blacklist: bool = False,
+                              player_list: List[Union[int, PlayerId]] = None,
+                              unit_list: List[Unit] = None) -> List[Unit]:
+        """
+        Filter unit on their unit_const value.
+
+        Args:
+            unit_consts (List[int]): The constants to filter with
+            blacklist (bool): Use the given constant list as blacklist instead of whitelist
+            player_list (List[int]): A list of players to filter from. If not used, all players are used.
+            unit_list (List[Unit]): A set of units to filter from. If not used, all units are used.
+
+        Returns:
+            A list of units
+        """
+        if unit_list is None:
+            unit_list = self.get_all_units()
+        if player_list is not None:
+            unit_list = [unit for unit in unit_list if unit.player in player_list]
+
+        # Both return statements can be combined using: ((unit.unit_const in unit_consts) != blacklist)
+        # But splitting them helps performance (not checking against blacklist for each entry)
+        if not blacklist:
+            return [unit for unit in unit_list if unit.unit_const in unit_consts]
+        return [unit for unit in unit_list if unit.unit_const not in unit_consts]
 
     def get_units_in_area(self,
                           x1: float = None,
@@ -106,7 +148,7 @@ class UnitManager(AoE2Object):
                           tile1: Tile = None,
                           tile2: Tile = None,
                           unit_list: List[Unit] = None,
-                          players: List[PlayerId] = None,
+                          players: List[Union[int, PlayerId]] = None,
                           ignore_players: List[PlayerId] = None):
         """
         Returns all units in the square with left corner (x1, y1) and right corner (x2, y2). Both corners inclusive.
@@ -161,7 +203,7 @@ class UnitManager(AoE2Object):
         return [unit for unit in unit_list
                 if x1 <= unit.x <= x2 and y1 <= unit.y <= y2 and unit.player in players]
 
-    def change_ownership(self, unit: Unit, to_player: PlayerId) -> None:
+    def change_ownership(self, unit: Unit, to_player: Union[int, PlayerId]) -> None:
         """
         Changes a unit's ownership to the given player.
 
@@ -169,20 +211,34 @@ class UnitManager(AoE2Object):
             unit: The unit object which ownership will be changed
             to_player: The player that'll get ownership over the unit (using PlayerId enum)
         """
-        for i, player_unit in enumerate(self.units[unit.player.value]):
+        for i, player_unit in enumerate(self.units[unit.player]):
             if player_unit == unit:
-                del self.units[unit.player.value][i]
-                self.units[to_player.value].append(unit)
+                del self.units[unit.player][i]
+                self.units[to_player].append(unit)
                 unit._player = PlayerId(to_player)
                 return
 
     def get_new_reference_id(self) -> int:
+        """
+        Get a new ID each time the function is called. Starting from the current highest ID.
+
+        Returns:
+            The newly generator ID
+        """
+        return next(self.reference_id_generator)
+
+    def find_highest_reference_id(self) -> int:
+        """
+        Find the highest ID in the map. Searches through all units for the highest ID.
+
+        Returns:
+            The highest ID in the map
+        """
         highest_id = 0  # If no units, default to 0
-        for player in range(0, 9):
+        for player in PlayerId.all():
             for unit in self.units[player]:
-                if highest_id < unit.reference_id:
-                    highest_id = unit.reference_id
-        return highest_id + 1
+                highest_id = max(highest_id, unit.reference_id)
+        return highest_id
 
     def remove_unit(self, reference_id: int = None, unit: Unit = None) -> None:
         """
@@ -206,4 +262,23 @@ class UnitManager(AoE2Object):
                         del self.units[player][i]
                         return
         elif unit is not None:
-            self.units[unit.player.value].remove(unit)
+            self.units[unit.player].remove(unit)
+
+    def remove_eye_candy(self) -> None:
+        eye_candy_ids = [1351, 1352, 1353, 1354, 1355, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366]
+        self.units[0] = [gaia_unit for gaia_unit in self.units[0] if gaia_unit.unit_const not in eye_candy_ids]
+
+
+def create_id_generator(start_id: int):
+    """
+    Create generator for increasing value
+
+    Args:
+        start_id (int): The id to start returning
+
+    Returns:
+        A generator which will return a +1 ID value for each time called with next.
+    """
+    while True:
+        yield start_id
+        start_id += 1

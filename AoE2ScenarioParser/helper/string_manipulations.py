@@ -1,36 +1,51 @@
 from typing import Union, Tuple, List, TypeVar
 
 
-def add_str_trail(string) -> str:
+def add_str_trail(string: bytes) -> bytes:
     if len(string) > 0:
-        string = string + ("\x00" if string[-1] != "\x00" else "")
+        string += (b"\x00" if string[-1] != 0 else "")
+    else:
+        return b"\x00"
     return string
 
 
-def has_str_trail(string) -> bool:
-    if len(string) > 0 and string[-1] == 0:
-        return True
-    return False
+def has_str_trail(string: bytes) -> bool:
+    return len(string) > 0 and string[-1] == 0
 
 
-def del_str_trail(string) -> Union[str, bytes]:
+def del_str_trail(string: Union[str, bytes]) -> Union[str, bytes]:
     if has_str_trail(string):
         string = string[:-1]
     return string
 
 
-def add_prefix_chars(string, char, length) -> str:
+def add_prefix_chars(string: str, char: str, length: int) -> str:
     if len(string) > length:
         return string
     else:
         return char * (length - len(string)) + string
 
 
-def add_suffix_chars(string, char, total_length) -> str:
+def add_suffix_chars(string: str, char: str, total_length: int) -> str:
     if len(string) > total_length:
         return string
     else:
         return string + char * (total_length - len(string))
+
+
+def remove_prefix(string: str, prefix: str) -> str:
+    """
+    Cheap knockoff function of:
+        https://docs.python.org/3/library/stdtypes.html?highlight=removesuffix#str.removeprefix
+
+    Args:
+        string (str): The string to check it's prefix
+        prefix (str): The prefix to remove from the string
+
+    Returns:
+        The given string or the string without the prefix if it was present
+    """
+    return string[len(prefix):] if string.index(prefix) == 0 else string
 
 
 def q_str(value: any) -> str:
@@ -41,23 +56,31 @@ def q_str(value: any) -> str:
     return str(value)
 
 
+def trunc_string(string: str, length=30, add_ellipsis=True) -> str:
+    return (string[:length] + ('...' if add_ellipsis else '')) if len(string) > length else string
+
+
+def trunc_bytes(string: bytes, length=30, add_ellipsis=True) -> bytes:
+    return (string[:length] + (b'...' if add_ellipsis else b'')) if len(string) > length else string
+
+
 def add_tabs(string: str, tabs: int) -> str:
     splitted_string = string.splitlines(keepends=True)
-    return ("\t" * tabs)+("\t" * tabs).join(splitted_string)
+    return ("\t" * tabs) + ("\t" * tabs).join(splitted_string)
 
 
-def create_inline_line(entries) -> str:
+def create_inline_line(entries: List[Any]) -> str:
     return "\t" + ", ".join(map(str, entries)) + "\r\n"
 
 
-def create_textual_hex(string, space_distance=2, enter_distance=48) -> str:
+def create_textual_hex(string: str, space_distance: int = 2, enter_distance: int = 48) -> str:
     """Please note that the 'enter_distance' parameter is including the - to be added - spaces. If you calculated it
     without the spaces, please multiply the number by: `block size incl space / block size excl space`"""
     return insert_char(insert_char(string, " ", space_distance), "\n", enter_distance)
 
 
 # Credits: gurney alex @ https://stackoverflow.com/a/2657733/7230293
-def insert_char(string, char, step=64) -> str:
+def insert_char(string: str, char: str, step=64) -> str:
     return char.join(string[i:i + step] for i in range(0, len(string), step))
 
 
