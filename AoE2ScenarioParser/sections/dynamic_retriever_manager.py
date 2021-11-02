@@ -1,13 +1,13 @@
 from pathlib import Path
-from turtledemo.penrose import draw
 from typing import TYPE_CHECKING, Generator, List, Dict, Tuple
 
 from AoE2ScenarioParser.helper.bytes_parser import slice_bytes
 from AoE2ScenarioParser.helper.exceptions import TargetRetrieverReached
 from AoE2ScenarioParser.helper.list_functions import sum_len
-from AoE2ScenarioParser.helper.pretty_format import pretty_format_list, pretty_format_dict
+from AoE2ScenarioParser.helper.pretty_format import pretty_format_list
 from AoE2ScenarioParser.helper.printers import rprint
 from AoE2ScenarioParser.helper.string_manipulations import split_string_blocks, create_textual_hex, add_tabs, q_str
+from AoE2ScenarioParser.scenarios import scenario_store
 from AoE2ScenarioParser.sections.aoe2_struct_model import AoE2StructModel
 from AoE2ScenarioParser.sections.dependencies.dependency import handle_retriever_dependency
 from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
@@ -84,12 +84,13 @@ class ContinueDiscover(Exception):
 
 
 class DynamicRetrieverManager:
-    def __init__(self):
+    def __init__(self, uuid):
         # Debugging mode
         self.debug_mode = True
         self.debug_store: Dict[int, Tuple[int, int, 'Retriever']] = {}  # { byte_loc : (length, rid, retr) }
 
-        self.scenario = None
+        self.uuid = uuid
+
         self.dynamic_retrievers = None
         self.dynamic_int_keys: List[int] = []
         self.dynamic_child_parent_map: Dict[str, List[str]] = {}
@@ -97,11 +98,8 @@ class DynamicRetrieverManager:
 
     @property
     def scenario(self) -> 'AoE2Scenario':
-        return self._scenario
-
-    @scenario.setter
-    def scenario(self, value):
-        self._scenario = value
+        # Todo: Don't cheat the UUID system like this
+        return scenario_store._scenarios[self.uuid]
 
     @property
     def structure(self):
@@ -170,47 +168,39 @@ class DynamicRetrieverManager:
             return
 
         for dynamic_retriever_id in dynamic_int_keys:
-            if self.progress_id >= dynamic_retriever_id:
-                print(f"\t[{dynamic_retriever_id}]  \tContinue")
-                continue  # Going to parse already parsed retriever. Next.
-            elif dynamic_retriever_id > until_rid:
-                print(f"\t[{dynamic_retriever_id}]  \tReturn")
-                return  # Going to parse further than requested. Cancel.
-            elif self.progress_id < until_rid:
-                print(f"\n\t[{dynamic_retriever_id}]  \tProgressing... <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-                drs = self.dynamic_retrievers[str(dynamic_retriever_id)]  # drs = Dynamic Retriever Structure
-                retriever = Retriever.from_structure(drs, drs['name'])
-                length_until = self.get_number_of_bytes_before(dynamic_retriever_id)
+            print(f"\t[{dynamic_retriever_id}] \tProgressing...")
+            drs = self.dynamic_retrievers[str(dynamic_retriever_id)]  # drs = Dynamic Retriever Structure
+            retriever = Retriever.from_structure(drs, drs['name'])
+            length_until = self.get_number_of_bytes_before(dynamic_retriever_id)
 
-                handle_retriever_dependency(
-                    retriever, 'construct',
-                    self.scenario.sections[drs['path'][0]],  # Todo: Add support within struct and nested etc.
-                    self.scenario.sections
-                )
+            handle_retriever_dependency(retriever, 'construct',
+                                        # Todo: Add support within struct and nested etc.
+                                        self.scenario.sections[drs['path'][0]],
+                                        self.uuid)
 
-                if retriever.datatype.repeat == 0:  # Skip parsing when repeat is 0
-                    retriever.data = []
-                    self._handle_parsed_retriever(retriever, drs, length_until, 0)
+            if retriever.datatype.repeat == 0:  # Skip parsing when repeat is 0
+                retriever.data = []
+                self._handle_parsed_retriever(retriever, drs, length_until, 0)
+                continue
+
+            if type_is_struct(drs):
+                try:
+                    self._handle_struct_discover(drs, retriever, length_until)
+                except ContinueDiscover:
                     continue
+            else:
+                necessary_bytes, _ = slice_bytes(retriever, self.scenario.file_content, length_until)
 
-                if type_is_struct(drs):
-                    try:
-                        self._handle_struct_discover(drs, retriever, length_until)
-                    except ContinueDiscover:
-                        continue
-                else:
-                    necessary_bytes, _ = slice_bytes(retriever, self.scenario.file_content, length_until)
-
-                    retriever.setup_data_as_bytes(necessary_bytes)
-                    self._handle_parsed_retriever(
-                        retriever=retriever,
-                        dynamic_retriever_structure=drs,
-                        length_until=length_until,
-                        length=sum_len(necessary_bytes),
-                        register_as_progress=True
-                    )
-                    if until_rid == dynamic_retriever_id:
-                        return retriever
+                retriever.setup_data_as_bytes(necessary_bytes)
+                self._handle_parsed_retriever(
+                    retriever=retriever,
+                    dynamic_retriever_structure=drs,
+                    length_until=length_until,
+                    length=sum_len(necessary_bytes),
+                    register_as_progress=True
+                )
+                if until_rid == dynamic_retriever_id:
+                    return retriever
 
     def _handle_struct_discover(self, drs, retriever, progress, parent_index=None):
         if parent_index is None:
@@ -308,11 +298,13 @@ class DynamicRetrieverManager:
 
         if retriever_id in self.dynamic_int_keys:
             print(self.scenario.sections['Units'].keys())
-            exit(99)
+            self._write_debug_file()
+            exit(338)
+            # exit(99)
             retriever = self.scenario.get_retriever(path)
             print(f"RETURNING! {retriever.to_simple_string()}")
             return retriever
- 
+
         necessary_bytes, _ = slice_bytes(retriever, self.scenario.file_content, length_until)
         print(f"necessary_bytes: {q_str(necessary_bytes[0])}")
         retriever.set_data_from_bytes(necessary_bytes)

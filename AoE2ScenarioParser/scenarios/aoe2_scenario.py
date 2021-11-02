@@ -46,6 +46,10 @@ class AoE2Scenario:
         self.scenario_version = "???"
         self.game_version = "???"
 
+        # Uuid generation
+        self.uuid = uuid.uuid4()
+        scenario_store.register_scenario(self)
+
         # File contents
         self.compressed_file = None
         self.decompressed_file = None
@@ -53,14 +57,9 @@ class AoE2Scenario:
         self.structure: dict = {}
         self.sections: dict = {}
         # Managers
-        self._drm: Drm = Drm()
+        self._drm: Drm = Drm(self.uuid)
         self._object_manager: Union[AoE2ObjectManager, None] = None
 
-        # Injection
-        self._drm.scenario = self
-
-        self.uuid = uuid.uuid4()
-        scenario_store.register_scenario(self)
 
     def get_retriever(self, path: List or str) -> Union['Retriever', 'SectionDict']:
         if type(path) is str:
