@@ -7,6 +7,7 @@ from AoE2ScenarioParser.sections.dependencies.dependency_action import Dependenc
 if TYPE_CHECKING:
     from AoE2ScenarioParser.sections.retrievers.retriever import Retriever
 
+
 def refresh_targets(retriever_event, section, host_uuid):
     for target in retriever_event.dependency_target.targets:
         selected_retriever = select_retriever(target, section, host_uuid)
@@ -19,7 +20,7 @@ def execute_refresh_action(retriever, section, host_uuid):
     handle_retriever_dependency(retriever, "refresh", section, host_uuid)
 
 
-def handle_retriever_dependency(retriever: Retriever, state, section, host_uuid: str):
+def handle_retriever_dependency(retriever: 'Retriever', state, section, host_uuid: str):
     on_x = f'on_{state}'
     if not hasattr(retriever, on_x):
         return

@@ -1,4 +1,4 @@
-from typing import Union, Tuple, List, TypeVar
+from typing import Union, Tuple, List, TypeVar, Any
 
 
 def add_str_trail(string: bytes) -> bytes:
