@@ -4,6 +4,7 @@ from typing import Dict, List
 
 from AoE2ScenarioParser.helper.pretty_format import pretty_format_dict, pretty_format_list
 from api_docs.fileobject import FileObject
+from api_docs.generate_json import generate_jsons
 
 mkdocs_yml_start = "# << INJECT API DOC LINES AFTER >>"
 mkdocs_yml_end = "# << INJECT API DOC LINES BEFORE >>"
@@ -54,7 +55,6 @@ def generate_from_templates():
                 rec(dct[key], pre + [key])
 
     rec(paths, [])
-    print(pretty_format_list(insert_strings))
 
     with (Path(__file__).parent.parent / 'mkdocs.yml').open(mode="r+") as f:
         content = f.read()
@@ -70,5 +70,5 @@ def generate_from_templates():
 
 
 if __name__ == '__main__':
-    # generate_jsons(source, target)
+    generate_jsons(source, target)
     generate_from_templates()
