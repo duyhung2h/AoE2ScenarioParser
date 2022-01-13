@@ -125,7 +125,7 @@ class PyInfoGenerator:
                 "name": name,
                 "type": type_,
                 "value": value,
-                "docstr": docstr.removeprefix("\n").removesuffix("\n") if match.group(4) else None
+                "docstr": remove_suffix(remove_prefix(docstr, "\n"), "\n") if match.group(4) else None
             }
         return class_attrs
 
@@ -167,7 +167,7 @@ class PyInfoGenerator:
             name = match.group(2)
             params = match.group(3)
             rtype = match.group(4)
-            docstr = match.group(5).removeprefix("\n").removesuffix("\n") if match.group(5) else None
+            docstr = remove_suffix(remove_prefix(match.group(5), "\n"), "\n") if match.group(5) else None
 
             param_info = {}
             if params:
@@ -250,12 +250,12 @@ class PyInfoGenerator:
 
             classes[name] = {}
             classes[name]["name"] = name
-            classes[name]["docstring"] = docstr.removeprefix("\n").removesuffix("\n") if match.group(3) else None
+            classes[name]["docstring"] = remove_suffix(remove_prefix(docstr, "\n"), "\n") if match.group(3) else None
             if parents:
                 parents = regex.split(r",\s*", parents)
                 classes[name]["parents"] = list(filter(lambda x: "metaclass" not in x, parents))
                 classes[name]["metaclasses"] = list(
-                    map(lambda x: x.removeprefix("metaclass="), filter(lambda x: "metaclass" in x, parents))
+                    map(lambda x: remove_prefix(x, "metaclass="), filter(lambda x: "metaclass" in x, parents))
                 )
             else:
                 classes[name]["parents"] = None
@@ -283,7 +283,7 @@ class PyInfoGenerator:
         code = regex.sub(r"\s*\\\s*\n\s*", "", code)
 
         file_info = {
-            "filename": file_name.removeprefix(self.folder_name + "\\"),
+            "filename": remove_prefix(file_name, self.folder_name + "\\"),
             "imports": self.generate_import_info(code),
             "classes": self.generate_class_info(code),
             "functions": self.generate_function_info(code, indent=0),
@@ -293,28 +293,40 @@ class PyInfoGenerator:
         c_print("\r✔ Generated file info for file:", colour="bright_green", end=" ")
         c_print(f"{file_name}", colour="bright_blue")
 
+        folder = Path(output_file_name).parent
+        if not folder.is_dir():
+            folder.mkdir()
+
         with open(output_file_name, "w") as file:
             json.dump(file_info, file, indent=4)
 
     def generate_info(self, output_folder: str) -> None:
         """
         Outputs all the json files to the given folder
-        :param str output_folder: The folder to output the jsons to
+
+        Args:
+            output_folder: The folder to output the jsons to
         """
         for root, dirs, files in os.walk(self.folder_name):
             for file in files:
                 if not self.ignored(f"{root}\\{file}") and file.endswith(".py"):
-                    inside_dir = root.removeprefix(self.folder_name).removeprefix("\\")
+                    inside_dir = remove_prefix(remove_prefix(root, self.folder_name), "\\")
                     inside_dir = inside_dir.replace("\\", ".") + "." if inside_dir else inside_dir
                     self.generate_file_info(f"{root}\\{file}", f"{output_folder}\\{inside_dir}{file}.json")
 
 
-def main():
-    path = Path(__file__).parent.parent / 'AoE2ScenarioParser'
-
-    with PyInfoGenerator(str(path.absolute())) as info_gen:
-        info_gen.generate_info(str((Path(__file__).parent / 'generated').absolute()))
+def generate_jsons(python_folder: Path, output_folder: Path):
+    with PyInfoGenerator(str(python_folder.absolute())) as info_gen:
+        info_gen.generate_info(str(output_folder.absolute()))
 
 
-if __name__ == '__main__':
-    main()
+def remove_prefix(text: str, prefix: str):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
+
+def remove_suffix(text: str, suffix: str):
+    if text.endswith(suffix):
+        return text[:len(suffix)]
+    return text
