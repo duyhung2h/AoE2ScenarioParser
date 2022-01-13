@@ -238,3 +238,5 @@ venv/
 AoE2ScenarioParser/AoE2_2v1_Scenario_Automation/
 
 api_docs/generated/
+
+.idea/codeStyles/codeStyleConfig.xml

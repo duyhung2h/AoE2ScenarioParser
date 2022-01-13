@@ -1,0 +1,33 @@
+# {{ filename }}
+
+## Functions
+
+{% for f_name, content in json.functions.items() %}
+
+### .{{ f_name }}(...)
+
+{% if content.docstr %}
+{{ content.docstr }}
+{% endif %}
+
+{% if content.params|length > 0 %}
+
+**Params**:
+
+| Parameter | Type | Default | Description |
+| --------- | ---- | ------- | ----------- |
+{% for param_name, param_info in content.params.items() %}
+| {{param_name}} | {{ param_info.type_ or '-' }} | {{ param_info.default or '-' }} | {{ param_info.docstr or '-' }} |
+{% endfor %}
+{% endif %}
+
+Returns: {{ content.return_type }}
+
+{% if  not loop.last %} --- {% endif %}
+
+{% endfor %} {# End of functions loop #}
+
+## Debug:
+```json
+{!{ pretty_format_dict(json) }}
+```
