@@ -27,8 +27,110 @@ nav:
   - Examples:
     - Intro: "examples/examples.md"
     - Triggers: "examples/triggers.md"
+  - API docs:
+    - About: "api_docs/about.md"
 
-#  - API Docs: "api-doc.md"
+    # << INJECT API DOC LINES AFTER >>
+    - app: "api_docs/app.md"
+    - datasets: 
+      - buildings: "api_docs/datasets/buildings.md"
+      - conditions: "api_docs/datasets/conditions.md"
+      - dataset_enum: "api_docs/datasets/dataset_enum.md"
+      - effects: "api_docs/datasets/effects.md"
+      - heroes: "api_docs/datasets/heroes.md"
+      - object_support: "api_docs/datasets/object_support.md"
+      - other: "api_docs/datasets/other.md"
+      - players: "api_docs/datasets/players.md"
+      - projectiles: "api_docs/datasets/projectiles.md"
+      - scripts: 
+        - get_icon_ids: "api_docs/datasets/scripts/get_icon_ids.md"
+        - object_parser: "api_docs/datasets/scripts/object_parser.md"
+      - support: 
+        - info_dataset_base: "api_docs/datasets/support/info_dataset_base.md"
+      - techs: "api_docs/datasets/techs.md"
+      - terrains: "api_docs/datasets/terrains.md"
+      - trigger_lists: "api_docs/datasets/trigger_lists.md"
+      - units: "api_docs/datasets/units.md"
+    - helper: 
+      - attr_dict: "api_docs/helper/attr_dict.md"
+      - bytes_conversions: "api_docs/helper/bytes_conversions.md"
+      - bytes_parser: "api_docs/helper/bytes_parser.md"
+      - exceptions: "api_docs/helper/exceptions.md"
+      - helper: "api_docs/helper/helper.md"
+      - incremental_generator: "api_docs/helper/incremental_generator.md"
+      - list_functions: "api_docs/helper/list_functions.md"
+      - maffs: "api_docs/helper/maffs.md"
+      - pretty_format: "api_docs/helper/pretty_format.md"
+      - printers: "api_docs/helper/printers.md"
+      - string_manipulations: "api_docs/helper/string_manipulations.md"
+      - version_check: "api_docs/helper/version_check.md"
+    - live_feed: "api_docs/live_feed.md"
+    - local_config: "api_docs/local_config.md"
+    - objects: 
+      - aoe2_object: "api_docs/objects/aoe2_object.md"
+      - aoe2_object_manager: "api_docs/objects/aoe2_object_manager.md"
+      - data_objects: 
+        - condition: "api_docs/objects/data_objects/condition.md"
+        - effect: "api_docs/objects/data_objects/effect.md"
+        - player: 
+          - player: "api_docs/objects/data_objects/player/player.md"
+          - player_data_four: "api_docs/objects/data_objects/player/player_data_four.md"
+          - player_data_three: "api_docs/objects/data_objects/player/player_data_three.md"
+          - player_diplomacy: "api_docs/objects/data_objects/player/player_diplomacy.md"
+          - player_meta_data: "api_docs/objects/data_objects/player/player_meta_data.md"
+          - player_resources: "api_docs/objects/data_objects/player/player_resources.md"
+        - terrain_tile: "api_docs/objects/data_objects/terrain_tile.md"
+        - trigger: "api_docs/objects/data_objects/trigger.md"
+        - unit: "api_docs/objects/data_objects/unit.md"
+        - variable: "api_docs/objects/data_objects/variable.md"
+      - managers: 
+        - de: 
+          - map_manager_de: "api_docs/objects/managers/de/map_manager_de.md"
+          - trigger_manager_de: "api_docs/objects/managers/de/trigger_manager_de.md"
+          - unit_manager_de: "api_docs/objects/managers/de/unit_manager_de.md"
+          - xs_manager_de: "api_docs/objects/managers/de/xs_manager_de.md"
+        - map_manager: "api_docs/objects/managers/map_manager.md"
+        - player_manager: "api_docs/objects/managers/player_manager.md"
+        - trigger_manager: "api_docs/objects/managers/trigger_manager.md"
+        - unit_manager: "api_docs/objects/managers/unit_manager.md"
+      - support: 
+        - area: "api_docs/objects/support/area.md"
+        - attr_presentation: "api_docs/objects/support/attr_presentation.md"
+        - enums: 
+          - group_by: "api_docs/objects/support/enums/group_by.md"
+        - new_condition: "api_docs/objects/support/new_condition.md"
+        - new_effect: "api_docs/objects/support/new_effect.md"
+        - tile: "api_docs/objects/support/tile.md"
+        - trigger_ce_lock: "api_docs/objects/support/trigger_ce_lock.md"
+        - trigger_select: "api_docs/objects/support/trigger_select.md"
+        - uuid_list: "api_docs/objects/support/uuid_list.md"
+    - scenarios: 
+      - aoe2_de_scenario: "api_docs/scenarios/aoe2_de_scenario.md"
+      - aoe2_scenario: "api_docs/scenarios/aoe2_scenario.md"
+      - scenario_store: 
+        - actions: "api_docs/scenarios/scenario_store/actions.md"
+        - getters: "api_docs/scenarios/scenario_store/getters.md"
+        - store: "api_docs/scenarios/scenario_store/store.md"
+      - support: 
+        - object_factory: "api_docs/scenarios/support/object_factory.md"
+        - scenario_actions: "api_docs/scenarios/support/scenario_actions.md"
+        - trigger_markings: "api_docs/scenarios/support/trigger_markings.md"
+    - sections: 
+      - aoe2_file_section: "api_docs/sections/aoe2_file_section.md"
+      - aoe2_struct_model: "api_docs/sections/aoe2_struct_model.md"
+      - dependencies: 
+        - dependency: "api_docs/sections/dependencies/dependency.md"
+        - dependency_action: "api_docs/sections/dependencies/dependency_action.md"
+        - dependency_eval: "api_docs/sections/dependencies/dependency_eval.md"
+        - dependency_target: "api_docs/sections/dependencies/dependency_target.md"
+        - retriever_dependency: "api_docs/sections/dependencies/retriever_dependency.md"
+      - retrievers: 
+        - datatype: "api_docs/sections/retrievers/datatype.md"
+        - retriever: "api_docs/sections/retrievers/retriever.md"
+        - retriever_object_link: "api_docs/sections/retrievers/retriever_object_link.md"
+        - support: "api_docs/sections/retrievers/support.md"
+    - settings: "api_docs/settings.md"
+    # << INJECT API DOC LINES BEFORE >>
 
 
 
